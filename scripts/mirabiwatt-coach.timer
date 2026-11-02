@@ -1,0 +1,9 @@
+[Unit]
+Description=MirabiWatt - recap di COACH CLAUDIO ogni domenica alle 20:00
+
+[Timer]
+OnCalendar=Sun *-*-* 20:00:00 Europe/Rome
+Persistent=true
+
+[Install]
+WantedBy=timers.target

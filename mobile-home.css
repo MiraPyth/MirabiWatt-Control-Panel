@@ -1,0 +1,97 @@
+/* MirabiWatt · home da telefono (19/10/2026 notte), dal mock di Tiziano: testata color cuoio con il saluto e il numero
+ * grande, schede chiare, settimana come lista a pallini, barra delle sezioni in basso con la pillola corallo.
+ * Solo sotto i 760px: da computer non cambia nulla. Caricato dopo mobile.css. */
+.mh, .mh-tab { display: none; }
+
+@media (max-width: 760px) {
+  :root { --mh-corallo: #ec7a5c; --mh-corallo-scuro: #d9603f; --mh-crema: #fff5f1; --mh-inchiostro: #2b1a14; }
+
+  /* su Oggi la testata prende il posto della barra del titolo e va da bordo a bordo */
+  body.mh-su-oggi .mw-titolo { display: none !important; }
+  body.mh-su-oggi .mw-main { padding: 0 0 30px; }
+  body.mh-su-oggi #view-today .mw-oggi-testa, body.mh-su-oggi #oggi-settimana { display: none; }
+  body.mh-su-oggi #oggi-root { padding: 4px 16px 0; }
+  body { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
+  .pal-riprendi { bottom: calc(96px + env(safe-area-inset-bottom)); }
+
+  .mh { display: block; }
+  .mh-hero { position: relative; overflow: hidden; padding: 16px 20px 20px; border-radius: 0 0 32px 32px; color: #fff;
+    background: radial-gradient(120% 80% at 85% 0%, #7a3b25 0%, rgba(122, 59, 37, 0) 60%), linear-gradient(160deg, #4a2418 0%, #2f1710 55%, #1f0f0a 100%); }
+  .mh-hero-su { display: flex; align-items: center; justify-content: space-between; }
+  .mh-avatar { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--mh-corallo); color: #fff; font-size: 18px; font-weight: 600; }
+  .mh-tondi { display: flex; gap: 10px; }
+  .mh-tondo { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; border: 0; cursor: pointer; color: #fff;
+    background: rgba(255, 255, 255, .1); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .12); }
+  .mh-tondo svg { width: 19px; height: 19px; }
+  .mh-tondo:active { transform: scale(.94); }
+  .mh-saluto { margin: 18px 0 18px; font-size: 30px; line-height: 1.1; font-weight: 700; letter-spacing: -.02em; color: #fff; }
+  .mh-riga { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .mh-etichetta { font-size: 14px; color: rgba(255, 255, 255, .7); }
+  .mh-pillola { font-size: 12.5px; font-weight: 600; padding: 4px 10px; border-radius: 999px; color: #ffb39d; background: rgba(236, 122, 92, .18); }
+  .mh-grande { display: flex; align-items: baseline; gap: 8px; margin: 2px 0 12px; }
+  .mh-numero { font-size: 56px; line-height: 1; font-weight: 700; letter-spacing: -.035em; font-variant-numeric: tabular-nums; }
+  .mh-su { font-size: 15px; color: rgba(255, 255, 255, .6); font-variant-numeric: tabular-nums; }
+  .mh-barra { height: 8px; border-radius: 999px; background: rgba(255, 255, 255, .14); overflow: hidden; }
+  .mh-barra i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--mh-corallo-scuro), var(--mh-corallo)); }
+  .mh-fase { margin: 10px 0 16px; font-size: 12.5px; color: rgba(255, 255, 255, .55); }
+  .mh-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .mh-stat { display: flex; flex-direction: column; gap: 2px; padding: 12px; border-radius: 16px; background: var(--mh-crema); color: var(--mh-inchiostro); }
+  .mh-stat-ico, .mh-stat svg { width: 18px; height: 18px; margin-bottom: 8px; }
+  .mh-stat.fit svg { color: #3b82f6; }
+  .mh-stat.fat svg { color: var(--mh-corallo); }
+  .mh-stat.form svg { color: #e0457b; }
+  .mh-stat b { font-size: 22px; line-height: 1.1; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .mh-stat small { font-size: 12px; color: #8a6f66; }
+
+  .mh-sezione { display: flex; align-items: baseline; justify-content: space-between; padding: 22px 20px 10px; }
+  .mh-sezione h2 { margin: 0; font-size: 19px; font-weight: 700; letter-spacing: -.01em; color: var(--text); }
+  .mh-link { border: 0; background: none; padding: 6px 0; cursor: pointer; font: inherit; font-size: 14px; color: var(--muted); }
+
+  .mh-lista { list-style: none; margin: 0 16px; padding: 8px 14px; border-radius: 24px; background: var(--card); border: 1px solid var(--card-b);
+    box-shadow: 0 8px 24px rgba(20, 10, 5, .06); position: relative; }
+  .mh-giorno { position: relative; display: flex; align-items: center; gap: 12px; padding: 9px 0; }
+  .mh-giorno + .mh-giorno::before { content: ''; position: absolute; left: 11px; top: -12px; height: 24px; width: 2px; background: var(--card-b); }
+  .mh-punto { position: relative; z-index: 1; flex: none; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center;
+    border: 2px solid var(--faint); background: var(--card); color: #fff; }
+  .mh-punto svg { width: 14px; height: 14px; stroke-width: 3; }
+  .mh-giorno.fatto .mh-punto { background: var(--text); border-color: var(--text); color: var(--card); }
+  .mh-giorno.saltato .mh-punto { background: var(--mh-corallo); border-color: var(--mh-corallo); }
+  .mh-giorno.oggi .mh-punto { border-color: var(--mh-corallo); box-shadow: 0 0 0 4px rgba(236, 122, 92, .18); }
+  .mh-apri { flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+  .mh-apri:disabled { cursor: default; }
+  .mh-mini { flex: none; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; color: #fff; box-shadow: inset 0 -6px 12px rgba(0, 0, 0, .15); }
+  .mh-mini svg { width: 21px; height: 21px; }
+  .mh-mini.palestra { background: linear-gradient(145deg, #f39a7c, #d9603f); }
+  .mh-mini.hit { background: linear-gradient(145deg, #ff7a8f, #c2335a); }
+  .mh-mini.z2 { background: linear-gradient(145deg, #6cc4f5, #3b82f6); }
+  .mh-mini.z3 { background: linear-gradient(145deg, #f7c95c, #e08a1e); }
+  .mh-mini.libero { background: linear-gradient(145deg, #7ee0b5, #2fa67a); }
+  .mh-mini.riposo { background: var(--hover-forte); color: var(--muted); box-shadow: none; }
+  .mh-testo { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .mh-testo b { font-size: 15.5px; font-weight: 650; line-height: 1.25; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mh-testo small { font-size: 12.5px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mh-giorno.riposo .mh-testo b { color: var(--muted); font-weight: 500; }
+  .mh-giorno.fatto .mh-testo b { color: var(--muted); }
+  .mh-azione { flex: none; border: 0; cursor: pointer; padding: 7px 14px; border-radius: 999px; font: inherit; font-size: 13px; font-weight: 600;
+    background: var(--mh-corallo); color: #fff; box-shadow: 0 4px 12px rgba(217, 96, 63, .3); }
+  .mh-azione.chiara { background: rgba(236, 122, 92, .14); color: var(--mh-corallo-scuro); box-shadow: none; cursor: default; }
+  button.mh-azione:active { transform: scale(.95); }
+
+  /* il resto di Oggi sotto la lista: stesse schede tonde */
+  body.mh-su-oggi #oggi-root .mw-card { border-radius: 24px; padding: 16px; }
+  body.mh-su-oggi #oggi-root .mw-oggi-griglia { gap: 12px; margin-top: 14px; }
+
+  /* barra delle sezioni */
+  .mh-tab { display: flex; align-items: center; justify-content: space-between; gap: 4px; position: fixed; z-index: 80;
+    left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); padding: 8px; border-radius: 30px;
+    background: var(--barra); border: 1px solid var(--card-b); box-shadow: 0 10px 30px rgba(10, 5, 3, .18); }
+  body.mw-menu-aperto .mh-tab, html.pal-aperta .mh-tab { display: none; }
+  .mh-tab button { flex: 1; min-width: 0; height: 52px; display: flex; align-items: center; justify-content: center; gap: 8px; border: 0; border-radius: 999px;
+    background: none; color: var(--muted); font: inherit; font-size: 14.5px; font-weight: 600; cursor: pointer; transition: flex-grow .25s cubic-bezier(.2, .8, .2, 1), background-color .2s; }
+  .mh-tab button svg { width: 22px; height: 22px; flex: none; }
+  .mh-tab button span { display: none; }
+  .mh-tab button.attivo { flex-grow: 2.2; background: var(--mh-corallo); color: #fff; box-shadow: 0 6px 16px rgba(217, 96, 63, .35); }
+  .mh-tab button.attivo span { display: inline; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mh-tab button:active { transform: scale(.96); }
+}
+@media (max-width: 760px) and (prefers-reduced-motion: reduce) { .mh-tab button { transition: none; } }

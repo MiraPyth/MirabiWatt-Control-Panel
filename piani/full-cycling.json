@@ -1,0 +1,642 @@
+{
+  "id": "full-cycling",
+  "nome": "Piano invernale full cycling",
+  "start": "2026-09-21",
+  "events": [
+    {
+      "id": "tratturo",
+      "name": "Granfondo Tratturo Magno",
+      "date": "2027-03-14",
+      "dateConfirmed": true,
+      "priority": "B",
+      "km": 104,
+      "elev": 1800
+    },
+    {
+      "id": "novecolli",
+      "name": "Granfondo Nove Colli (percorso lungo)",
+      "date": "2027-05-23",
+      "dateConfirmed": true,
+      "priority": "A",
+      "km": 200,
+      "elev": 3814,
+      "maxGrad": 18,
+      "maxAlt": 791
+    }
+  ],
+  "detailedPhases": [
+    {
+      "id": "prep",
+      "name": "Prep — Riattivazione",
+      "start": "2026-09-21",
+      "end": "2026-10-04",
+      "weeks": [
+        {
+          "label": "Sett. 1",
+          "special": "Controllato il tuo storico: ultime 2 settimane quasi ferme (TSB fino a +23), poi oggi (20/9) 4h a sorpresa. Niente test massimale a freddo: martedì fai un Ramp Test su Zwift — 20', si ferma da solo, zero pacing da gestire, ci dà comunque un eFTP fresco. Volume ~8h: parto dal basso della tua fascia (8-12h) perché vieni da 2 settimane ferme, non perché 8h sia il tetto.",
+          "days": [
+            {
+              "d": "Lun",
+              "s": "Riposo",
+              "note": "Passiva, stretching se va."
+            },
+            {
+              "d": "Mar",
+              "s": "Ramp Test",
+              "dur": "20-25'",
+              "zone": "Test",
+              "critical": true,
+              "note": "Su Zwift/rulli — ramp test standard, non il tuo protocollo 5'+15'. Meno costoso, dato comunque affidabile."
+            },
+            {
+              "d": "Mer",
+              "s": "EnduranceCorto",
+              "dur": "1h30-2h",
+              "zone": "Z2",
+              "note": "Rulli."
+            },
+            {
+              "d": "Gio",
+              "s": "EnduranceAgile",
+              "dur": "1h30",
+              "zone": "Z2",
+              "note": "Rulli, lavoro di cadenza."
+            },
+            {
+              "d": "Ven",
+              "s": "MedioMini",
+              "dur": "2h",
+              "zone": "Z2/Z3",
+              "note": "Libero pomeriggio da giovedì → outdoor se meteo ok."
+            },
+            {
+              "d": "Sab",
+              "s": "Corpo libero e MSR",
+              "note": "Facoltativa ma consigliata."
+            },
+            {
+              "d": "Dom",
+              "s": "EnduranceCorto",
+              "dur": "2h30",
+              "zone": "Z2",
+              "critical": true,
+              "note": "Outdoor."
+            }
+          ]
+        },
+        {
+          "label": "Sett. 2",
+          "special": "Niente secondo test dedicato: se in una delle uscite outdoor ti viene naturale spingere forte 15-20' con buone sensazioni, bene — ci basta l'eFTP che intervals.icu calcola da solo su quello sforzo, confrontato col ramp test. Nessun obbligo. Volume verso 8h30-9h.",
+          "days": [
+            {
+              "d": "Lun",
+              "s": "Riposo",
+              "note": ""
+            },
+            {
+              "d": "Mar",
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true,
+              "note": "Prima uscita \"vera\" — non tirare al 100%, è ancora riattivazione."
+            },
+            {
+              "d": "Mer",
+              "s": "EnduranceCorto",
+              "dur": "1h30",
+              "zone": "Z2",
+              "note": "Rulli."
+            },
+            {
+              "d": "Gio",
+              "s": "EnduranceAgile",
+              "dur": "1h15",
+              "zone": "Z2",
+              "note": "Rulli."
+            },
+            {
+              "d": "Ven",
+              "s": "EnduranceMedio",
+              "dur": "2h",
+              "zone": "Z2",
+              "note": "Pomeriggio libero, outdoor se possibile — occasione per lo sforzo libero di cui sopra, se ti va."
+            },
+            {
+              "d": "Sab",
+              "s": "Riposo",
+              "note": ""
+            },
+            {
+              "d": "Dom",
+              "s": "EnduranceMedio",
+              "dur": "2h45",
+              "zone": "Z2",
+              "critical": true,
+              "note": "Outdoor."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "base1",
+      "name": "Base 1 — Aerobico puro",
+      "start": "2026-10-05",
+      "end": "2026-11-01",
+      "weeks": [
+        {
+          "label": "Sett. 1",
+          "special": "Volume verso 9h — dentro la tua fascia 8-12h, in crescita rispetto alla Prep.",
+          "days": [
+            {
+              "d": "Lun",
+              "s": "Riposo"
+            },
+            {
+              "d": "Mar",
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true
+            },
+            {
+              "d": "Mer",
+              "s": "EnduranceCorto",
+              "dur": "1h30",
+              "zone": "Z2",
+              "note": "Rulli."
+            },
+            {
+              "d": "Gio",
+              "s": "EnduranceMedio",
+              "dur": "1h30",
+              "zone": "Z2",
+              "note": "Rulli/outdoor."
+            },
+            {
+              "d": "Ven",
+              "s": "EnduranceMedio",
+              "dur": "2h",
+              "zone": "Z2",
+              "note": "Pomeriggio libero, outdoor se possibile."
+            },
+            {
+              "d": "Sab",
+              "s": "Riposo"
+            },
+            {
+              "d": "Dom",
+              "s": "EnduranceLungo",
+              "dur": "3h",
+              "zone": "Z2",
+              "critical": true,
+              "note": "Outdoor."
+            }
+          ]
+        },
+        {
+          "label": "Sett. 2",
+          "special": "Volume verso 10h.",
+          "days": [
+            {
+              "d": "Lun",
+              "s": "Riposo"
+            },
+            {
+              "d": "Mar",
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true
+            },
+            {
+              "d": "Mer",
+              "s": "EnduranceCorto",
+              "dur": "1h45",
+              "zone": "Z2"
+            },
+            {
+              "d": "Gio",
+              "s": "EnduranceMedio",
+              "dur": "1h45",
+              "zone": "Z2"
+            },
+            {
+              "d": "Ven",
+              "s": "EnduranceMedio",
+              "dur": "2h15",
+              "zone": "Z2"
+            },
+            {
+              "d": "Sab",
+              "s": "Riposo"
+            },
+            {
+              "d": "Dom",
+              "s": "MedioLungo",
+              "dur": "3h30",
+              "zone": "Z2/Z3bassa",
+              "critical": true,
+              "note": "Outdoor."
+            }
+          ]
+        },
+        {
+          "label": "Sett. 3",
+          "special": "Punta della fase, ~11h30 — dentro il tuo tetto di 12h. Poi scarico.",
+          "days": [
+            {
+              "d": "Lun",
+              "s": "Riposo"
+            },
+            {
+              "d": "Mar",
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true
+            },
+            {
+              "d": "Mer",
+              "s": "EnduranceCorto",
+              "dur": "2h",
+              "zone": "Z2"
+            },
+            {
+              "d": "Gio",
+              "s": "EnduranceMedio",
+              "dur": "2h",
+              "zone": "Z2"
+            },
+            {
+              "d": "Ven",
+              "s": "EnduranceMedio",
+              "dur": "2h30",
+              "zone": "Z2"
+            },
+            {
+              "d": "Sab",
+              "s": "Riposo"
+            },
+            {
+              "d": "Dom",
+              "s": "MedioLungo",
+              "dur": "4h",
+              "zone": "Z2/Z3bassa",
+              "critical": true,
+              "note": "Outdoor, ultima lunga prima dello scarico."
+            }
+          ]
+        },
+        {
+          "label": "Sett. 4 — Scarico",
+          "special": "Settimana di scarico: cala il volume (~7h, non i tuoi 8-12h abituali) di proposito — non è un premio, è dove consolidi quello che hai costruito. Qui il volume basso è voluto, non un limite mancato.",
+          "days": [
+            {
+              "d": "Lun",
+              "s": "Riposo"
+            },
+            {
+              "d": "Mar",
+              "s": "Zwift Race",
+              "dur": "45-60'",
+              "zone": "HIT",
+              "critical": true,
+              "note": "Versione corta."
+            },
+            {
+              "d": "Mer",
+              "s": "EnduranceCorto",
+              "dur": "1h30",
+              "zone": "Z2"
+            },
+            {
+              "d": "Gio",
+              "s": "Corpo libero e MSR",
+              "note": "Facoltativa ma consigliata, settimana di scarico."
+            },
+            {
+              "d": "Ven",
+              "s": "EnduranceCadenza",
+              "dur": "1h30",
+              "zone": "Z2"
+            },
+            {
+              "d": "Sab",
+              "s": "Riposo"
+            },
+            {
+              "d": "Dom",
+              "s": "EnduranceCorto",
+              "dur": "2h30",
+              "zone": "Z2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "base2",
+      "name": "Base 2 — Blocco Rønnestad",
+      "start": "2026-11-02",
+      "end": "2026-11-29",
+      "weeks": [
+        {
+          "label": "Sett. 1 — FORTE",
+          "special": "Settimana concentrata (~10h30, verso il tuo tetto): 2 sedute qualità. Le gambe pesanti qui sono previste — il recupero vero arriva nelle 3 settimane leggere che seguono.",
+          "days": [
+            {
+              "d": "Lun",
+              "s": "Riposo"
+            },
+            {
+              "d": "Mar",
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true
+            },
+            {
+              "d": "Mer",
+              "s": "EnduranceCorto",
+              "dur": "2h",
+              "zone": "Z2",
+              "note": "Rulli."
+            },
+            {
+              "d": "Gio",
+              "s": "30/15 Short Intervals",
+              "dur": "1h",
+              "zone": "HIT",
+              "critical": true,
+              "note": "Rulli — 30'' hard/15'' easy x13, 3 serie. 2ª qualità della settimana."
+            },
+            {
+              "d": "Ven",
+              "s": "MedioMini",
+              "dur": "2h30",
+              "zone": "Z2/Z3",
+              "note": "Pomeriggio libero."
+            },
+            {
+              "d": "Sab",
+              "s": "Corpo libero e MSR",
+              "note": "Facoltativa ma consigliata."
+            },
+            {
+              "d": "Dom",
+              "s": "MedioLungo",
+              "dur": "3h30-4h",
+              "zone": "Z2/Z3bassa",
+              "critical": true,
+              "note": "Outdoor se possibile."
+            }
+          ]
+        },
+        {
+          "label": "Sett. 2 — leggera",
+          "special": "Leggera ma comunque ~9h30 — niente 2ª HIT, ma il volume Z2 resta dentro la tua disponibilità.",
+          "days": [
+            {
+              "d": "Lun",
+              "s": "Riposo"
+            },
+            {
+              "d": "Mar",
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true
+            },
+            {
+              "d": "Mer",
+              "s": "EnduranceCorto",
+              "dur": "1h30",
+              "zone": "Z2"
+            },
+            {
+              "d": "Gio",
+              "s": "EnduranceMedio",
+              "dur": "1h45",
+              "zone": "Z2",
+              "note": "Niente 2ª HIT questa settimana."
+            },
+            {
+              "d": "Ven",
+              "s": "EnduranceMedio",
+              "dur": "2h",
+              "zone": "Z2"
+            },
+            {
+              "d": "Sab",
+              "s": "Riposo"
+            },
+            {
+              "d": "Dom",
+              "s": "EnduranceLungo",
+              "dur": "3h15",
+              "zone": "Z2",
+              "critical": true,
+              "note": "Outdoor."
+            }
+          ]
+        },
+        {
+          "label": "Sett. 3 — leggera",
+          "days": [
+            {
+              "d": "Lun",
+              "s": "Riposo"
+            },
+            {
+              "d": "Mar",
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true
+            },
+            {
+              "d": "Mer",
+              "s": "EnduranceCorto",
+              "dur": "1h30",
+              "zone": "Z2"
+            },
+            {
+              "d": "Gio",
+              "s": "EnduranceMedio",
+              "dur": "1h45",
+              "zone": "Z2"
+            },
+            {
+              "d": "Ven",
+              "s": "EnduranceMedio",
+              "dur": "2h",
+              "zone": "Z2"
+            },
+            {
+              "d": "Sab",
+              "s": "Riposo"
+            },
+            {
+              "d": "Dom",
+              "s": "EnduranceLungo",
+              "dur": "3h",
+              "zone": "Z2",
+              "critical": true,
+              "note": "Outdoor (giornate più corte: valuta orario)."
+            }
+          ]
+        },
+        {
+          "label": "Sett. 4 — leggera",
+          "days": [
+            {
+              "d": "Lun",
+              "s": "Riposo"
+            },
+            {
+              "d": "Mar",
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true
+            },
+            {
+              "d": "Mer",
+              "s": "EnduranceCorto",
+              "dur": "1h30",
+              "zone": "Z2",
+              "note": "Rulli (buio presto)."
+            },
+            {
+              "d": "Gio",
+              "s": "EnduranceMedio",
+              "dur": "1h30",
+              "zone": "Z2",
+              "note": "Rulli."
+            },
+            {
+              "d": "Ven",
+              "s": "EnduranceMedio",
+              "dur": "1h45",
+              "zone": "Z2",
+              "note": "Rulli o outdoor breve."
+            },
+            {
+              "d": "Sab",
+              "s": "Corpo libero e MSR",
+              "note": "Facoltativa ma consigliata."
+            },
+            {
+              "d": "Dom",
+              "s": "MedioLungo",
+              "dur": "2h45",
+              "zone": "Z2/Z3bassa",
+              "critical": true,
+              "note": "Outdoor se possibile, altrimenti rulli spezzato."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "summaryPhases": [
+    {
+      "id": "base3",
+      "name": "Base 3 / Inverno (blocco + feste)",
+      "start": "2026-11-30",
+      "end": "2027-01-03",
+      "hours": "8-11h",
+      "hit": "1-2",
+      "focus": "Blocco Rønnestad #2 + settimane natalizie volutamente leggere. Usa Piano B senza sensi di colpa durante le feste.",
+      "zoneMix": {
+        "z1z2": 75,
+        "z3": 15,
+        "z4plus": 10
+      },
+      "detail": "Stesso schema di Base 2: 1 settimana forte (5 sedute qualità, verso il tuo tetto di 12h) seguita da 3 leggere (verso 8-9h, un solo HIT). Introduco sweet spot (CPSalita, MedioBillat) nella settimana forte oltre al 30/15 già visto. Le settimane di Natale/Capodanno restano intenzionalmente più leggere (7-8h) per stare con la famiglia senza sensi di colpa — è già previsto, non un cedimento al piano."
+    },
+    {
+      "id": "build1",
+      "name": "Build 1",
+      "start": "2027-01-04",
+      "end": "2027-02-14",
+      "hours": "9-12h",
+      "hit": "1-2",
+      "focus": "Sweet spot/soglia (30/15, 4x8, CPSalita). Ri-test CP indoor+outdoor a metà fase.",
+      "zoneMix": {
+        "z1z2": 68,
+        "z3": 20,
+        "z4plus": 12
+      },
+      "detail": "Qui il lavoro a soglia/sweet spot aumenta di frequenza (non di rischio: resta 1-2 HIT/sett, il resto è Z2 lungo). Introduco 4x8' (Seiler) accanto al 30/15 già rodato, più CPSalita per iniziare a specializzare verso le salite del Tratturo Magno. A metà fase rifacciamo il test CP indoor+outdoor per aggiornare le zone con dati freschi."
+    },
+    {
+      "id": "specific-taper",
+      "name": "Specifico + mini-taper",
+      "start": "2027-02-15",
+      "end": "2027-03-14",
+      "hours": "8-12h",
+      "hit": "1-2",
+      "focus": "Salite specifiche per il Tratturo Magno, scarico breve nell'ultima settimana.",
+      "zoneMix": {
+        "z1z2": 65,
+        "z3": 22,
+        "z4plus": 13
+      },
+      "detail": "Volume verso il tetto nelle prime 2-3 settimane (uscite con salite vere, SweetSerie/CPSalita/SerieLungo), poi mini-taper nell'ultima settimana (~7-8h, non un taper completo — il Tratturo è la gara B) prima della gara.",
+      "raceId": "tratturo"
+    },
+    {
+      "id": "recovery-build2",
+      "name": "Recupero + Build 2",
+      "start": "2027-03-15",
+      "end": "2027-04-18",
+      "hours": "7-12h",
+      "hit": "1-2",
+      "focus": "Settimana di recupero post-gara, poi durabilità: uscite lunghe back-to-back per i 3814m di Nove Colli.",
+      "zoneMix": {
+        "z1z2": 70,
+        "z3": 20,
+        "z4plus": 10
+      },
+      "detail": "Settimana 1 di recupero attivo dopo il Tratturo Magno (~7h, Z1-Z2 solo). Poi risalita verso il tetto con uscite lunghe nel weekend (anche back-to-back sab+dom) per costruire la resistenza specifica ai 3814m di dislivello di Nove Colli — più CP/soglia su salite lunghe (CPSFR, CPLungo) che VO2max puro."
+    },
+    {
+      "id": "peak",
+      "name": "Peak",
+      "start": "2027-04-19",
+      "end": "2027-05-09",
+      "hours": "9-11h",
+      "hit": "2",
+      "focus": "Qualità corta e specifica, 1 simulazione gara lunga con nutrizione da gara.",
+      "zoneMix": {
+        "z1z2": 60,
+        "z3": 20,
+        "z4plus": 20
+      },
+      "detail": "Qui NON spingo verso il tuo tetto di 12h di proposito: si affina, non si accumula. Volume leggermente sotto il picco di Build2, intensità/qualità in salita (CPRipetute, VO2Medio). Una uscita lunga di simulazione gara con la nutrizione vera che userai a Nove Colli."
+    },
+    {
+      "id": "taper",
+      "name": "Taper",
+      "start": "2027-05-10",
+      "end": "2027-05-23",
+      "hours": "4-7h",
+      "hit": "1",
+      "focus": "Scarico classico, openers, arrivo fresco.",
+      "zoneMix": {
+        "z1z2": 70,
+        "z3": 15,
+        "z4plus": 15
+      },
+      "detail": "Taper vero: volume tagliato del 40-60% rispetto al Peak, di proposito ben sotto la tua disponibilità — è l'unica fase dove \"meno\" è l'obiettivo. Frequenza e un po' di intensità restano (openers, brevi accelerazioni) per arrivare freschi ma non \"spenti\" a Nove Colli.",
+      "raceId": "novecolli"
+    }
+  ],
+  "planB": {
+    "ridotta": "Tieni SOLO martedì (anche in Z2 se le gambe sono pesanti) + una uscita lunga più corta del 40%. Tutto il resto diventa Riposo o Z1 leggero.",
+    "recupero": "Fermati. Riposo passivo o \"Riposo o Passeggiata\" tutti i giorni. Riprendi la settimana prossima da dove sei, non da dove dovevi essere."
+  }
+}

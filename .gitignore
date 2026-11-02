@@ -1,0 +1,27 @@
+.env
+.env.*
+node_modules/
+saved-meals.json
+automation-log.md
+cron-run.log
+ftp-tests.json
+preferenze.json
+obiettivi.json
+.coach_webhook
+palestra-storico.json
+coach-ultimo.json
+.strava.env
+.strava-token.json
+*.bak_*
+*.bak
+*.tmp
+# app Android (palestra-app): generati
+palestra-app/node_modules/
+palestra-app/www/
+palestra-app/dist/
+palestra-app/android/app/build/
+palestra-app/android/build/
+palestra-app/android/.gradle/
+palestra-app/android/local.properties
+palestra-app/android/app/src/main/assets/public/
+palestra-app/android/capacitor-cordova-android-plugins/build/

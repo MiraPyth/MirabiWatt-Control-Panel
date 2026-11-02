@@ -1,0 +1,50 @@
+/* MirabiWatt da smartphone (13/10/2026): menu laterale a scomparsa, calendario a una colonna (giorni uno sotto l'altro),
+ * barre più compatte, tabelle che scorrono dentro la card invece di allargare la pagina. Caricato per ultimo. */
+#mw-apri-menu { display: none; }
+.mw-velo { display: none; }
+body { overflow-x: hidden; }
+
+@media (max-width: 760px) {
+  /* menu */
+  #mw-apri-menu { display: grid; margin-left: -6px; }
+  .mw-sidebar, .mw-sidebar.compatto { position: fixed; top: 0; left: 0; bottom: 0; height: 100%; width: min(280px, 84vw); z-index: 90;
+    transform: translateX(-105%); transition: transform .2s ease; box-shadow: 0 0 40px rgba(0, 0, 0, .45); overflow-y: auto; }
+  .mw-sidebar.aperto { transform: none; }
+  .mw-sidebar.compatto .mw-label { display: inline; }
+  .mw-sidebar.compatto .mw-item.sidebar-item { justify-content: flex-start; padding: 14px 20px !important; }
+  .mw-velo:not([hidden]) { display: block; position: fixed; inset: 0; background: rgba(0, 0, 0, .45); z-index: 85; }
+  body.mw-menu-aperto { overflow: hidden; }
+
+  /* barra del titolo: sempre visibile, anche nel calendario, per avere il menu */
+  body.mw-cal-attivo .mw-titolo { display: flex !important; }
+  .mw-titolo { padding: 8px 12px !important; flex-wrap: nowrap !important; }
+  .mw-titolo h2 { font-size: 16px !important; letter-spacing: .06em !important; }
+  #dash-status { max-width: 38vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mw-main { padding: 12px 12px 30px; }
+  body.mw-cal-attivo .mw-main { padding: 0 0 30px; }
+  .mira-crumbs { padding-left: 12px !important; padding-right: 12px !important; }
+
+  /* calendario */
+  .mw-toolbar { position: static; padding: 8px 10px; gap: 8px; }
+  .mw-mese-nome { min-width: 0; }
+  .mw-tb { padding: 6px 9px; }
+  .mw-tb-info { align-items: flex-start; }
+  .mw-cal { overflow: visible; max-height: none; }
+  .mw-cal-testa { display: none; }
+  .mw-riga { display: block; min-width: 0; border-bottom: 8px solid var(--card-b); }
+  .mw-sett { border-right: 0; border-bottom: 1px solid var(--card-b); }
+  .mw-giorno { display: grid; grid-template-columns: 46px minmax(0, 1fr); column-gap: 10px; row-gap: 6px; min-height: 0; padding: 8px 12px; }
+  .mw-giorno + .mw-giorno { border-left: 0; border-top: 1px solid var(--hover); }
+  .mw-giorno > * { grid-column: 2; }
+  .mw-giorno > .mw-g-testa { grid-column: 1; justify-content: flex-start; }
+  .mw-giorno > .mw-imprevisto { justify-self: start; }
+  .mw-pannello { width: 100vw; }
+  .mw-popover { max-width: calc(100vw - 20px); }
+
+  /* schede e tabelle */
+  .mw-card { padding: 12px; }
+  .mw-tools-testa h2, .mw-oggi-testa h2 { font-size: 20px; }
+  .mw-tab { display: block; overflow-x: auto; max-width: 100%; }
+  .mw-gear-tab td:first-child, .mw-gear-prom { min-width: 0; }
+  .mw-oggi-conto b { font-size: 28px; }
+}

@@ -1,0 +1,142 @@
+/* MirabiWatt nello stile di Mira Economy (14/10/2026): stessa palette, testi leggibili, card al posto del neon.
+ * Caricato DOPO gli stili delle pagine; le classi Tailwind (dal CDN, che inietta i suoi stili in coda) si
+ * sovrascrivono con selettori [class~="…"] e !important, senza toccare il markup. */
+:root {
+  /* 14/10 sera: palette come intervals.icu (indaco scuro, azzurro, numeri di forma colorati) */
+  --bg: #1d1c2b; --side: #232134; --barra: #2a2740;
+  --card: #26243a; --card-b: #35324d; --input: #1f1d2f; --input-b: #3f3b5c;
+  --text: #ececf4; --muted: #a8a4c2; --faint: #77739a;
+  --accent: #4fc3f7; --accent2: #5b9cf5;
+  --entrata: #4ade80; --spesa: #fb923c; --bad: #ff7a8f; --giallo: #f5c542; --viola: #c27cf0;
+  --fit: #4fa3f7; --fat: #d16ef5; --form: #f5c542;
+  --hover: rgba(255, 255, 255, .06); --hover-forte: #302d48; --sel-bg: #2b2944; --sul-accento: #0b1a26;
+  color-scheme: dark;
+}
+
+/* 14/10: tema chiaro (la voce «Tema chiaro» in fondo alla barra laterale), come la Light Mode di intervals.icu */
+html[data-tema="chiaro"] {
+  --bg: #f3f4f8; --side: #ffffff; --barra: #ffffff;
+  --card: #ffffff; --card-b: #dcdfe9; --input: #f7f8fb; --input-b: #c5c9d8;
+  --text: #1c1d2b; --muted: #555a70; --faint: #868aa0;
+  --accent: #0a7fbf; --accent2: #2f6fe0;
+  --entrata: #15803d; --spesa: #c2410c; --bad: #c62828; --giallo: #a16207; --viola: #7e3bd0;
+  --fit: #1f6fe0; --fat: #a133c7; --form: #a16207;
+  --hover: rgba(20, 22, 40, .05); --hover-forte: #e8ebf3; --sel-bg: #e6f2fa; --sul-accento: #ffffff;
+  color-scheme: light;
+}
+html[data-tema="chiaro"] [class~="text-orange-300"], html[data-tema="chiaro"] [class~="text-orange-200"] { color: var(--spesa) !important; }
+html[data-tema="chiaro"] [class~="text-purple-300"], html[data-tema="chiaro"] [class~="text-purple-400"], html[data-tema="chiaro"] [class~="text-purple-200"],
+html[data-tema="chiaro"] .text-purple-400\/70, html[data-tema="chiaro"] .text-purple-400\/60, html[data-tema="chiaro"] .text-purple-300\/70 { color: var(--viola) !important; }
+html[data-tema="chiaro"] .modal-overlay { background: rgba(30, 32, 50, .35) !important; }
+html[data-tema="chiaro"] .salt-particle { background: var(--accent) !important; }
+
+/* ----- base ----- */
+html body {
+  background-color: var(--bg) !important;
+  background-image: none !important;
+  background-size: auto !important;
+  color: var(--text) !important;
+  font: 15px/1.45 Roboto, system-ui, -apple-system, "Segoe UI", sans-serif !important;
+}
+::selection { background: rgba(79, 195, 247, .35); color: var(--text); }
+::-webkit-scrollbar-track { background: var(--bg) !important; }
+::-webkit-scrollbar-thumb, ::-webkit-scrollbar-thumb:hover { background: var(--card-b) !important; }
+
+/* «← Control Panel › MirabiWatt», come le altre pagine aperte dalla dashboard */
+.mira-crumbs { display: flex; align-items: center; gap: 8px; padding: 8px 16px; font-size: 13px; color: var(--muted);
+  background: var(--side); border-bottom: 1px solid var(--card-b); position: relative; z-index: 50; }
+.mira-crumbs a { color: var(--accent); font-weight: 600; text-decoration: none; }
+.mira-crumbs .sep { color: var(--faint); }
+
+/* ----- testi: niente minuscoli, niente maiuscolo spaziato né corsivo ----- */
+.text-\[8px\] { font-size: 12px !important; }
+.text-\[9px\] { font-size: 12px !important; }
+.text-\[10px\] { font-size: 12.5px !important; }
+.text-xs { font-size: 13px !important; line-height: 1.4 !important; }
+.text-sm { font-size: 14.5px !important; }
+.uppercase { text-transform: none !important; }
+.tracking-widest, .tracking-wider, .tracking-wide { letter-spacing: normal !important; }
+.italic { font-style: normal !important; }
+h1, h2, h3 { letter-spacing: normal !important; }
+
+/* testo principale */
+[class~="text-white"], [class~="text-cyan-100"], [class~="text-cyan-200"], [class~="text-cyan-300"], [class~="text-gray-300"],
+[class~="text-orange-100"], [class~="text-purple-100/80"] { color: var(--text) !important; }
+/* evidenza: valori e link */
+[class~="text-cyan-400"], [class~="text-cyan-500"], [class~="text-blue-400"], [class~="text-blue-300"] { color: var(--accent2) !important; }
+[class~="hover:text-cyan-300"]:hover { color: var(--accent) !important; }
+/* secondario */
+.text-cyan-500\/50, .text-cyan-500\/60, .text-cyan-500\/40, .text-cyan-500\/70, .text-cyan-100\/50, .text-cyan-100\/60, .text-cyan-100\/70,
+.text-cyan-100\/80, .text-cyan-200\/60, .text-cyan-200\/70, .text-cyan-300\/80, .text-cyan-400\/60, .text-cyan-400\/80,
+[class~="text-cyan-600"], [class~="text-cyan-700"], [class~="text-gray-400"] { color: var(--muted) !important; }
+/* colori di significato */
+[class~="text-orange-400"], [class~="text-orange-500"], [class~="text-orange"], .text-orange-400\/70 { color: var(--spesa) !important; }
+[class~="text-orange-300"], [class~="text-orange-200"] { color: #fdba74 !important; }
+[class~="text-red-400"], [class~="text-red-500"], [class~="text-red-300"], [class~="hover:text-red-300"]:hover { color: var(--bad) !important; }
+[class~="text-green-400"], [class~="text-green-300"], [class~="text-green-200"], .text-green-400\/70 { color: var(--entrata) !important; }
+[class~="text-yellow-400"], [class~="text-yellow-300"], [class~="text-yellow-200"], [class~="text-yellow-600"], .text-yellow-400\/80, .text-yellow-400\/70 { color: var(--giallo) !important; }
+[class~="text-purple-300"], [class~="text-purple-400"], [class~="text-purple-200"], .text-purple-400\/70, .text-purple-400\/60, .text-purple-300\/70 { color: #c4b5fd !important; }
+[class~="text-black"] { color: #04131c !important; }
+
+/* titoli (erano neon) */
+.neon-text { color: var(--text) !important; text-shadow: none !important; }
+.neon-text-orange { color: var(--spesa) !important; text-shadow: none !important; }
+[class~="bg-clip-text"] { background: none !important; color: var(--text) !important; -webkit-text-fill-color: currentColor !important; }
+[class*="drop-shadow-["] { filter: none !important; }
+
+/* ----- superfici: card come Mira Economy ----- */
+.neon-border { background: var(--card) !important; border: 1px solid var(--card-b) !important; box-shadow: none !important; border-radius: 16px !important; }
+.neon-border-orange { border: 1px solid rgba(251, 146, 60, .45) !important; box-shadow: none !important; border-radius: 16px !important; }
+.neon-hover:hover { border-color: var(--accent) !important; box-shadow: none !important; }
+[class*="shadow-["] { box-shadow: none !important; }
+.animate-pulse { animation: none !important; }
+.scanline { display: none !important; }
+.bg-black\/30, .bg-black\/40, .bg-black\/50, .bg-black\/60 { background-color: var(--input) !important; }
+.bg-black\/80, .bg-black\/90 { background-color: rgba(10, 17, 24, .94) !important; }
+.from-black\/70 { --tw-gradient-from: rgba(10, 17, 24, .7) !important; }
+.bg-cyan-950\/10, .bg-cyan-950\/20, .bg-cyan-950\/30, .bg-cyan-900\/10, .bg-cyan-900\/20, .bg-cyan-900\/30, .bg-cyan-900\/50, .bg-blue-900\/20, .bg-gray-100\/10 { background-color: rgba(56, 189, 248, .08) !important; }
+.bg-orange-900\/10, .bg-orange-900\/20, .bg-orange-900\/50, .bg-orange-950\/30, .bg-orange-600\/20 { background-color: rgba(251, 146, 60, .10) !important; }
+.bg-green-900\/20, .bg-green-950\/20 { background-color: rgba(74, 222, 128, .10) !important; }
+.bg-red-900\/20 { background-color: rgba(255, 122, 143, .10) !important; }
+.bg-purple-950\/10, .bg-purple-950\/20, .bg-purple-900\/20 { background-color: rgba(167, 139, 250, .10) !important; }
+.bg-yellow-950\/20, .bg-yellow-900\/20 { background-color: rgba(251, 191, 36, .10) !important; }
+[class~="bg-cyan-400"], [class~="bg-cyan-500"] { background-color: var(--accent) !important; }
+[class~="bg-blue-500"] { background-color: var(--accent2) !important; }
+.hover\:bg-cyan-950\/20:hover, .hover\:bg-cyan-950\/40:hover, .hover\:bg-cyan-900\/40:hover, .hover\:bg-cyan-900\/50:hover { background-color: rgba(79, 195, 247, .10) !important; }
+.hover\:bg-green-900\/40:hover { background-color: rgba(74, 222, 128, .14) !important; }
+.hover\:bg-red-950\/40:hover { background-color: rgba(255, 122, 143, .14) !important; }
+.hover\:bg-purple-900\/40:hover, .hover\:bg-purple-900\/50:hover { background-color: rgba(167, 139, 250, .14) !important; }
+.hover\:bg-orange-950\/40:hover, .hover\:bg-orange-600\/40:hover { background-color: rgba(251, 146, 60, .14) !important; }
+
+/* bordi */
+[class*="border-cyan-9"], [class*="border-cyan-8"], [class*="border-cyan-7"], [class*="border-cyan-6"], [class*="border-gray-6"] { border-color: var(--card-b) !important; }
+[class~="border-cyan-500"], [class~="border-cyan-400"], .border-cyan-500\/50, [class~="hover:border-cyan-500"]:hover, [class~="hover:border-cyan-400"]:hover, [class~="ring-cyan-400"] { border-color: var(--accent) !important; --tw-ring-color: var(--accent) !important; }
+[class*="border-orange-"], [class~="border-orange"], [class~="hover:border-orange-500"]:hover, [class~="focus:border-orange-500"]:focus, [class~="focus:border-orange-400"]:focus { border-color: rgba(251, 146, 60, .5) !important; }
+[class*="border-purple-"] { border-color: rgba(167, 139, 250, .5) !important; }
+[class*="border-green-"] { border-color: rgba(74, 222, 128, .5) !important; }
+[class*="border-red-"] { border-color: rgba(255, 122, 143, .5) !important; }
+[class*="border-yellow-"] { border-color: rgba(251, 191, 36, .5) !important; }
+[class~="border-blue-500"] { border-color: var(--accent2) !important; }
+.rounded { border-radius: 10px !important; }
+.rounded-lg { border-radius: 14px !important; }
+.rounded-xl { border-radius: 18px !important; }
+[class~="accent-cyan-500"], [class~="accent-yellow-600"] { accent-color: var(--accent) !important; }
+
+/* ----- componenti delle pagine ----- */
+.sidebar-item { font-size: 14px !important; text-transform: none !important; letter-spacing: normal !important; font-weight: 600 !important; color: var(--muted) !important; border-radius: 12px !important; }
+.sidebar-item:hover { background: rgba(79, 195, 247, .08) !important; color: var(--text) !important; }
+.sidebar-item.active { background: rgba(79, 195, 247, .14) !important; color: var(--accent) !important; box-shadow: inset 3px 0 0 var(--accent) !important; }
+
+.tron-input, input, select, textarea { background: var(--input) !important; border: 1px solid var(--input-b) !important; color: var(--text) !important; border-radius: 12px !important; box-shadow: none !important; }
+.tron-input:focus, input:focus, select:focus, textarea:focus { border-color: var(--accent) !important; box-shadow: none !important; outline: none !important; }
+.tron-input:disabled { opacity: .45 !important; }
+.table-row-hover:hover { background-color: rgba(79, 195, 247, .08) !important; }
+.day-card { background: var(--card) !important; border: 1px solid var(--card-b) !important; border-radius: 14px !important; box-shadow: none !important; }
+.day-card:hover { border-color: var(--accent) !important; box-shadow: none !important; }
+.day-header { font-size: 12.5px !important; text-transform: none !important; letter-spacing: normal !important; border-bottom-color: var(--card-b) !important; }
+.bottle-cap { background: var(--card-b) !important; border-color: var(--accent2) !important; box-shadow: none !important; }
+.bottle-body { border-color: var(--accent2) !important; background: var(--input) !important; box-shadow: none !important; }
+.liquid-water { background: rgba(56, 189, 248, .3) !important; }
+.power-bar-container { background: var(--input) !important; border-color: var(--input-b) !important; }
+.modal-overlay { background: rgba(4, 10, 16, .75) !important; }
+button { letter-spacing: normal !important; }

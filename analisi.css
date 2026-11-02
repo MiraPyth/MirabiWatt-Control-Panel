@@ -1,0 +1,237 @@
+/* MirabiWatt · Analisi FTP, Fitness, nome, obiettivi (14/10/2026). Solo variabili di mira-tema.css: tema chiaro e scuro. */
+
+/* nome modificabile nella barra laterale */
+.mw-nome { cursor: text; border-bottom: 1px dashed transparent; }
+.mw-nome:hover { border-bottom-color: var(--faint); }
+.mw-nome-input { width: 130px; padding: 4px 8px !important; font-size: 14px !important; }
+
+/* card e tabelle */
+.mw-ftp-griglia { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 16px; margin-top: 8px; }
+.mw-ftp-griglia .mw-intera { grid-column: 1 / -1; }
+@media (max-width: 1100px) { .mw-ftp-griglia { grid-template-columns: 1fr; } }
+.mw-card { background: var(--card); border: 1px solid var(--card-b); border-radius: 14px; padding: 14px 16px; min-width: 0; position: relative; }
+.mw-card-testa { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+.mw-card-testa h3 { margin: 0; font-size: 17px; color: var(--accent); }
+.mw-seg { display: inline-flex; border: 1px solid var(--input-b); border-radius: 999px; overflow: hidden; }
+.mw-seg button { all: unset; cursor: pointer; padding: 6px 14px; font-size: 13px; font-weight: 700; color: var(--muted); }
+.mw-seg button:hover { background: var(--hover); color: var(--text); }
+.mw-seg button.scelto { background: var(--accent); color: var(--sul-accento); }
+.mw-tab { width: 100%; border-collapse: collapse; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+.mw-tab th, .mw-tab td { padding: 6px 8px; text-align: right; border-bottom: 1px solid var(--card-b); white-space: nowrap; }
+.mw-tab th:first-child, .mw-tab td:first-child { text-align: left; }
+.mw-tab thead th { color: var(--muted); font-weight: 700; font-size: 12.5px; }
+.mw-tab tbody th { color: var(--muted); font-weight: 600; }
+.mw-tab small { color: var(--muted); font-size: 11.5px; }
+.mw-best td { font-weight: 700; }
+#ftp-legenda { margin-top: 8px; }
+#ftp-legenda td { text-align: left; }
+.pallino { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+
+/* grafici */
+.mw-grafico { position: relative; }
+.mw-svg { width: 100%; height: auto; display: block; }
+.mw-svg text { fill: var(--muted); font-size: 12px; font-family: inherit; }
+.mw-svg .et-y { text-anchor: end; }
+.mw-svg .et-x { text-anchor: middle; }
+.mw-svg .et-unita { font-weight: 700; fill: var(--faint); }
+.mw-svg .griglia { stroke: var(--card-b); stroke-width: 1; }
+.mw-svg .griglia-v { stroke: var(--card-b); stroke-width: 1; stroke-dasharray: 2 4; }
+.mw-svg .pc-presa { fill: transparent; cursor: crosshair; }
+.pc-linea { fill: none; stroke-width: 2.4; stroke-linejoin: round; }
+.pc-cp { stroke-width: 1.2; opacity: .85; }
+.pc-cursore, .fit-cursore { stroke: var(--text); stroke-width: 1; opacity: .5; pointer-events: none; }
+.pp-linea { fill: none; stroke-width: 2.4; }
+.pp-punto { fill: var(--card); stroke-width: 2.4; }
+.mw-tip { position: absolute; top: 56px; right: 26px; background: var(--barra); border: 1px solid var(--card-b); border-radius: 10px; padding: 8px 12px;
+  font-size: 13px; display: grid; gap: 2px; pointer-events: none; box-shadow: 0 8px 24px rgba(0, 0, 0, .25); }
+.mw-tip[hidden] { display: none; }
+.mw-profilo { display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap: 18px; align-items: start; }
+.mw-profilo > .mw-aiuto { grid-column: 1 / -1; }
+@media (max-width: 900px) { .mw-profilo { grid-template-columns: 1fr; } }
+
+/* Fitness */
+.mw-fit-barra { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin: 4px 0 12px; }
+.mw-fit-date { font-weight: 800; font-size: 16px; }
+.mw-fit-corpo { display: grid; grid-template-columns: minmax(0, 1fr) 180px; gap: 14px; }
+@media (max-width: 800px) { .mw-fit-corpo { grid-template-columns: 1fr; } }
+.mw-fit-grafici { display: grid; gap: 10px; background: var(--card); border: 1px solid var(--card-b); border-radius: 14px; padding: 10px; }
+.fit-carico { fill: var(--fat); opacity: .28; }
+.fit-carico.previsto { opacity: .14; }
+.fit-area { fill: var(--fit); opacity: .12; }
+.fit-ctl { fill: none; stroke: var(--fit); stroke-width: 3; }
+.fit-atl { fill: none; stroke: var(--fat); stroke-width: 1.8; }
+.fit-previsto { fill: none; stroke-width: 2; stroke-dasharray: 6 5; }
+.fit-ctl-p { stroke: var(--fit); }
+.fit-atl-p { stroke: var(--fat); opacity: .8; }
+.fit-oggi { stroke: var(--text); stroke-width: 1; opacity: .35; stroke-dasharray: 3 3; }
+.fascia { opacity: .16; }
+.fascia.z-transizione { fill: #f5c542; } .fascia.z-fresco { fill: #4fa3f7; } .fascia.z-grigia { fill: #9a98ad; }
+.fascia.z-ottimale { fill: #34d399; } .fascia.z-rischio { fill: #ff6b81; }
+.forma-linea { fill: none; stroke-width: 2.4; stroke-linejoin: round; }
+.forma-linea.z-transizione { stroke: #e0b12f; } .forma-linea.z-fresco { stroke: #4fa3f7; } .forma-linea.z-grigia { stroke: #9a98ad; }
+.forma-linea.z-ottimale { stroke: #22c58b; } .forma-linea.z-rischio { stroke: #ff5c74; }
+.forma-linea.previsto { stroke-dasharray: 6 5; }
+.mw-fit-valori { background: var(--card); border: 1px solid var(--card-b); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 8px; align-self: start; }
+.mw-fv-data { color: var(--muted); font-weight: 700; }
+.mw-fv { display: flex; justify-content: space-between; align-items: baseline; font-size: 14px; }
+.mw-fv b { font-size: 24px; font-variant-numeric: tabular-nums; }
+.mw-fv b.fit { color: var(--fit); } .mw-fv b.fat { color: var(--fat); }
+.mw-fv b.z-transizione, .mw-fv-zona.z-transizione { color: #d9a81d; } .mw-fv b.z-fresco, .mw-fv-zona.z-fresco { color: #4fa3f7; }
+.mw-fv b.z-grigia, .mw-fv-zona.z-grigia { color: var(--muted); } .mw-fv b.z-ottimale, .mw-fv-zona.z-ottimale { color: #22c58b; }
+.mw-fv b.z-rischio, .mw-fv-zona.z-rischio { color: #ff5c74; }
+.mw-fv-zona { font-weight: 700; }
+.mw-fv-legenda { list-style: none; margin: 6px 0 0; padding: 8px 0 0; border-top: 1px solid var(--card-b); display: grid; gap: 3px; font-size: 12.5px; font-weight: 700; }
+.mw-fv-legenda li.z-transizione { color: #d9a81d; } .mw-fv-legenda li.z-fresco { color: #4fa3f7; } .mw-fv-legenda li.z-grigia { color: var(--muted); }
+.mw-fv-legenda li.z-ottimale { color: #22c58b; } .mw-fv-legenda li.z-rischio { color: #ff5c74; }
+
+/* obiettivi (Stagione) */
+.mw-obiettivi-testa { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin: 6px 0 10px; }
+.mw-obiettivi-testa h3 { margin: 0; font-size: 16px; }
+.mw-ob-form { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; background: var(--card); border: 1px solid var(--card-b);
+  border-radius: 14px; padding: 14px; margin-bottom: 12px; }
+.mw-ob-form[hidden] { display: none; }
+.mw-ob-form label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: var(--muted); }
+.mw-ob-form label.largo { grid-column: 1 / -1; }
+.mw-ob-form input, .mw-ob-form select { padding: 8px 10px; font: inherit; font-size: 14px; }
+.mw-ob-form .mw-riga-azioni { grid-column: 1 / -1; }
+.mw-obiettivo { background: var(--card); border: 1px solid var(--card-b); border-left: 5px solid var(--accent2); border-radius: 14px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; }
+.mw-obiettivo.prio-A { border-left-color: var(--spesa); }
+.mw-obiettivo.prio-C { border-left-color: var(--faint); }
+.mw-ob-testa { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.mw-ob-testa h3 { margin: 0; font-size: 15.5px; }
+.mw-prio { font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: var(--hover); white-space: nowrap; }
+.mw-obiettivo.prio-A .mw-prio { color: var(--spesa); }
+.mw-ob-data { margin: 0; color: var(--muted); font-size: 13px; text-transform: capitalize; }
+.mw-ob-info { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 13px; }
+.mw-ob-piede { display: flex; justify-content: space-between; align-items: flex-end; gap: 10px; margin-top: 4px; }
+.mw-ob-giorni { font-size: 22px; color: var(--accent); display: block; }
+.mw-ob-piede small { color: var(--muted); }
+
+/* ----- 14/10 sera: valori attuali e zone, Tools, Oggi ----- */
+.mw-kpi-griglia { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.mw-kpi { background: var(--input); border: 1px solid var(--card-b); border-radius: 12px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; }
+.mw-kpi span { font-size: 12px; color: var(--muted); font-weight: 600; }
+.mw-kpi b { font-size: 20px; font-variant-numeric: tabular-nums; }
+.mw-kpi small { color: var(--muted); font-size: 12px; }
+.mw-kpi-nota { grid-column: 1 / -1; margin: 0; }
+.stato-sotto, .stato-sopra { color: var(--giallo); font-weight: 600; }
+.mw-vz { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 900px) { .mw-vz { grid-template-columns: 1fr; } }
+.mw-zona-col { display: inline-block; width: 10px; height: 18px; border-radius: 3px; margin-right: 8px; vertical-align: -4px; background: var(--faint); }
+.zona-1 .mw-zona-col { background: #8a86ad; } .zona-2 .mw-zona-col { background: #4fa3f7; } .zona-3 .mw-zona-col { background: #34d399; }
+.zona-4 .mw-zona-col { background: #f5c542; } .zona-5 .mw-zona-col { background: #fb923c; } .zona-6 .mw-zona-col { background: #ff6b81; } .zona-7 .mw-zona-col { background: #c27cf0; }
+
+.mw-tools, .mw-oggi { display: flex; flex-direction: column; gap: 14px; }
+.mw-tools-testa, .mw-oggi-testa { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap; }
+.mw-tools-testa h2, .mw-oggi-testa h2 { margin: 2px 0 0; font-size: 24px; text-transform: capitalize; }
+.mw-tool[hidden] { display: none; }
+.mw-tool-corpo { display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: 18px; align-items: start; }
+@media (max-width: 800px) { .mw-tool-corpo { grid-template-columns: 1fr; } }
+/* 19/10/2026 sera: colonne e campi che si stringono, sennò debordavano sopra i risultati */
+.mw-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.mw-form .mw-largo { grid-column: 1 / -1; }
+.mw-form label { min-width: 0; display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: var(--muted); }
+.mw-form input, .mw-form select { width: 100%; min-width: 0; box-sizing: border-box; padding: 8px 10px; font: inherit; font-size: 15px; }
+.mw-risultato { display: flex; flex-direction: column; gap: 10px; }
+.mw-barra-composta { display: flex; height: 26px; border-radius: 8px; overflow: hidden; background: var(--input); font-size: 12px; font-weight: 700; }
+.mw-barra-composta i { font-style: normal; display: flex; align-items: center; justify-content: center; color: #0b1a26; overflow: hidden; white-space: nowrap; }
+.mw-barra-composta .malto { background: #4fa3f7; } .mw-barra-composta .fruttosio { background: #fb923c; }
+.mw-barra-composta .aria { background: #4fa3f7; } .mw-barra-composta .gravita { background: #fb923c; } .mw-barra-composta .rotolamento { background: #9a98ad; }
+.ton-isotonica { color: var(--entrata); } .ton-ipotonica { color: var(--fit); } .ton-ipertonica, .ton-gel { color: var(--bad); }
+#sal-livelli { margin-top: 12px; }
+#sal-livelli tr.tu td { color: var(--accent); }
+
+.mw-oggi-valori { display: flex; flex-wrap: wrap; gap: 6px; }
+.mw-oggi-valori span { padding: 5px 12px; border-radius: 999px; background: var(--card); border: 1px solid var(--card-b); font-weight: 700; font-size: 13px; }
+.mw-oggi-griglia { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 14px; }
+.mw-oggi-griglia .mw-intera { grid-column: 1 / -1; }
+@media (max-width: 900px) { .mw-oggi-griglia { grid-template-columns: 1fr; } }
+.mw-oggi-allenamento { border-left: 5px solid var(--zona, var(--accent)); }
+.mw-oggi-sessione { display: flex; flex-direction: column; gap: 8px; }
+.mw-oggi-nome { font-size: 22px; font-weight: 800; }
+.mw-oggi-info { color: var(--muted); font-weight: 600; }
+.mw-stato { font-size: 12.5px; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: var(--hover); }
+.mw-stato.fatto { color: var(--entrata); } .mw-stato.da-fare { color: var(--accent); } .mw-stato.imprevisto { color: var(--giallo); }
+.mw-passi { margin: 0; padding-left: 20px; display: grid; gap: 4px; font-size: 14px; }
+.mw-passi small { color: var(--muted); }
+.mw-passi b { color: var(--accent); }
+.mw-oggi-fatte { margin: 0; padding-left: 18px; }
+.mw-oggi-domani { margin: 4px 0 0; padding-top: 8px; border-top: 1px solid var(--card-b); color: var(--muted); }
+.mw-oggi-forma { display: flex; gap: 18px; }
+.mw-oggi-conto b { font-size: 34px; color: var(--accent); }
+.mw-oggi-conto small { color: var(--muted); margin-left: 6px; }
+.mw-sotto { margin: 12px 0 4px; font-size: 13px; color: var(--muted); }
+.mw-chips { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+@media (max-width: 700px) { .mw-chips { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.mw-chip { background: var(--input); border: 1px solid var(--card-b); border-top: 4px solid var(--zona, var(--card-b)); border-radius: 10px; padding: 7px 8px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.mw-chip.oggi { box-shadow: 0 0 0 2px var(--accent); }
+.mw-chip.riposo { border-top-color: transparent; opacity: .75; }
+.mw-chip-g { font-size: 12px; color: var(--muted); font-weight: 700; }
+.mw-chip-s { font-size: 13px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mw-chip-i { font-size: 13px; min-height: 16px; }
+.mw-chip.fatto .mw-chip-i { color: var(--entrata); } .mw-chip.diverso .mw-chip-i { color: var(--giallo); } .mw-chip.saltato .mw-chip-i { color: var(--bad); }
+.mw-barra-prog { height: 8px; border-radius: 999px; background: var(--input); overflow: hidden; margin-top: 10px; }
+.mw-barra-prog i { display: block; height: 100%; background: var(--accent); }
+
+/* Attrezzatura (13/10/2026) */
+.mw-gear { display: flex; flex-direction: column; gap: 14px; }
+.mw-gear-griglia { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 14px; }
+@media (max-width: 900px) { .mw-gear-griglia { grid-template-columns: 1fr; } }
+#gear-bici { display: flex; flex-direction: column; gap: 14px; }
+.mw-gear-bici.ferma { opacity: .7; }
+.mw-gear-tab td { vertical-align: top; white-space: normal; }
+.mw-gear-tab td:first-child { min-width: 170px; }
+.mw-gear-prom { min-width: 220px; text-align: left !important; }
+.mw-gear-barra { height: 7px; border-radius: 999px; background: var(--hover); overflow: hidden; margin: 4px 0; }
+.mw-gear-barra i { display: block; height: 100%; border-radius: 999px; background: var(--entrata); }
+.mw-gear-barra.presto i { background: var(--giallo); }
+.mw-gear-barra.scaduto i { background: var(--bad); }
+.mw-gear-oltre { color: var(--bad); }
+.mw-gear-avviso { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 12px; padding: 10px 0; border-top: 1px solid var(--card-b); }
+.mw-gear-avviso:first-of-type { border-top: 0; }
+.mw-gear-avviso small { color: var(--muted); }
+.mw-gear-avviso .mw-gear-barra { grid-column: 1 / -1; }
+.mw-gear-avviso-num { text-align: right; display: flex; flex-direction: column; font-variant-numeric: tabular-nums; }
+.mw-gear-avviso.scaduto .mw-gear-avviso-num b { color: var(--bad); }
+.mw-gear-avviso.presto .mw-gear-avviso-num b { color: var(--giallo); }
+.mw-gear-lista { list-style: none; margin: 0 0 8px; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.mw-gear-lista small { color: var(--muted); }
+.mw-gear-storico { border-top: 1px solid var(--card-b); padding: 8px 0; }
+.mw-gear-storico summary { cursor: pointer; }
+.mw-gear-storico summary small { color: var(--muted); }
+.mw-gear-storico .mw-tab { margin-top: 6px; }
+
+/* Oggi · specchietto nutrizione (13/10/2026) */
+.mw-nut-kpi { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+.mw-nut-kcal { display: flex; align-items: baseline; gap: 8px; }
+.mw-nut-kcal b { font-size: 28px; color: var(--accent); font-variant-numeric: tabular-nums; }
+.mw-nut-kcal small { color: var(--muted); }
+.mw-nut-macro { display: flex; flex-wrap: wrap; gap: 6px 14px; font-weight: 700; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+.mw-nut-macro .p, .mw-nut-barra .p { --c: #4fa3f7; } .mw-nut-macro .c, .mw-nut-barra .c { --c: #f5c542; } .mw-nut-macro .f, .mw-nut-barra .f { --c: #fb923c; }
+.mw-nut-macro span { color: var(--c); }
+.mw-nut-barra { height: 18px; } .mw-nut-barra i { background: var(--c); }
+.mw-nut-consumate { margin: 0 0 6px; font-size: 13.5px; } .mw-nut-consumate b { color: var(--spesa); } .mw-nut-consumate small { color: var(--muted); }
+/* Nutrizione · alternativa AI (13/10/2026) */
+.mw-attesa { display: inline-block; width: 12px; height: 12px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; vertical-align: -2px; margin-right: 6px; animation: mw-gira .8s linear infinite; }
+@keyframes mw-gira { to { transform: rotate(360deg); } }
+[id^="meal-alt-"] { position: relative; }
+.mw-alt-chiudi { all: unset; cursor: pointer; position: absolute; top: 4px; right: 6px; width: 24px; height: 24px; display: grid; place-items: center; border-radius: 6px; font-size: 13px; }
+.mw-alt-chiudi:hover { background: var(--hover); }
+button[data-alt]:disabled { opacity: .5; cursor: wait; }
+/* 19/10/2026: scelta del piano stagionale in Stagione */
+.mw-piano-riga { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 6px 0 18px; }
+.mw-piano-riga label { font-size: 13px; font-weight: 600; }
+.mw-piano-riga select { min-width: 0; max-width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--input-b); background: var(--input); color: inherit; font: inherit; font-size: 14px; }
+.mw-piano-stato { font-size: 12px; color: var(--muted); }
+
+/* 19/10/2026 sera: scheda Strava in Tools */
+.mw-strava { margin-top: 16px; display: flex; flex-direction: column; gap: 10px; }
+.mw-strava-stato { margin: 0; font-weight: 700; }
+.mw-strava-stato.si { color: var(--entrata); }
+.mw-strava-stato.no { color: var(--muted); }
+.mw-strava-btn { align-self: flex-start; padding: 10px 16px; border-radius: 10px; background: #fc4c02; color: #fff; font-weight: 700; text-decoration: none; }
+.mw-strava-azioni { display: flex; gap: 8px; flex-wrap: wrap; }
+.mw-strava-azioni .mw-tb { border: 1px solid var(--card-b); }
+.mw-strava-ok { margin: 0; color: var(--entrata); }
+.mw-strava-ko { margin: 0; color: var(--bad); }
+.mw-strava-auto { display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; }

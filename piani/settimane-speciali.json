@@ -1,0 +1,17 @@
+{
+  "2026-10-26": {
+    "label": "Sett. 4 — Scarico fuori casa",
+    "special": "Scarico dopo tre settimane di Base 1 (8,2 e 8,1 ore le ultime due, più il giro di gruppo di domenica): fuori casa con gli elastici, un'uscita a pranzo, la MTB nel weekend. Circa 5 ore in tutto, uscite facoltative comprese: poco più della metà del solito, apposta. La palestra parte lunedì 2/11, con tendini e spalle già pronti.",
+    "nutrizione": "mantenimento",
+    "perche": "In palestra: Lo scarico taglia il volume ma tiene il movimento: la fatica se ne va e il muscolo non perde lo stimolo (Bell 2023). Con gli elastici a RIR 3 non si accumula fatica e si preparano tendini e articolazioni al ritorno in palestra. In bici: Dopo un blocco di carico una settimana a volume dimezzato, con un po' di brio e senza intensità piena, fa salire la forma invece di perderla (Friel; Mujika, tapering). Al rientro trovi gambe fresche per il ri-adattamento.",
+    "days": [
+      { "d": "Lun", "s": "Elastici Spinta (elastici)", "dur": "35'", "zone": "Palestra", "note": "Petto, spalle e tricipiti con l'elastico. Se hai un elastico chiuso ad anello, fissalo a una porta (in alto per le tirate, a metà per le spinte)." },
+      { "d": "Mar", "s": "Uscita a pranzo", "dur": "45'", "zone": "Z1-Z2", "icuType": "Workout", "note": "Camminata veloce o corsa leggera, con 6 allunghi facoltativi. È la tua seduta del martedì in versione scarico: niente gara né ripetute." },
+      { "d": "Mer", "s": "Elastici Gambe-Core (elastici)", "dur": "35'", "zone": "Palestra", "note": "Gambe leggere: nel weekend c'è la MTB." },
+      { "d": "Gio", "s": "Elastici Tirata (elastici)", "dur": "35'", "zone": "Palestra", "note": "Dorsali, spalle posteriori e bicipiti." },
+      { "d": "Ven", "s": "Uscita facoltativa", "dur": "40'", "zone": "Z1-Z2", "icuType": "Workout", "note": "Solo se ci riesci nel pomeriggio. Se salta, riposo: va bene lo stesso." },
+      { "d": "Sab", "s": "Riposo", "note": "Se la MTB la fai oggi, domenica diventa il riposo." },
+      { "d": "Dom", "s": "MTB Endurance", "dur": "2h-2h30", "zone": "Z2", "critical": true, "icuType": "MountainBikeRide", "note": "Sabato o domenica, col meteo migliore. Tutto in Z2 a sensazione, in salita seduto e agile; sui muri anche a piedi." }
+    ]
+  }
+}

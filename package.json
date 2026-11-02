@@ -1,0 +1,7 @@
+{
+  "name": "mirabiwatt-control-panel",
+  "private": true,
+  "scripts": {
+    "start": "node server.js"
+  }
+}

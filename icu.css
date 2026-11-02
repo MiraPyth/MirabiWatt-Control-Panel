@@ -1,0 +1,222 @@
+/* MirabiWatt come intervals.icu (31/10/2026). Richiesta: «assomigliare il più possibile a intervals.icu, assomigliare è
+ * diverso da UGUALE», e pagine che si allargano con lo schermo. Valori misurati sul sito vero il 23/10 (~/mirabiwatt-icu):
+ * fondo #f4f4fa, schede bianche a spigoli da 4px con l'ombra leggera, barre strumenti #f5f5f5 alte 48px, blu #1976d2,
+ * Roboto 14px, Fitness azzurro e Fatica viola; tema scuro dalla Dark Mode di intervals. Di MirabiWatt restano i colori di
+ * zona sulle sedute e i testi in frase (niente maiuscolo spaziato: leggibilità, richiesta del 14/10).
+ * Caricato dopo i fogli delle viste e prima di mobile.css / mobile-home.css (tests/icu_stile.test.js). */
+
+@font-face { font-family: Roboto; font-style: normal; font-weight: 300; font-display: swap; src: url(fonts/roboto-300.woff2) format("woff2"); }
+@font-face { font-family: Roboto; font-style: normal; font-weight: 400; font-display: swap; src: url(fonts/roboto-400.woff2) format("woff2"); }
+@font-face { font-family: Roboto; font-style: normal; font-weight: 500; font-display: swap; src: url(fonts/roboto-500.woff2) format("woff2"); }
+@font-face { font-family: Roboto; font-style: normal; font-weight: 700; font-display: swap; src: url(fonts/roboto-700.woff2) format("woff2"); }
+
+/* ---------- colori: scuro (di base) ---------- */
+:root {
+  --bg: #141018; --side: #1c1824; --barra: #2a2636;
+  --card: #242030; --card-b: #3a3548; --input: #1c1824; --input-b: #4d475e;
+  --text: #f4f2f8; --muted: #b6b1c4; --faint: #8b8699;
+  --accent: #64b5f6; --accent2: #64b5f6;
+  --entrata: #81c784; --spesa: #ffb74d; --bad: #ef5350; --giallo: #ffd54f; --viola: #ce93d8;
+  --fit: #4fc3f7; --fat: #e040fb; --form: #ffd54f;
+  --hover: rgba(255, 255, 255, .07); --hover-forte: #2d2939; --sel-bg: rgba(100, 181, 246, .12); --sul-accento: #0b1622;
+  --linea: rgba(255, 255, 255, .10); --oggi-bg: rgba(255, 255, 255, .05);
+  --ombra-1: 0 1px 2px rgba(0, 0, 0, .5), 0 1px 3px 1px rgba(0, 0, 0, .25);
+  --ombra-2: 0 3px 6px rgba(0, 0, 0, .45), 0 2px 4px rgba(0, 0, 0, .3);
+  --ombra-8: 0 8px 28px rgba(0, 0, 0, .55), 0 2px 8px rgba(0, 0, 0, .35);
+  --ease: cubic-bezier(.25, .8, .5, 1);
+  color-scheme: dark;
+}
+/* ---------- colori: chiaro (Light Mode di intervals) ---------- */
+html[data-tema="chiaro"] {
+  --bg: #f4f4fa; --side: #ffffff; --barra: #f5f5f5;
+  --card: #ffffff; --card-b: #e2e2ea; --input: #ffffff; --input-b: #c2c2cc;
+  --text: #1f1f24; --muted: #5f5f6b; --faint: #8d8d99;
+  --accent: #1976d2; --accent2: #1976d2;
+  --entrata: #2e7d32; --spesa: #e65100; --bad: #c4003c; --giallo: #9a6c00; --viola: #7b1fa2;
+  --fit: #34ace4; --fat: #6633cc; --form: #b38600;
+  --hover: rgba(0, 0, 0, .04); --hover-forte: #eeeef5; --sel-bg: rgba(25, 118, 210, .08); --sul-accento: #ffffff;
+  --linea: rgba(0, 0, 0, .12); --oggi-bg: rgba(0, 0, 0, .04);
+  --ombra-1: 0 1px 2px rgba(0, 0, 0, .3), 0 1px 3px 1px rgba(0, 0, 0, .15);
+  --ombra-2: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px rgba(0, 0, 0, .14), 0 1px 5px rgba(0, 0, 0, .12);
+  --ombra-8: 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12);
+  color-scheme: light;
+}
+
+/* ---------- base ---------- */
+html body { font: 14px/1.5 Roboto, system-ui, -apple-system, "Segoe UI", sans-serif !important; letter-spacing: .0107em; -webkit-font-smoothing: antialiased; }
+h1, h2, h3, h4 { font-weight: 500; }
+::selection { background: color-mix(in srgb, var(--accent) 30%, transparent); color: var(--text); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+html { scrollbar-color: var(--card-b) transparent; }
+::-webkit-scrollbar { width: 10px !important; height: 10px; }
+::-webkit-scrollbar-thumb { border: 2px solid var(--bg); border-radius: 6px !important; }
+.mw-stats dd, .mw-tab, .mw-oggi-valori, .mw-oggi-conto, .mw-nut-kpi, .mw-chip-g { font-variant-numeric: tabular-nums; }
+
+/* «← Control Panel › MirabiWatt»: riga sottile sopra tutto */
+.mira-crumbs { min-height: 32px; padding: 4px 16px; font-size: 12.5px; background: var(--side); border-bottom: 1px solid var(--linea); }
+.mira-crumbs a { font-weight: 500; }
+
+/* ---------- barra laterale: 200px, voci da 40px, la scelta in azzurro tenue ---------- */
+.mw-sidebar { width: 200px; background: var(--side); border-right: 1px solid var(--linea); box-shadow: none !important; transition: width .2s var(--ease); }
+.mw-sidebar.compatto { width: 56px; }
+.mw-side-top { min-height: 48px; padding: 4px 8px; gap: 8px; }
+.mw-hamburger { width: 40px; height: 40px; border-radius: 50%; color: var(--muted); transition: background .15s; }
+.mw-brand { font-size: 17px; font-weight: 500; letter-spacing: .01em; }
+.mw-brand::first-letter { color: var(--accent); }
+.mw-atleta { padding: 6px 8px 10px; gap: 10px; border-bottom: 1px solid var(--linea); margin-bottom: 4px; }
+.mw-avatar { width: 40px; height: 40px; font-size: 17px; background: var(--sel-bg); color: var(--accent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent); }
+.mw-atleta .mw-label { font-weight: 500; font-size: 14px; overflow: hidden; text-overflow: ellipsis; }
+html body .mw-item.sidebar-item { gap: 16px; min-height: 40px; padding: 0 16px !important; margin: 1px 6px; border-radius: 4px !important; border-top: 0;
+  color: var(--text) !important; font-size: 14px !important; font-weight: 400 !important; transition: background .15s, color .15s; }
+html body .mw-item.sidebar-item svg { color: var(--muted); transition: color .15s; }
+html body .mw-item.sidebar-item:hover { background: var(--hover) !important; }
+html body .mw-item.sidebar-item.active { background: var(--sel-bg) !important; color: var(--accent) !important; box-shadow: none !important; font-weight: 500 !important; }
+html body .mw-item.sidebar-item.active svg { color: var(--accent); }
+.mw-sidebar.compatto .mw-item.sidebar-item { justify-content: center; padding: 0 !important; margin: 1px 8px; }
+.mw-sidebar .mw-tema { border-top: 1px solid var(--linea) !important; margin: auto 0 0 !important; border-radius: 0 !important; min-height: 48px; }
+
+/* sotto i 1280px intervals tiene solo le icone; il telefono (≤760) usa il menu a scomparsa di mobile.css */
+@media (min-width: 761px) and (max-width: 1279px) {
+  .mw-sidebar, .mw-sidebar.compatto { width: 56px; }
+  .mw-sidebar .mw-label { display: none; }
+  .mw-sidebar .mw-item.sidebar-item { justify-content: center; padding: 0 !important; margin: 1px 8px; }
+  .mw-side-top { justify-content: center; padding: 4px 0; }
+  .mw-atleta { justify-content: center; padding: 6px 0 10px; }
+}
+
+/* ---------- barra del titolo e barre strumenti: 48px, piatte ---------- */
+html body .mw-titolo { min-height: 48px; padding: 0 16px !important; background: var(--barra) !important; border-bottom: 1px solid var(--linea) !important;
+  backdrop-filter: none !important; box-shadow: none; }
+html body #dash-view-title { font-size: 18px !important; font-weight: 500 !important; letter-spacing: .0125em !important; color: var(--text) !important; }
+html body #dash-view-title svg { color: var(--accent); }
+html body #dash-status { font-size: 12.5px !important; color: var(--muted) !important; }
+.mw-toolbar { min-height: 48px; padding: 6px 12px; gap: 8px; background: var(--barra); border-bottom: 1px solid var(--linea); }
+.mw-mese-nome { font-weight: 500; letter-spacing: .04em; min-width: 132px; }
+.mw-tb-info { font-size: 12.5px; }
+
+/* ---------- pulsanti come v-btn: 36px, spigoli 4px, velo al passaggio ---------- */
+.mw-tb { min-height: 36px; padding: 0 12px; gap: 8px; border-radius: 4px; font-size: 14px; font-weight: 500; letter-spacing: .02em;
+  color: var(--text); transition: background .2s var(--ease), box-shadow .2s var(--ease), transform .1s; }
+.mw-tb:hover { background: var(--hover); }
+.mw-tb:active { transform: translateY(1px); }
+.mw-tb.mw-primario { background: var(--accent); color: var(--sul-accento); box-shadow: var(--ombra-2); }
+.mw-tb.mw-primario:hover { filter: none; background: color-mix(in srgb, var(--accent) 88%, var(--text)); }
+.mw-tb.mw-ia { color: var(--viola); }
+.mw-tb.scelto { background: var(--sel-bg); color: var(--accent); box-shadow: none; }
+.mw-livelli { gap: 0; border: 1px solid var(--linea); border-radius: 4px; overflow: hidden; align-self: flex-start; }
+.mw-livelli .mw-tb { border-radius: 0; }
+.mw-livelli .mw-tb + .mw-tb { border-left: 1px solid var(--linea); }
+.mw-seg { border-radius: 4px; border-color: var(--linea); }
+.mw-seg button { font-weight: 500; }
+.mw-seg button.scelto { background: var(--sel-bg); color: var(--accent); }
+
+/* ---------- area principale: tutta la larghezza ---------- */
+.mw-main { padding: 16px 16px 40px; }
+@media (min-width: 1280px) { .mw-main { padding: 20px 24px 48px; } }
+
+/* ---------- schede ---------- */
+.mw-card { background: var(--card); border: 0; border-radius: 4px; padding: 16px; box-shadow: var(--ombra-1); }
+.mw-card-testa { margin-bottom: 12px; }
+.mw-card-testa h3 { font-size: 16px; font-weight: 500; color: var(--text); letter-spacing: .0125em; }
+.mw-sotto { font-size: 14px; font-weight: 500; margin: 14px 0 4px; }
+.mw-aiuto { font-size: 13px; line-height: 1.5; }
+html body .neon-border { border: 0 !important; border-radius: 4px !important; box-shadow: var(--ombra-1) !important; }
+html body .neon-hover:hover { box-shadow: var(--ombra-2) !important; }
+html body .rounded { border-radius: 4px !important; }
+html body .rounded-lg { border-radius: 4px !important; }
+html body .rounded-xl { border-radius: 6px !important; }
+html body .tron-input, html body input, html body select, html body textarea { border-radius: 4px !important; }
+html body .day-card { border-radius: 4px !important; border: 0 !important; box-shadow: var(--ombra-1) !important; }
+.mw-nota { border-radius: 4px; border: 0; background: var(--hover); }
+.mw-nota.mw-gialla { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--giallo) 45%, transparent); }
+.mw-nota.mw-viola { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--viola) 45%, transparent); }
+.mw-nota.mw-verde { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--entrata) 45%, transparent); }
+.mw-badge { border-radius: 999px; font-weight: 500; }
+.mw-tab th, .mw-tab td { border-bottom-color: var(--linea); }
+.mw-tab thead th { font-weight: 500; }
+.mw-fit-grafici { border: 0; border-radius: 4px; box-shadow: var(--ombra-1); }
+.mw-tip, .mw-popover, .mw-campi-pop { border-radius: 4px; border: 0; background: var(--card); box-shadow: var(--ombra-8); }
+.mw-popover button { border-radius: 4px; }
+.mw-toast { border-radius: 4px; border: 0; background: #323232; color: #fff; box-shadow: var(--ombra-8); }
+
+/* pannello «Ripianifica settimana» e finestre: superficie con l'ombra alta */
+.mw-pannello { background: var(--card); border-left: 0; box-shadow: var(--ombra-8); }
+.mw-pan-testa { background: var(--barra); border-bottom: 1px solid var(--linea); padding: 12px 16px; }
+.mw-pan-sopra { font-size: 12.5px; font-weight: 500; text-transform: none; letter-spacing: .02em; }
+.mw-pan-testa h3 { font-size: 18px; font-weight: 500; }
+.mw-pan-corpo { padding: 16px; gap: 12px; }
+.mw-pan-corpo h4 { font-size: 14px; font-weight: 500; margin-top: 10px; }
+.mw-modale { background: rgba(0, 0, 0, .46); }
+.mw-modale-box { background: var(--card); border: 0; border-radius: 4px; box-shadow: var(--ombra-8); padding: 20px 24px; }
+html[data-tema="chiaro"] .mw-modale { background: rgba(33, 33, 33, .46); }
+
+/* ---------- calendario: dentro una superficie, come la scheda di intervals ---------- */
+.mw-cal { background: var(--card); }
+.mw-cal-testa { background: var(--card); border-bottom: 1px solid var(--linea); }
+.mw-cal-testa > div { font-size: 12px; font-weight: 500; letter-spacing: .02em; text-transform: none; color: var(--muted); }
+.mw-riga { border-bottom: 1px solid var(--linea); }
+.mw-riga.corrente .mw-giorno { background: transparent; }
+.mw-giorno.oggi { background: var(--oggi-bg); }
+.mw-giorno + .mw-giorno { border-left: 1px solid var(--linea); }
+.mw-sett { background: var(--card); border-right: 1px solid var(--linea); padding: 10px 12px; transition: background .15s; }
+.mw-sett:hover { background: var(--hover); }
+.mw-riga.sel .mw-sett { background: var(--sel-bg); box-shadow: none; }
+.mw-riga.sel .mw-sett-testa b { color: var(--accent); }
+.mw-sett-testa b { font-size: 14px; font-weight: 500; }
+.mw-stats { font-size: 12.5px; }
+.mw-stats dd { font-weight: 500; }
+.mw-g-nome, .mw-g-mese { font-size: 12px; color: var(--faint); }
+.mw-g-num { font-size: 18px; font-weight: 400; }
+.mw-giorno.oggi .mw-g-num { font-weight: 500; padding: 0 7px; }
+
+/* sedute pianificate: tessera con l'ombra e il colore di zona in alto (al posto della striscia a sinistra) */
+.mw-sessione { border-left: 0; border-radius: 4px; background: var(--card); box-shadow: var(--ombra-1); padding: 8px 8px 7px;
+  background-image: linear-gradient(var(--zona, var(--faint)), var(--zona, var(--faint))); background-repeat: no-repeat; background-size: 100% 3px;
+  transition: box-shadow .2s var(--ease), transform .2s var(--ease); }
+.mw-sessione:hover { background-color: var(--card); box-shadow: var(--ombra-2); transform: translateY(-1px); }
+.mw-sessione.riposo { box-shadow: none; background-image: none; background-color: transparent; }
+.mw-sessione.riposo:hover { transform: none; background-color: var(--hover); }
+.mw-s-nome { font-size: 13px; font-weight: 500; }
+.mw-s-stato { font-weight: 500; }
+.mw-attivita { border-radius: 4px; border: 0; box-shadow: var(--ombra-1); transition: box-shadow .2s var(--ease); }
+.mw-attivita:hover, .mw-attivita:focus-visible { box-shadow: var(--ombra-2), inset 0 0 0 1px var(--entrata); }
+.mw-a-testa { background: color-mix(in srgb, var(--entrata) 16%, transparent); }
+.mw-a-testa b, .mw-a-nome { font-weight: 500; }
+.mw-attivita.stub { box-shadow: inset 0 0 0 1px var(--input-b); }
+.mw-evento { border-radius: 4px; font-weight: 500; }
+.mw-imprevisto { border-radius: 4px; }
+/* zone (piano): stessi toni delle zone di potenza di intervals */
+.z-z2 { --zona: #34ace4; } .z-z3 { --zona: #ffcb0e; } .z-hit { --zona: #dd0447; } .z-test { --zona: #6633cc; }
+.z-rec { --zona: #9e9e9e; } .z-libero { --zona: #9e9e9e; } .z-palestra { --zona: #009e80; }
+
+/* ---------- Oggi: griglia a 12 colonne che usa tutta la larghezza ---------- */
+.mw-oggi { gap: 16px; }
+.mw-oggi-testa .mw-pan-sopra { display: none; }
+.mw-oggi-testa h2 { font-size: 22px; font-weight: 400; margin: 0; letter-spacing: 0; }
+.mw-oggi-valori span { border: 0; border-radius: 999px; background: var(--card); box-shadow: var(--ombra-1); font-weight: 500; padding: 4px 12px; }
+.mw-oggi-griglia { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; }
+.mw-oggi-griglia > * { grid-column: span 6; }
+#oggi-allenamento { grid-column: span 7; }
+#oggi-forma { grid-column: span 5; }
+#oggi-settimana { grid-column: 1 / -1; }
+#oggi-obiettivo { grid-column: span 4; }
+#oggi-nutrizione { grid-column: span 4; }
+#oggi-ultima { grid-column: span 4; }
+@media (max-width: 1100px) {
+  .mw-oggi-griglia > * { grid-column: 1 / -1; }
+  #oggi-allenamento { grid-column: 1 / -1; }
+  #oggi-forma { grid-column: 1 / -1; }
+  #oggi-obiettivo { grid-column: 1 / -1; }
+  #oggi-nutrizione { grid-column: 1 / -1; }
+  #oggi-ultima { grid-column: 1 / -1; }
+}
+.mw-oggi-allenamento { border-left: 0; overflow: hidden; }
+.mw-oggi-nome::before { content: ""; display: inline-block; width: 12px; height: 12px; margin-right: 10px; border-radius: 50%; vertical-align: .08em; background: var(--zona, var(--accent)); }
+.mw-oggi-nome { font-size: 24px; font-weight: 400; line-height: 1.25; }
+.mw-oggi-info { font-weight: 500; }
+.mw-oggi-conto b { font-size: 36px; font-weight: 300; color: var(--text); }
+.mw-chip { border: 0; border-radius: 4px; background-color: var(--hover); background-image: linear-gradient(var(--zona, var(--card-b)), var(--zona, var(--card-b))); background-repeat: no-repeat; background-size: 100% 3px; }
+.mw-chip.oggi { box-shadow: inset 0 0 0 2px var(--accent); }
+.mw-chip-g { font-weight: 500; }
+.mw-chip-s { font-weight: 500; }
+.mw-chip.riposo { background-image: none; }

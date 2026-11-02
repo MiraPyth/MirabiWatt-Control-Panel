@@ -1,0 +1,1655 @@
+{
+  "id": "mixed-body-building",
+  "nome": "Piano invernale mixed body building",
+  "inizioPalestra": "2026-11-02",
+  "start": "2026-09-21",
+  "events": [
+    {
+      "id": "tratturo",
+      "name": "Granfondo Tratturo Magno",
+      "date": "2027-03-14",
+      "dateConfirmed": true,
+      "priority": "B",
+      "km": 104,
+      "elev": 1800
+    },
+    {
+      "id": "novecolli",
+      "name": "Granfondo Nove Colli (percorso lungo)",
+      "date": "2027-05-23",
+      "dateConfirmed": true,
+      "priority": "A",
+      "km": 200,
+      "elev": 3814,
+      "maxGrad": 18,
+      "maxAlt": 791
+    }
+  ],
+  "eventiFacoltativi": true,
+  "detailedPhases": [
+    {
+      "id": "prep",
+      "name": "Prep — Riattivazione",
+      "start": "2026-09-21",
+      "end": "2026-10-04",
+      "weeks": [
+        {
+          "label": "Sett. 1",
+          "special": "Controllato il tuo storico: ultime 2 settimane quasi ferme (TSB fino a +23), poi oggi (20/9) 4h a sorpresa. Niente test massimale a freddo: martedì fai un Ramp Test su Zwift — 20', si ferma da solo, zero pacing da gestire, ci dà comunque un eFTP fresco. Volume ~8h: parto dal basso della tua fascia (8-12h) perché vieni da 2 settimane ferme, non perché 8h sia il tetto.",
+          "days": [
+            {
+              "d": "Lun",
+              "s": "Riposo",
+              "note": "Passiva, stretching se va."
+            },
+            {
+              "d": "Mar",
+              "s": "Ramp Test",
+              "dur": "20-25'",
+              "zone": "Test",
+              "critical": true,
+              "note": "Su Zwift/rulli — ramp test standard, non il tuo protocollo 5'+15'. Meno costoso, dato comunque affidabile."
+            },
+            {
+              "d": "Mer",
+              "s": "EnduranceCorto",
+              "dur": "1h30-2h",
+              "zone": "Z2",
+              "note": "Rulli."
+            },
+            {
+              "d": "Gio",
+              "s": "EnduranceAgile",
+              "dur": "1h30",
+              "zone": "Z2",
+              "note": "Rulli, lavoro di cadenza."
+            },
+            {
+              "d": "Ven",
+              "s": "MedioMini",
+              "dur": "2h",
+              "zone": "Z2/Z3",
+              "note": "Libero pomeriggio da giovedì → outdoor se meteo ok."
+            },
+            {
+              "d": "Sab",
+              "s": "Corpo libero e MSR",
+              "note": "Facoltativa ma consigliata."
+            },
+            {
+              "d": "Dom",
+              "s": "EnduranceCorto",
+              "dur": "2h30",
+              "zone": "Z2",
+              "critical": true,
+              "note": "Outdoor."
+            }
+          ]
+        },
+        {
+          "label": "Sett. 2",
+          "special": "Niente secondo test dedicato: se in una delle uscite outdoor ti viene naturale spingere forte 15-20' con buone sensazioni, bene — ci basta l'eFTP che intervals.icu calcola da solo su quello sforzo, confrontato col ramp test. Nessun obbligo. Volume verso 8h30-9h.",
+          "days": [
+            {
+              "d": "Lun",
+              "s": "Riposo",
+              "note": ""
+            },
+            {
+              "d": "Mar",
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true,
+              "note": "Prima uscita \"vera\" — non tirare al 100%, è ancora riattivazione."
+            },
+            {
+              "d": "Mer",
+              "s": "EnduranceCorto",
+              "dur": "1h30",
+              "zone": "Z2",
+              "note": "Rulli."
+            },
+            {
+              "d": "Gio",
+              "s": "EnduranceAgile",
+              "dur": "1h15",
+              "zone": "Z2",
+              "note": "Rulli."
+            },
+            {
+              "d": "Ven",
+              "s": "EnduranceMedio",
+              "dur": "2h",
+              "zone": "Z2",
+              "note": "Pomeriggio libero, outdoor se possibile — occasione per lo sforzo libero di cui sopra, se ti va."
+            },
+            {
+              "d": "Sab",
+              "s": "Riposo",
+              "note": ""
+            },
+            {
+              "d": "Dom",
+              "s": "EnduranceMedio",
+              "dur": "2h45",
+              "zone": "Z2",
+              "critical": true,
+              "note": "Outdoor."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "base1",
+      "name": "Base 1 — Aerobico puro",
+      "start": "2026-10-05",
+      "end": "2026-11-01",
+      "weeks": [
+        {
+          "label": "Sett. 1",
+          "special": "Volume verso 9h — dentro la tua fascia 8-12h, in crescita rispetto alla Prep.",
+          "days": [
+            {
+              "d": "Lun",
+              "s": "Riposo"
+            },
+            {
+              "d": "Mar",
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true
+            },
+            {
+              "d": "Mer",
+              "s": "EnduranceCorto",
+              "dur": "1h30",
+              "zone": "Z2",
+              "note": "Rulli."
+            },
+            {
+              "d": "Gio",
+              "s": "EnduranceMedio",
+              "dur": "1h30",
+              "zone": "Z2",
+              "note": "Rulli/outdoor."
+            },
+            {
+              "d": "Ven",
+              "s": "EnduranceMedio",
+              "dur": "2h",
+              "zone": "Z2",
+              "note": "Pomeriggio libero, outdoor se possibile."
+            },
+            {
+              "d": "Sab",
+              "s": "Riposo"
+            },
+            {
+              "d": "Dom",
+              "s": "EnduranceLungo",
+              "dur": "3h",
+              "zone": "Z2",
+              "critical": true,
+              "note": "Outdoor."
+            }
+          ]
+        },
+        {
+          "label": "Sett. 2",
+          "special": "Volume verso 10h.",
+          "days": [
+            {
+              "d": "Lun",
+              "s": "Riposo"
+            },
+            {
+              "d": "Mar",
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true
+            },
+            {
+              "d": "Mer",
+              "s": "EnduranceCorto",
+              "dur": "1h45",
+              "zone": "Z2"
+            },
+            {
+              "d": "Gio",
+              "s": "EnduranceMedio",
+              "dur": "1h45",
+              "zone": "Z2"
+            },
+            {
+              "d": "Ven",
+              "s": "EnduranceMedio",
+              "dur": "2h15",
+              "zone": "Z2"
+            },
+            {
+              "d": "Sab",
+              "s": "Riposo"
+            },
+            {
+              "d": "Dom",
+              "s": "MedioLungo",
+              "dur": "3h30",
+              "zone": "Z2/Z3bassa",
+              "critical": true,
+              "note": "Outdoor."
+            }
+          ]
+        },
+        {
+          "label": "Sett. 3",
+          "special": "Punta della fase, ~11h30 — dentro il tuo tetto di 12h. Poi scarico.",
+          "days": [
+            {
+              "d": "Lun",
+              "s": "Riposo"
+            },
+            {
+              "d": "Mar",
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true
+            },
+            {
+              "d": "Mer",
+              "s": "EnduranceCorto",
+              "dur": "2h",
+              "zone": "Z2"
+            },
+            {
+              "d": "Gio",
+              "s": "EnduranceMedio",
+              "dur": "2h",
+              "zone": "Z2"
+            },
+            {
+              "d": "Ven",
+              "s": "EnduranceMedio",
+              "dur": "2h30",
+              "zone": "Z2"
+            },
+            {
+              "d": "Sab",
+              "s": "Riposo"
+            },
+            {
+              "d": "Dom",
+              "s": "MedioLungo",
+              "dur": "4h",
+              "zone": "Z2/Z3bassa",
+              "critical": true,
+              "note": "Outdoor, ultima lunga prima dello scarico."
+            }
+          ]
+        },
+        {
+          "label": "Sett. 4 — Scarico fuori casa",
+          "special": "Scarico dopo tre settimane di Base 1 (8,2 e 8,1 ore le ultime due, più il giro di gruppo di domenica): fuori casa con gli elastici, un'uscita a pranzo, la MTB nel weekend. Circa 5 ore in tutto, uscite facoltative comprese: poco più della metà del solito, apposta. La palestra parte lunedì 2/11, con tendini e spalle già pronti.",
+          "nutrizione": "mantenimento",
+          "perche": "In palestra: Lo scarico taglia il volume ma tiene il movimento: la fatica se ne va e il muscolo non perde lo stimolo (Bell 2023). Con gli elastici a RIR 3 non si accumula fatica e si preparano tendini e articolazioni al ritorno in palestra. In bici: Dopo un blocco di carico una settimana a volume dimezzato, con un po' di brio e senza intensità piena, fa salire la forma invece di perderla (Friel; Mujika, tapering). Al rientro trovi gambe fresche per il ri-adattamento.",
+          "days": [
+            {
+              "d": "Lun",
+              "s": "Elastici Spinta (elastici)",
+              "dur": "35'",
+              "zone": "Palestra",
+              "note": "Petto, spalle e tricipiti con l'elastico. Se hai un elastico chiuso ad anello, fissalo a una porta (in alto per le tirate, a metà per le spinte)."
+            },
+            {
+              "d": "Mar",
+              "s": "Uscita a pranzo",
+              "dur": "45'",
+              "zone": "Z1-Z2",
+              "icuType": "Workout",
+              "note": "Camminata veloce o corsa leggera, con 6 allunghi facoltativi. È la tua seduta del martedì in versione scarico: niente gara né ripetute."
+            },
+            {
+              "d": "Mer",
+              "s": "Elastici Gambe-Core (elastici)",
+              "dur": "35'",
+              "zone": "Palestra",
+              "note": "Gambe leggere: nel weekend c'è la MTB."
+            },
+            {
+              "d": "Gio",
+              "s": "Elastici Tirata (elastici)",
+              "dur": "35'",
+              "zone": "Palestra",
+              "note": "Dorsali, spalle posteriori e bicipiti."
+            },
+            {
+              "d": "Ven",
+              "s": "Uscita facoltativa",
+              "dur": "40'",
+              "zone": "Z1-Z2",
+              "icuType": "Workout",
+              "note": "Solo se ci riesci nel pomeriggio. Se salta, riposo: va bene lo stesso."
+            },
+            {
+              "d": "Sab",
+              "s": "Riposo",
+              "note": "Se la MTB la fai oggi, domenica diventa il riposo."
+            },
+            {
+              "d": "Dom",
+              "s": "MTB Endurance",
+              "dur": "2h-2h30",
+              "zone": "Z2",
+              "critical": true,
+              "icuType": "MountainBikeRide",
+              "note": "Sabato o domenica, col meteo migliore. Tutto in Z2 a sensazione, in salita seduto e agile; sui muri anche a piedi."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "riadatt",
+      "name": "Ri-adattamento palestra",
+      "start": "2026-11-02",
+      "end": "2026-11-29",
+      "nutrizione": "mantenimento",
+      "weeks": [
+        {
+          "label": "Sett. 1",
+          "special": "Si cambia rotta: tre palestre, la seduta intensa del martedì, un'endurance e il lungo nel weekend. Prima settimana in palestra dopo anni: poche serie, lontano dal cedimento. Il dolore muscolare dei primi giorni è previsto.",
+          "nutrizione": "mantenimento",
+          "perche": "In palestra: Dopo anni di stop tendini e tecnica si riadattano più lentamente dei muscoli: si parte sotto il volume minimo efficace, lontano dal cedimento (RP: «parti basso, è più facile salire che rimediare»). In bici: martedì la seduta intensa, il resto in Z2. Una sola HIT a intensità piena mantiene il VO2max (Spiering 2021) e il volume aerobico a bassa intensità non toglie muscolo (Schumann 2022).",
+          "days": [
+            {
+              "s": "Petto-Spalle (adattamento 1)",
+              "dur": "50'",
+              "zone": "Palestra",
+              "note": "Prima seduta: carichi con cui faresti 4 ripetizioni in più di quelle scritte.",
+              "d": "Lun"
+            },
+            {
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true,
+              "note": "Spalle indolenzite dalla palestra: in bici non pesa, corri normale.",
+              "d": "Mar"
+            },
+            {
+              "s": "Gambe-Core (adattamento 1)",
+              "dur": "50'",
+              "zone": "Palestra",
+              "note": "Gambe mai a cedimento: giovedì pedali e nel weekend c'è il lungo.",
+              "d": "Mer"
+            },
+            {
+              "s": "EnduranceCorto",
+              "dur": "1h15",
+              "zone": "Z2",
+              "note": "Rulli o outdoor, conversazionale.",
+              "d": "Gio"
+            },
+            {
+              "s": "Schiena-Bicipiti (adattamento 1)",
+              "dur": "50'",
+              "zone": "Palestra",
+              "note": "Niente gambe: arrivi fresco al lungo.",
+              "d": "Ven"
+            },
+            {
+              "s": "Riposo",
+              "note": "Libero. Se il lungo lo fai oggi, domenica diventa il riposo.",
+              "d": "Sab"
+            },
+            {
+              "s": "EnduranceLungo",
+              "dur": "2h30",
+              "zone": "Z2",
+              "critical": true,
+              "note": "Outdoor, sabato o domenica: quella col meteo migliore. Per farlo sabato: Ripianifica → domenica non disponibile.",
+              "d": "Dom"
+            }
+          ]
+        },
+        {
+          "label": "Sett. 2",
+          "special": "Stesse serie, un po' più vicino al limite. Se mercoledì le gambe sono ancora indolenzite da lunedì, resta leggero.",
+          "nutrizione": "mantenimento",
+          "perche": "In palestra: Si alza lo sforzo prima del volume: il corpo si abitua al carico senza accumulare la fatica che porta indolenzimento per giorni. In bici: martedì la seduta intensa, il resto in Z2. Una sola HIT a intensità piena mantiene il VO2max (Spiering 2021) e il volume aerobico a bassa intensità non toglie muscolo (Schumann 2022).",
+          "days": [
+            {
+              "s": "Petto-Spalle (adattamento 2)",
+              "dur": "50'",
+              "zone": "Palestra",
+              "d": "Lun"
+            },
+            {
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true,
+              "note": "Seduta intensa della settimana. Quando smetti i rulli: intervalli VO2max all'aperto (30/15, 4×8' o 5×5').",
+              "d": "Mar"
+            },
+            {
+              "s": "Gambe-Core (adattamento 2)",
+              "dur": "50'",
+              "zone": "Palestra",
+              "note": "Gambe mai a cedimento: giovedì pedali e nel weekend c'è il lungo.",
+              "d": "Mer"
+            },
+            {
+              "s": "EnduranceCorto",
+              "dur": "1h15",
+              "zone": "Z2",
+              "note": "Rulli o outdoor, conversazionale.",
+              "d": "Gio"
+            },
+            {
+              "s": "Schiena-Bicipiti (adattamento 2)",
+              "dur": "50'",
+              "zone": "Palestra",
+              "note": "Niente gambe: arrivi fresco al lungo.",
+              "d": "Ven"
+            },
+            {
+              "s": "Riposo",
+              "note": "Libero. Se il lungo lo fai oggi, domenica diventa il riposo.",
+              "d": "Sab"
+            },
+            {
+              "s": "EnduranceLungo",
+              "dur": "2h45",
+              "zone": "Z2",
+              "critical": true,
+              "note": "Outdoor, sabato o domenica: quella col meteo migliore. Per farlo sabato: Ripianifica → domenica non disponibile.",
+              "d": "Dom"
+            }
+          ]
+        },
+        {
+          "label": "Sett. 3",
+          "special": "Serie piene della scheda, RIR 2-3.",
+          "nutrizione": "mantenimento",
+          "perche": "In palestra: Volume pieno della scheda, ancora a 2-3 ripetizioni dal cedimento: è già uno stimolo di crescita per chi torna dopo una pausa. In bici: martedì la seduta intensa, il resto in Z2. Una sola HIT a intensità piena mantiene il VO2max (Spiering 2021) e il volume aerobico a bassa intensità non toglie muscolo (Schumann 2022).",
+          "days": [
+            {
+              "s": "Petto-Spalle (adattamento 3)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "d": "Lun"
+            },
+            {
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true,
+              "note": "Seduta intensa della settimana. Quando smetti i rulli: intervalli VO2max all'aperto (30/15, 4×8' o 5×5').",
+              "d": "Mar"
+            },
+            {
+              "s": "Gambe-Core (adattamento 3)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Gambe mai a cedimento: giovedì pedali e nel weekend c'è il lungo.",
+              "d": "Mer"
+            },
+            {
+              "s": "EnduranceCorto",
+              "dur": "1h30",
+              "zone": "Z2",
+              "note": "Rulli o outdoor, conversazionale.",
+              "d": "Gio"
+            },
+            {
+              "s": "Schiena-Bicipiti (adattamento 3)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Niente gambe: arrivi fresco al lungo.",
+              "d": "Ven"
+            },
+            {
+              "s": "Riposo",
+              "note": "Libero. Se il lungo lo fai oggi, domenica diventa il riposo.",
+              "d": "Sab"
+            },
+            {
+              "s": "EnduranceLungo",
+              "dur": "3h",
+              "zone": "Z2",
+              "critical": true,
+              "note": "Outdoor, sabato o domenica: quella col meteo migliore. Per farlo sabato: Ripianifica → domenica non disponibile.",
+              "d": "Dom"
+            }
+          ]
+        },
+        {
+          "label": "Sett. 4",
+          "special": "Ultima di ri-adattamento: annota i carichi di ogni esercizio, sono la partenza della costruzione.",
+          "nutrizione": "mantenimento",
+          "perche": "In palestra: Si fissano i carichi di riferimento: da qui parte la doppia progressione (prima le ripetizioni, poi il peso). In bici: martedì la seduta intensa, il resto in Z2. Una sola HIT a intensità piena mantiene il VO2max (Spiering 2021) e il volume aerobico a bassa intensità non toglie muscolo (Schumann 2022).",
+          "days": [
+            {
+              "s": "Petto-Spalle (adattamento 4)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "d": "Lun"
+            },
+            {
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true,
+              "note": "Seduta intensa della settimana. Quando smetti i rulli: intervalli VO2max all'aperto (30/15, 4×8' o 5×5').",
+              "d": "Mar"
+            },
+            {
+              "s": "Gambe-Core (adattamento 4)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Gambe mai a cedimento: giovedì pedali e nel weekend c'è il lungo.",
+              "d": "Mer"
+            },
+            {
+              "s": "EnduranceAgile",
+              "dur": "1h30",
+              "zone": "Z2",
+              "note": "Rulli o outdoor, conversazionale.",
+              "d": "Gio"
+            },
+            {
+              "s": "Schiena-Bicipiti (adattamento 4)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Niente gambe: arrivi fresco al lungo.",
+              "d": "Ven"
+            },
+            {
+              "s": "Riposo",
+              "note": "Libero. Se il lungo lo fai oggi, domenica diventa il riposo.",
+              "d": "Sab"
+            },
+            {
+              "s": "EnduranceLungo",
+              "dur": "3h",
+              "zone": "Z2",
+              "critical": true,
+              "note": "Outdoor, sabato o domenica: quella col meteo migliore. Per farlo sabato: Ripianifica → domenica non disponibile.",
+              "d": "Dom"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "costruzione",
+      "name": "Costruzione",
+      "start": "2026-11-30",
+      "end": "2027-01-03",
+      "nutrizione": "costruzione",
+      "weeks": [
+        {
+          "label": "Sett. 1",
+          "special": "Parte la costruzione: mesociclo di 4 settimane + scarico. Volume di partenza, RIR 3, e un piccolo surplus calorico (+150 kcal).",
+          "nutrizione": "costruzione",
+          "perche": "In palestra: Il mesociclo parte vicino al volume minimo efficace (MEV): lascia spazio per salire nelle settimane dopo (RP, cap. 2). In bici: martedì la seduta intensa, il resto in Z2. Una sola HIT a intensità piena mantiene il VO2max (Spiering 2021) e il volume aerobico a bassa intensità non toglie muscolo (Schumann 2022).",
+          "days": [
+            {
+              "s": "Petto-Spalle (costruzione 1)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "d": "Lun"
+            },
+            {
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true,
+              "note": "Seduta intensa della settimana. Quando smetti i rulli: intervalli VO2max all'aperto (30/15, 4×8' o 5×5').",
+              "d": "Mar"
+            },
+            {
+              "s": "Gambe-Core (costruzione 1)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Gambe mai a cedimento: giovedì pedali e nel weekend c'è il lungo.",
+              "d": "Mer"
+            },
+            {
+              "s": "EnduranceCorto",
+              "dur": "1h15",
+              "zone": "Z2",
+              "note": "Rulli o outdoor, conversazionale.",
+              "d": "Gio"
+            },
+            {
+              "s": "Schiena-Bicipiti (costruzione 1)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Niente gambe: arrivi fresco al lungo.",
+              "d": "Ven"
+            },
+            {
+              "s": "Riposo",
+              "note": "Libero. Se il lungo lo fai oggi, domenica diventa il riposo.",
+              "d": "Sab"
+            },
+            {
+              "s": "EnduranceLungo",
+              "dur": "2h45",
+              "zone": "Z2",
+              "critical": true,
+              "note": "Outdoor, sabato o domenica: quella col meteo migliore. Per farlo sabato: Ripianifica → domenica non disponibile.",
+              "d": "Dom"
+            }
+          ]
+        },
+        {
+          "label": "Sett. 2",
+          "special": "Stesse serie, RIR 2. Dove hai chiuso tutte le serie al massimo delle ripetizioni, sali di peso.",
+          "nutrizione": "costruzione",
+          "perche": "In palestra: Progressione dello sforzo: più vicino al cedimento a parità di serie. Doppia progressione: chiudi il massimo delle ripetizioni e la volta dopo sali di peso. In bici: martedì la seduta intensa, il resto in Z2. Una sola HIT a intensità piena mantiene il VO2max (Spiering 2021) e il volume aerobico a bassa intensità non toglie muscolo (Schumann 2022).",
+          "days": [
+            {
+              "s": "Petto-Spalle (costruzione 2)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "d": "Lun"
+            },
+            {
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true,
+              "note": "Seduta intensa della settimana. Quando smetti i rulli: intervalli VO2max all'aperto (30/15, 4×8' o 5×5').",
+              "d": "Mar"
+            },
+            {
+              "s": "Gambe-Core (costruzione 2)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Gambe mai a cedimento: giovedì pedali e nel weekend c'è il lungo.",
+              "d": "Mer"
+            },
+            {
+              "s": "EnduranceMedio",
+              "dur": "1h30",
+              "zone": "Z2",
+              "note": "Rulli o outdoor, conversazionale.",
+              "d": "Gio"
+            },
+            {
+              "s": "Schiena-Bicipiti (costruzione 2)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Niente gambe: arrivi fresco al lungo.",
+              "d": "Ven"
+            },
+            {
+              "s": "Riposo",
+              "note": "Libero. Se il lungo lo fai oggi, domenica diventa il riposo.",
+              "d": "Sab"
+            },
+            {
+              "s": "EnduranceLungo",
+              "dur": "3h",
+              "zone": "Z2",
+              "critical": true,
+              "note": "Outdoor, sabato o domenica: quella col meteo migliore. Per farlo sabato: Ripianifica → domenica non disponibile.",
+              "d": "Dom"
+            }
+          ]
+        },
+        {
+          "label": "Sett. 3",
+          "special": "Una serie in più su petto, spalle, bicipiti e addome. Dormi almeno 7 ore: è lì che il muscolo cresce.",
+          "nutrizione": "costruzione",
+          "perche": "In palestra: Il volume è la leva con la relazione dose-risposta più chiara (Pelland 2024, Schoenfeld 2017): si aggiunge sui gruppi che vuoi far crescere di più. In bici: martedì la seduta intensa, il resto in Z2. Una sola HIT a intensità piena mantiene il VO2max (Spiering 2021) e il volume aerobico a bassa intensità non toglie muscolo (Schumann 2022).",
+          "days": [
+            {
+              "s": "Petto-Spalle (costruzione 3)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "d": "Lun"
+            },
+            {
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true,
+              "note": "Seduta intensa della settimana. Quando smetti i rulli: intervalli VO2max all'aperto (30/15, 4×8' o 5×5').",
+              "d": "Mar"
+            },
+            {
+              "s": "Gambe-Core (costruzione 3)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Gambe mai a cedimento: giovedì pedali e nel weekend c'è il lungo.",
+              "d": "Mer"
+            },
+            {
+              "s": "EnduranceMedio",
+              "dur": "1h30",
+              "zone": "Z2",
+              "note": "Rulli o outdoor, conversazionale.",
+              "d": "Gio"
+            },
+            {
+              "s": "Schiena-Bicipiti (costruzione 3)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Niente gambe: arrivi fresco al lungo.",
+              "d": "Ven"
+            },
+            {
+              "s": "Riposo",
+              "note": "Libero. Se il lungo lo fai oggi, domenica diventa il riposo.",
+              "d": "Sab"
+            },
+            {
+              "s": "EnduranceLungo",
+              "dur": "3h",
+              "zone": "Z2",
+              "critical": true,
+              "note": "Outdoor, sabato o domenica: quella col meteo migliore. Per farlo sabato: Ripianifica → domenica non disponibile.",
+              "d": "Dom"
+            }
+          ]
+        },
+        {
+          "label": "Sett. 4",
+          "special": "La settimana più dura del mesociclo: isolamenti fino a RIR 0. Poi scarico.",
+          "nutrizione": "costruzione",
+          "perche": "In palestra: Fine mesociclo vicino al volume massimo recuperabile (MRV): massimo stimolo, poi serve lo scarico per smaltire la fatica accumulata. In bici: martedì la seduta intensa, il resto in Z2. Una sola HIT a intensità piena mantiene il VO2max (Spiering 2021) e il volume aerobico a bassa intensità non toglie muscolo (Schumann 2022).",
+          "days": [
+            {
+              "s": "Petto-Spalle (costruzione 4)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "d": "Lun"
+            },
+            {
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true,
+              "note": "Seduta intensa della settimana. Quando smetti i rulli: intervalli VO2max all'aperto (30/15, 4×8' o 5×5').",
+              "d": "Mar"
+            },
+            {
+              "s": "Gambe-Core (costruzione 4)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Gambe mai a cedimento: giovedì pedali e nel weekend c'è il lungo.",
+              "d": "Mer"
+            },
+            {
+              "s": "EnduranceMedio",
+              "dur": "1h30",
+              "zone": "Z2",
+              "note": "Rulli o outdoor, conversazionale.",
+              "d": "Gio"
+            },
+            {
+              "s": "Schiena-Bicipiti (costruzione 4)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Niente gambe: arrivi fresco al lungo.",
+              "d": "Ven"
+            },
+            {
+              "s": "Riposo",
+              "note": "Libero. Se il lungo lo fai oggi, domenica diventa il riposo.",
+              "d": "Sab"
+            },
+            {
+              "s": "MedioLungo",
+              "dur": "3h15",
+              "zone": "Z2/Z3bassa",
+              "critical": true,
+              "note": "Outdoor, sabato o domenica: quella col meteo migliore. Per farlo sabato: Ripianifica → domenica non disponibile.",
+              "d": "Dom"
+            }
+          ]
+        },
+        {
+          "label": "Sett. 5 — Scarico",
+          "special": "Scarico vero, in palestra e in bici. Non è tempo perso: è dove la fatica se ne va e il muscolo cresce.",
+          "nutrizione": "costruzione",
+          "perche": "In palestra: La fatica si accumula più in fretta dei muscoli: una settimana leggera ogni 4-6 la smaltisce e risensibilizza il muscolo allo stimolo (Bell 2023; RP, gestione della fatica). Anche la bici cala del 30-40%: la fatica si smaltisce insieme, palestra e sella.",
+          "days": [
+            {
+              "s": "Petto-Spalle (scarico)",
+              "dur": "45'",
+              "zone": "Palestra",
+              "d": "Lun"
+            },
+            {
+              "s": "Zwift Race",
+              "dur": "45-60'",
+              "zone": "HIT",
+              "critical": true,
+              "note": "Versione corta: gara breve o solo il primo giro tirato.",
+              "d": "Mar"
+            },
+            {
+              "s": "Gambe-Core (scarico)",
+              "dur": "45'",
+              "zone": "Palestra",
+              "note": "Gambe mai a cedimento: giovedì pedali e nel weekend c'è il lungo.",
+              "d": "Mer"
+            },
+            {
+              "s": "EnduranceCadenza",
+              "dur": "1h",
+              "zone": "Z2",
+              "note": "Rulli o outdoor, conversazionale.",
+              "d": "Gio"
+            },
+            {
+              "s": "Schiena-Bicipiti (scarico)",
+              "dur": "45'",
+              "zone": "Palestra",
+              "note": "Niente gambe: arrivi fresco al lungo.",
+              "d": "Ven"
+            },
+            {
+              "s": "Riposo",
+              "note": "Libero. Se il lungo lo fai oggi, domenica diventa il riposo.",
+              "d": "Sab"
+            },
+            {
+              "s": "EnduranceLungo",
+              "dur": "2h",
+              "zone": "Z2",
+              "critical": true,
+              "note": "Outdoor, sabato o domenica: quella col meteo migliore. Per farlo sabato: Ripianifica → domenica non disponibile.",
+              "d": "Dom"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "definizione",
+      "name": "Definizione",
+      "start": "2027-01-04",
+      "end": "2027-03-28",
+      "nutrizione": "definizione",
+      "weeks": [
+        {
+          "label": "Sett. 1",
+          "special": "Parte la definizione: deficit di circa 400-500 kcal nei giorni di palestra e riposo, proteine a 2,4 g/kg. Obiettivo −0,4/−0,8 kg a settimana.",
+          "nutrizione": "definizione",
+          "perche": "In palestra: In deficit il muscolo si mantiene tenendo alto il carico (l'intensità), anche con meno volume (Spiering 2021, Bickel 2011). In definizione la bici prende un po' di spazio (endurance più lunga): aiuta il deficit senza toccare il muscolo. Il deficit si fa nei giorni di palestra e riposo, mai sotto i lunghi e la HIT (disponibilità energetica, IOC RED-S 2018).",
+          "days": [
+            {
+              "s": "Petto-Spalle (definizione 1)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "d": "Lun"
+            },
+            {
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true,
+              "note": "Seduta intensa della settimana. Quando smetti i rulli: intervalli VO2max all'aperto (30/15, 4×8' o 5×5').",
+              "d": "Mar"
+            },
+            {
+              "s": "Gambe-Core (definizione 1)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Gambe mai a cedimento: giovedì pedali e nel weekend c'è il lungo.",
+              "d": "Mer"
+            },
+            {
+              "s": "EnduranceMedio",
+              "dur": "1h30",
+              "zone": "Z2",
+              "note": "Rulli o outdoor, conversazionale.",
+              "d": "Gio"
+            },
+            {
+              "s": "Schiena-Bicipiti (definizione 1)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Niente gambe: arrivi fresco al lungo.",
+              "d": "Ven"
+            },
+            {
+              "s": "Riposo",
+              "note": "Libero. Se il lungo lo fai oggi, domenica diventa il riposo.",
+              "d": "Sab"
+            },
+            {
+              "s": "EnduranceLungo",
+              "dur": "3h",
+              "zone": "Z2",
+              "critical": true,
+              "note": "Outdoor, sabato o domenica: quella col meteo migliore. Per farlo sabato: Ripianifica → domenica non disponibile.",
+              "d": "Dom"
+            }
+          ]
+        },
+        {
+          "label": "Sett. 2",
+          "special": "Stessi carichi della costruzione: se il peso sul bilanciere tiene, il muscolo resta.",
+          "nutrizione": "definizione",
+          "perche": "In palestra: Il recupero in deficit è peggiore: meno volume sui gruppi di supporto, sforzo pieno sui prioritari. In definizione la bici prende un po' di spazio (endurance più lunga): aiuta il deficit senza toccare il muscolo. Il deficit si fa nei giorni di palestra e riposo, mai sotto i lunghi e la HIT (disponibilità energetica, IOC RED-S 2018).",
+          "days": [
+            {
+              "s": "Petto-Spalle (definizione 2)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "d": "Lun"
+            },
+            {
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true,
+              "note": "Seduta intensa della settimana. Quando smetti i rulli: intervalli VO2max all'aperto (30/15, 4×8' o 5×5').",
+              "d": "Mar"
+            },
+            {
+              "s": "Gambe-Core (definizione 2)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Gambe mai a cedimento: giovedì pedali e nel weekend c'è il lungo.",
+              "d": "Mer"
+            },
+            {
+              "s": "EnduranceMedio",
+              "dur": "1h45",
+              "zone": "Z2",
+              "note": "Rulli o outdoor, conversazionale.",
+              "d": "Gio"
+            },
+            {
+              "s": "Schiena-Bicipiti (definizione 2)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Niente gambe: arrivi fresco al lungo.",
+              "d": "Ven"
+            },
+            {
+              "s": "Riposo",
+              "note": "Libero. Se il lungo lo fai oggi, domenica diventa il riposo.",
+              "d": "Sab"
+            },
+            {
+              "s": "EnduranceLungo",
+              "dur": "3h",
+              "zone": "Z2",
+              "critical": true,
+              "note": "Outdoor, sabato o domenica: quella col meteo migliore. Per farlo sabato: Ripianifica → domenica non disponibile.",
+              "d": "Dom"
+            }
+          ]
+        },
+        {
+          "label": "Sett. 3",
+          "special": "Se il peso non scende da 2 settimane, togli 150 kcal dai giorni di palestra. Se scende più di 0,8 kg a settimana, aggiungile.",
+          "nutrizione": "definizione",
+          "perche": "In palestra: Perdere una ripetizione in deficit è normale; perdere carico è il segnale che si sta perdendo muscolo. In definizione la bici prende un po' di spazio (endurance più lunga): aiuta il deficit senza toccare il muscolo. Il deficit si fa nei giorni di palestra e riposo, mai sotto i lunghi e la HIT (disponibilità energetica, IOC RED-S 2018).",
+          "days": [
+            {
+              "s": "Petto-Spalle (definizione 3)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "d": "Lun"
+            },
+            {
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true,
+              "note": "Seduta intensa della settimana. Quando smetti i rulli: intervalli VO2max all'aperto (30/15, 4×8' o 5×5').",
+              "d": "Mar"
+            },
+            {
+              "s": "Gambe-Core (definizione 3)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Gambe mai a cedimento: giovedì pedali e nel weekend c'è il lungo.",
+              "d": "Mer"
+            },
+            {
+              "s": "EnduranceMedio",
+              "dur": "1h45",
+              "zone": "Z2",
+              "note": "Rulli o outdoor, conversazionale.",
+              "d": "Gio"
+            },
+            {
+              "s": "Schiena-Bicipiti (definizione 3)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Niente gambe: arrivi fresco al lungo.",
+              "d": "Ven"
+            },
+            {
+              "s": "Riposo",
+              "note": "Libero. Se il lungo lo fai oggi, domenica diventa il riposo.",
+              "d": "Sab"
+            },
+            {
+              "s": "EnduranceLungo",
+              "dur": "3h15",
+              "zone": "Z2",
+              "critical": true,
+              "note": "Outdoor, sabato o domenica: quella col meteo migliore. Per farlo sabato: Ripianifica → domenica non disponibile.",
+              "d": "Dom"
+            }
+          ]
+        },
+        {
+          "label": "Sett. 4",
+          "special": "Ultima settimana del mesociclo. Poi scarico e pausa dalla dieta.",
+          "nutrizione": "definizione",
+          "perche": "In palestra: Stessa logica del mesociclo di costruzione, con meno volume totale per rispettare il recupero in deficit. In definizione la bici prende un po' di spazio (endurance più lunga): aiuta il deficit senza toccare il muscolo. Il deficit si fa nei giorni di palestra e riposo, mai sotto i lunghi e la HIT (disponibilità energetica, IOC RED-S 2018).",
+          "days": [
+            {
+              "s": "Petto-Spalle (definizione 4)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "d": "Lun"
+            },
+            {
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true,
+              "note": "Seduta intensa della settimana. Quando smetti i rulli: intervalli VO2max all'aperto (30/15, 4×8' o 5×5').",
+              "d": "Mar"
+            },
+            {
+              "s": "Gambe-Core (definizione 4)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Gambe mai a cedimento: giovedì pedali e nel weekend c'è il lungo.",
+              "d": "Mer"
+            },
+            {
+              "s": "EnduranceMedio",
+              "dur": "1h45",
+              "zone": "Z2",
+              "note": "Rulli o outdoor, conversazionale.",
+              "d": "Gio"
+            },
+            {
+              "s": "Schiena-Bicipiti (definizione 4)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Niente gambe: arrivi fresco al lungo.",
+              "d": "Ven"
+            },
+            {
+              "s": "Riposo",
+              "note": "Libero. Se il lungo lo fai oggi, domenica diventa il riposo.",
+              "d": "Sab"
+            },
+            {
+              "s": "MedioLungo",
+              "dur": "3h30",
+              "zone": "Z2/Z3bassa",
+              "critical": true,
+              "note": "Outdoor, sabato o domenica: quella col meteo migliore. Per farlo sabato: Ripianifica → domenica non disponibile.",
+              "d": "Dom"
+            }
+          ]
+        },
+        {
+          "label": "Sett. 5 — Scarico e pausa dieta",
+          "special": "Scarico + pausa dalla dieta: una settimana a calorie di mantenimento (Pyramid Nutrition: 1-2 settimane ogni ~8 di dieta; MATADOR). Ripartono fame, umore e prestazione.",
+          "nutrizione": "mantenimento",
+          "perche": "In palestra: La fatica si accumula più in fretta dei muscoli: una settimana leggera ogni 4-6 la smaltisce e risensibilizza il muscolo allo stimolo (Bell 2023; RP, gestione della fatica). Anche la bici cala del 30-40%: la fatica si smaltisce insieme, palestra e sella.",
+          "days": [
+            {
+              "s": "Petto-Spalle (scarico)",
+              "dur": "45'",
+              "zone": "Palestra",
+              "d": "Lun"
+            },
+            {
+              "s": "Zwift Race",
+              "dur": "45-60'",
+              "zone": "HIT",
+              "critical": true,
+              "note": "Seduta intensa della settimana. Quando smetti i rulli: intervalli VO2max all'aperto (30/15, 4×8' o 5×5').",
+              "d": "Mar"
+            },
+            {
+              "s": "Gambe-Core (scarico)",
+              "dur": "45'",
+              "zone": "Palestra",
+              "note": "Gambe mai a cedimento: giovedì pedali e nel weekend c'è il lungo.",
+              "d": "Mer"
+            },
+            {
+              "s": "EnduranceCadenza",
+              "dur": "1h",
+              "zone": "Z2",
+              "note": "Rulli o outdoor, conversazionale.",
+              "d": "Gio"
+            },
+            {
+              "s": "Schiena-Bicipiti (scarico)",
+              "dur": "45'",
+              "zone": "Palestra",
+              "note": "Niente gambe: arrivi fresco al lungo.",
+              "d": "Ven"
+            },
+            {
+              "s": "Riposo",
+              "note": "Libero. Se il lungo lo fai oggi, domenica diventa il riposo.",
+              "d": "Sab"
+            },
+            {
+              "s": "EnduranceLungo",
+              "dur": "2h",
+              "zone": "Z2",
+              "critical": true,
+              "note": "Outdoor, sabato o domenica: quella col meteo migliore. Per farlo sabato: Ripianifica → domenica non disponibile.",
+              "d": "Dom"
+            }
+          ]
+        },
+        {
+          "label": "Sett. 6",
+          "special": "Parte la definizione: deficit di circa 400-500 kcal nei giorni di palestra e riposo, proteine a 2,4 g/kg. Obiettivo −0,4/−0,8 kg a settimana.",
+          "nutrizione": "definizione",
+          "perche": "In palestra: In deficit il muscolo si mantiene tenendo alto il carico (l'intensità), anche con meno volume (Spiering 2021, Bickel 2011). In definizione la bici prende un po' di spazio (endurance più lunga): aiuta il deficit senza toccare il muscolo. Il deficit si fa nei giorni di palestra e riposo, mai sotto i lunghi e la HIT (disponibilità energetica, IOC RED-S 2018).",
+          "days": [
+            {
+              "s": "Petto-Spalle (definizione 1)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "d": "Lun"
+            },
+            {
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true,
+              "note": "Seduta intensa della settimana. Quando smetti i rulli: intervalli VO2max all'aperto (30/15, 4×8' o 5×5').",
+              "d": "Mar"
+            },
+            {
+              "s": "Gambe-Core (definizione 1)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Gambe mai a cedimento: giovedì pedali e nel weekend c'è il lungo.",
+              "d": "Mer"
+            },
+            {
+              "s": "EnduranceMedio",
+              "dur": "1h30",
+              "zone": "Z2",
+              "note": "Rulli o outdoor, conversazionale.",
+              "d": "Gio"
+            },
+            {
+              "s": "Schiena-Bicipiti (definizione 1)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Niente gambe: arrivi fresco al lungo.",
+              "d": "Ven"
+            },
+            {
+              "s": "Riposo",
+              "note": "Libero. Se il lungo lo fai oggi, domenica diventa il riposo.",
+              "d": "Sab"
+            },
+            {
+              "s": "EnduranceLungo",
+              "dur": "3h",
+              "zone": "Z2",
+              "critical": true,
+              "note": "Outdoor, sabato o domenica: quella col meteo migliore. Per farlo sabato: Ripianifica → domenica non disponibile.",
+              "d": "Dom"
+            }
+          ]
+        },
+        {
+          "label": "Sett. 7",
+          "special": "Stessi carichi della costruzione: se il peso sul bilanciere tiene, il muscolo resta.",
+          "nutrizione": "definizione",
+          "perche": "In palestra: Il recupero in deficit è peggiore: meno volume sui gruppi di supporto, sforzo pieno sui prioritari. In definizione la bici prende un po' di spazio (endurance più lunga): aiuta il deficit senza toccare il muscolo. Il deficit si fa nei giorni di palestra e riposo, mai sotto i lunghi e la HIT (disponibilità energetica, IOC RED-S 2018).",
+          "days": [
+            {
+              "s": "Petto-Spalle (definizione 2)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "d": "Lun"
+            },
+            {
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true,
+              "note": "Seduta intensa della settimana. Quando smetti i rulli: intervalli VO2max all'aperto (30/15, 4×8' o 5×5').",
+              "d": "Mar"
+            },
+            {
+              "s": "Gambe-Core (definizione 2)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Gambe mai a cedimento: giovedì pedali e nel weekend c'è il lungo.",
+              "d": "Mer"
+            },
+            {
+              "s": "EnduranceMedio",
+              "dur": "1h45",
+              "zone": "Z2",
+              "note": "Rulli o outdoor, conversazionale.",
+              "d": "Gio"
+            },
+            {
+              "s": "Schiena-Bicipiti (definizione 2)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Niente gambe: arrivi fresco al lungo.",
+              "d": "Ven"
+            },
+            {
+              "s": "Riposo",
+              "note": "Libero. Se il lungo lo fai oggi, domenica diventa il riposo.",
+              "d": "Sab"
+            },
+            {
+              "s": "EnduranceLungo",
+              "dur": "3h",
+              "zone": "Z2",
+              "critical": true,
+              "note": "Outdoor, sabato o domenica: quella col meteo migliore. Per farlo sabato: Ripianifica → domenica non disponibile.",
+              "d": "Dom"
+            }
+          ]
+        },
+        {
+          "label": "Sett. 8",
+          "special": "Se il peso non scende da 2 settimane, togli 150 kcal dai giorni di palestra. Se scende più di 0,8 kg a settimana, aggiungile.",
+          "nutrizione": "definizione",
+          "perche": "In palestra: Perdere una ripetizione in deficit è normale; perdere carico è il segnale che si sta perdendo muscolo. In definizione la bici prende un po' di spazio (endurance più lunga): aiuta il deficit senza toccare il muscolo. Il deficit si fa nei giorni di palestra e riposo, mai sotto i lunghi e la HIT (disponibilità energetica, IOC RED-S 2018).",
+          "days": [
+            {
+              "s": "Petto-Spalle (definizione 3)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "d": "Lun"
+            },
+            {
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true,
+              "note": "Seduta intensa della settimana. Quando smetti i rulli: intervalli VO2max all'aperto (30/15, 4×8' o 5×5').",
+              "d": "Mar"
+            },
+            {
+              "s": "Gambe-Core (definizione 3)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Gambe mai a cedimento: giovedì pedali e nel weekend c'è il lungo.",
+              "d": "Mer"
+            },
+            {
+              "s": "EnduranceMedio",
+              "dur": "1h45",
+              "zone": "Z2",
+              "note": "Rulli o outdoor, conversazionale.",
+              "d": "Gio"
+            },
+            {
+              "s": "Schiena-Bicipiti (definizione 3)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Niente gambe: arrivi fresco al lungo.",
+              "d": "Ven"
+            },
+            {
+              "s": "Riposo",
+              "note": "Libero. Se il lungo lo fai oggi, domenica diventa il riposo.",
+              "d": "Sab"
+            },
+            {
+              "s": "EnduranceLungo",
+              "dur": "3h15",
+              "zone": "Z2",
+              "critical": true,
+              "note": "Outdoor, sabato o domenica: quella col meteo migliore. Per farlo sabato: Ripianifica → domenica non disponibile.",
+              "d": "Dom"
+            }
+          ]
+        },
+        {
+          "label": "Sett. 9",
+          "special": "Ultima settimana del mesociclo. Poi scarico e pausa dalla dieta.",
+          "nutrizione": "definizione",
+          "perche": "In palestra: Stessa logica del mesociclo di costruzione, con meno volume totale per rispettare il recupero in deficit. In definizione la bici prende un po' di spazio (endurance più lunga): aiuta il deficit senza toccare il muscolo. Il deficit si fa nei giorni di palestra e riposo, mai sotto i lunghi e la HIT (disponibilità energetica, IOC RED-S 2018).",
+          "days": [
+            {
+              "s": "Petto-Spalle (definizione 4)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "d": "Lun"
+            },
+            {
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true,
+              "note": "Seduta intensa della settimana. Quando smetti i rulli: intervalli VO2max all'aperto (30/15, 4×8' o 5×5').",
+              "d": "Mar"
+            },
+            {
+              "s": "Gambe-Core (definizione 4)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Gambe mai a cedimento: giovedì pedali e nel weekend c'è il lungo.",
+              "d": "Mer"
+            },
+            {
+              "s": "EnduranceMedio",
+              "dur": "1h45",
+              "zone": "Z2",
+              "note": "Rulli o outdoor, conversazionale.",
+              "d": "Gio"
+            },
+            {
+              "s": "Schiena-Bicipiti (definizione 4)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Niente gambe: arrivi fresco al lungo.",
+              "d": "Ven"
+            },
+            {
+              "s": "Riposo",
+              "note": "Libero. Se il lungo lo fai oggi, domenica diventa il riposo.",
+              "d": "Sab"
+            },
+            {
+              "s": "MedioLungo",
+              "dur": "3h30",
+              "zone": "Z2/Z3bassa",
+              "critical": true,
+              "note": "Outdoor, sabato o domenica: quella col meteo migliore. Per farlo sabato: Ripianifica → domenica non disponibile.",
+              "d": "Dom"
+            }
+          ]
+        },
+        {
+          "label": "Sett. 10 — Scarico e pausa dieta",
+          "special": "Scarico + pausa dalla dieta: una settimana a calorie di mantenimento (Pyramid Nutrition: 1-2 settimane ogni ~8 di dieta; MATADOR). Ripartono fame, umore e prestazione.",
+          "nutrizione": "mantenimento",
+          "perche": "In palestra: La fatica si accumula più in fretta dei muscoli: una settimana leggera ogni 4-6 la smaltisce e risensibilizza il muscolo allo stimolo (Bell 2023; RP, gestione della fatica). Anche la bici cala del 30-40%: la fatica si smaltisce insieme, palestra e sella.",
+          "days": [
+            {
+              "s": "Petto-Spalle (scarico)",
+              "dur": "45'",
+              "zone": "Palestra",
+              "d": "Lun"
+            },
+            {
+              "s": "Zwift Race",
+              "dur": "45-60'",
+              "zone": "HIT",
+              "critical": true,
+              "note": "Seduta intensa della settimana. Quando smetti i rulli: intervalli VO2max all'aperto (30/15, 4×8' o 5×5').",
+              "d": "Mar"
+            },
+            {
+              "s": "Gambe-Core (scarico)",
+              "dur": "45'",
+              "zone": "Palestra",
+              "note": "Gambe mai a cedimento: giovedì pedali e nel weekend c'è il lungo.",
+              "d": "Mer"
+            },
+            {
+              "s": "EnduranceCadenza",
+              "dur": "1h",
+              "zone": "Z2",
+              "note": "Rulli o outdoor, conversazionale.",
+              "d": "Gio"
+            },
+            {
+              "s": "Schiena-Bicipiti (scarico)",
+              "dur": "45'",
+              "zone": "Palestra",
+              "note": "Niente gambe: arrivi fresco al lungo.",
+              "d": "Ven"
+            },
+            {
+              "s": "Riposo",
+              "note": "Libero. Se il lungo lo fai oggi, domenica diventa il riposo.",
+              "d": "Sab"
+            },
+            {
+              "s": "EnduranceLungo",
+              "dur": "2h",
+              "zone": "Z2",
+              "critical": true,
+              "note": "Outdoor, sabato o domenica: quella col meteo migliore. Per farlo sabato: Ripianifica → domenica non disponibile.",
+              "d": "Dom"
+            }
+          ]
+        },
+        {
+          "label": "Sett. 11",
+          "special": "Parte la definizione: deficit di circa 400-500 kcal nei giorni di palestra e riposo, proteine a 2,4 g/kg. Obiettivo −0,4/−0,8 kg a settimana.",
+          "nutrizione": "definizione",
+          "perche": "In palestra: In deficit il muscolo si mantiene tenendo alto il carico (l'intensità), anche con meno volume (Spiering 2021, Bickel 2011). In definizione la bici prende un po' di spazio (endurance più lunga): aiuta il deficit senza toccare il muscolo. Il deficit si fa nei giorni di palestra e riposo, mai sotto i lunghi e la HIT (disponibilità energetica, IOC RED-S 2018).",
+          "days": [
+            {
+              "s": "Petto-Spalle (definizione 1)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "d": "Lun"
+            },
+            {
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true,
+              "note": "Seduta intensa della settimana. Quando smetti i rulli: intervalli VO2max all'aperto (30/15, 4×8' o 5×5').",
+              "d": "Mar"
+            },
+            {
+              "s": "Gambe-Core (definizione 1)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Gambe mai a cedimento: giovedì pedali e nel weekend c'è il lungo.",
+              "d": "Mer"
+            },
+            {
+              "s": "EnduranceMedio",
+              "dur": "1h30",
+              "zone": "Z2",
+              "note": "Rulli o outdoor, conversazionale.",
+              "d": "Gio"
+            },
+            {
+              "s": "Schiena-Bicipiti (definizione 1)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Niente gambe: arrivi fresco al lungo.",
+              "d": "Ven"
+            },
+            {
+              "s": "Riposo",
+              "note": "Libero. Se il lungo lo fai oggi, domenica diventa il riposo.",
+              "d": "Sab"
+            },
+            {
+              "s": "EnduranceLungo",
+              "dur": "3h",
+              "zone": "Z2",
+              "critical": true,
+              "note": "Outdoor, sabato o domenica: quella col meteo migliore. Per farlo sabato: Ripianifica → domenica non disponibile.",
+              "d": "Dom"
+            }
+          ]
+        },
+        {
+          "label": "Sett. 12",
+          "special": "Stessi carichi della costruzione: se il peso sul bilanciere tiene, il muscolo resta.",
+          "nutrizione": "definizione",
+          "perche": "In palestra: Il recupero in deficit è peggiore: meno volume sui gruppi di supporto, sforzo pieno sui prioritari. In definizione la bici prende un po' di spazio (endurance più lunga): aiuta il deficit senza toccare il muscolo. Il deficit si fa nei giorni di palestra e riposo, mai sotto i lunghi e la HIT (disponibilità energetica, IOC RED-S 2018).",
+          "days": [
+            {
+              "s": "Petto-Spalle (definizione 2)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "d": "Lun"
+            },
+            {
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true,
+              "note": "Seduta intensa della settimana. Quando smetti i rulli: intervalli VO2max all'aperto (30/15, 4×8' o 5×5').",
+              "d": "Mar"
+            },
+            {
+              "s": "Gambe-Core (definizione 2)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Gambe mai a cedimento: giovedì pedali e nel weekend c'è il lungo.",
+              "d": "Mer"
+            },
+            {
+              "s": "EnduranceMedio",
+              "dur": "1h45",
+              "zone": "Z2",
+              "note": "Rulli o outdoor, conversazionale.",
+              "d": "Gio"
+            },
+            {
+              "s": "Schiena-Bicipiti (definizione 2)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Niente gambe: arrivi fresco al lungo.",
+              "d": "Ven"
+            },
+            {
+              "s": "Riposo",
+              "note": "Libero. Se il lungo lo fai oggi, domenica diventa il riposo.",
+              "d": "Sab"
+            },
+            {
+              "s": "EnduranceLungo",
+              "dur": "3h",
+              "zone": "Z2",
+              "critical": true,
+              "note": "Outdoor, sabato o domenica: quella col meteo migliore. Per farlo sabato: Ripianifica → domenica non disponibile.",
+              "d": "Dom"
+            }
+          ]
+        },
+        {
+          "label": "Sett. 13",
+          "special": "Se il peso non scende da 2 settimane, togli 150 kcal dai giorni di palestra. Se scende più di 0,8 kg a settimana, aggiungile.",
+          "nutrizione": "definizione",
+          "perche": "In palestra: Perdere una ripetizione in deficit è normale; perdere carico è il segnale che si sta perdendo muscolo. In definizione la bici prende un po' di spazio (endurance più lunga): aiuta il deficit senza toccare il muscolo. Il deficit si fa nei giorni di palestra e riposo, mai sotto i lunghi e la HIT (disponibilità energetica, IOC RED-S 2018).",
+          "days": [
+            {
+              "s": "Petto-Spalle (definizione 3)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "d": "Lun"
+            },
+            {
+              "s": "Zwift Race",
+              "dur": "60-75'",
+              "zone": "HIT",
+              "critical": true,
+              "note": "Seduta intensa della settimana. Quando smetti i rulli: intervalli VO2max all'aperto (30/15, 4×8' o 5×5').",
+              "d": "Mar"
+            },
+            {
+              "s": "Gambe-Core (definizione 3)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Gambe mai a cedimento: giovedì pedali e nel weekend c'è il lungo.",
+              "d": "Mer"
+            },
+            {
+              "s": "EnduranceMedio",
+              "dur": "1h45",
+              "zone": "Z2",
+              "note": "Rulli o outdoor, conversazionale.",
+              "d": "Gio"
+            },
+            {
+              "s": "Schiena-Bicipiti (definizione 3)",
+              "dur": "75'",
+              "zone": "Palestra",
+              "note": "Niente gambe: arrivi fresco al lungo.",
+              "d": "Ven"
+            },
+            {
+              "s": "Riposo",
+              "note": "Libero. Se il lungo lo fai oggi, domenica diventa il riposo.",
+              "d": "Sab"
+            },
+            {
+              "s": "EnduranceLungo",
+              "dur": "3h15",
+              "zone": "Z2",
+              "critical": true,
+              "note": "Outdoor, sabato o domenica: quella col meteo migliore. Per farlo sabato: Ripianifica → domenica non disponibile.",
+              "d": "Dom"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "summaryPhases": [
+    {
+      "id": "mantenimento",
+      "name": "Mantenimento e prestazione",
+      "start": "2027-03-29",
+      "end": "2027-09-26",
+      "hours": "7-10h",
+      "hit": "1-2",
+      "nutrizione": "mantenimento",
+      "focus": "Stagione all'aperto: più bici, palestra a 2 sedute di forza e mantenimento, calorie al mantenimento.",
+      "zoneMix": {
+        "z1z2": 75,
+        "z3": 13,
+        "z4plus": 12
+      },
+      "detail": "Dopo la dieta 4-8 settimane al mantenimento stabilizzano peso e prestazione (Trexler 2014). La palestra scende a 2 sedute con un terzo del volume e carichi pieni: basta a mantenere il muscolo (Bickel 2011, Spiering 2021). Il martedì diventa VO2max all'aperto (30/15 Rønnestad, 4×8' Seiler, 5×5' hard-start), al massimo un'altra seduta di qualità a settimana. Le gare sono «settimane evento» facoltative."
+    },
+    {
+      "id": "transizione",
+      "name": "Transizione",
+      "start": "2027-09-27",
+      "end": "2027-10-10",
+      "hours": "libere",
+      "hit": "0",
+      "nutrizione": "mantenimento",
+      "focus": "Due settimane libere, poi si riparte con la costruzione dai carichi raggiunti.",
+      "zoneMix": {
+        "z1z2": 100,
+        "z3": 0,
+        "z4plus": 0
+      },
+      "detail": "Saltare la pausa tra un ciclo e l'altro è la causa più comune di esaurimento (Friel). Due settimane senza piano, attivo ma libero."
+    }
+  ],
+  "planB": {
+    "ridotta": "Tieni martedì, una palestra (lunedì) e il lungo accorciato del 40%. Il resto è riposo.",
+    "recupero": "Fermati. Riposo passivo o \"Riposo o Passeggiata\" tutti i giorni. Riprendi la settimana prossima da dove sei, non da dove dovevi essere.",
+    "evento": "Settimana evento: volume −40/−50%, una sola palestra leggera di parte alta, openers il giorno prima, carboidrati pieni nei 2 giorni prima. Il giorno dopo il piano riprende."
+  }
+}

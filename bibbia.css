@@ -1,0 +1,62 @@
+/* MirabiWatt · «Fondamenti di Body Building» e nuovi blocchi di Nutrizione (19/10/2026 sera). Solo variabili del tema. */
+#bb-corpo { max-width: 1100px; }
+.bb-testa, .bb-sezione, .bb-fonti { background: var(--card); border: 1px solid var(--card-b); border-radius: 14px; padding: 18px; }
+.bb-testa h2 { font-size: 22px; margin: 0 0 6px; }
+.bb-testa h3, .bb-sezione h3, .bb-fonti h3 { font-size: 16px; margin: 0 0 8px; }
+.bb-testa p { color: var(--muted); margin: 0 0 14px; font-size: 14px; }
+.bb-due { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+.bb-piramide { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.bb-livello { width: calc(30% + var(--l) * 11%); max-width: 100%; text-align: center; padding: 8px 10px; border-radius: 8px; font-size: 13px; font-weight: 600;
+  background: color-mix(in srgb, var(--accent) calc(12% + var(--l) * 10%), var(--card)); color: var(--text, inherit); }
+.bb-livello span { display: inline-block; min-width: 18px; margin-right: 6px; opacity: .6; }
+.bb-didascalia { font-size: 12px; color: var(--muted); margin: 8px 0 0; }
+.bb-indice { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0; }
+.bb-indice a { padding: 6px 10px; border-radius: 999px; border: 1px solid var(--card-b); background: var(--card); font-size: 12.5px; color: inherit; text-decoration: none; }
+.bb-indice a:hover { border-color: var(--accent); }
+.bb-griglia { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; }
+.bb-regola { font-size: 15px; font-weight: 600; color: var(--accent); margin: 0 0 10px; line-height: 1.4; }
+.bb-sezione ul { margin: 10px 0 0; padding-left: 18px; font-size: 13.5px; line-height: 1.55; }
+.bb-sezione li + li { margin-top: 4px; }
+.bb-grafico { margin: 6px 0 4px; }
+.bb-scala { display: grid; grid-template-columns: 1fr 2fr 1fr; border-radius: 10px; overflow: hidden; text-align: center; font-size: 12.5px; font-weight: 600; }
+.bb-zona { padding: 10px 4px; }
+.bb-zona small { font-weight: 400; }
+.bb-zona.mv { background: color-mix(in srgb, var(--muted) 25%, var(--card)); }
+.bb-zona.mev { background: color-mix(in srgb, var(--accent) 35%, var(--card)); }
+.bb-zona.mrv { background: color-mix(in srgb, var(--bad) 30%, var(--card)); }
+.bb-rir { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; text-align: center; }
+.bb-rir div { padding: 8px 2px; border-radius: 8px; background: color-mix(in srgb, var(--accent) 12%, var(--card)); }
+.bb-rir div:nth-child(n+3) { background: color-mix(in srgb, var(--accent) 32%, var(--card)); }
+.bb-rir b { display: block; font-size: 18px; }
+.bb-rir small { font-size: 11px; color: var(--muted); }
+.bb-tab { width: 100%; border-collapse: collapse; font-size: 13px; }
+.bb-tab th, .bb-tab td { padding: 6px 8px; border-bottom: 1px solid var(--card-b); text-align: left; }
+.bb-tab th { font-size: 12px; color: var(--muted); font-weight: 600; }
+.bb-barre { display: flex; flex-direction: column; gap: 6px; }
+.bb-barra { display: grid; grid-template-columns: minmax(110px, 38%) 1fr auto; gap: 8px; align-items: center; font-size: 12.5px; }
+.bb-barra i { display: block; height: 12px; width: var(--w); border-radius: 6px; background: var(--accent); }
+.bb-barra i.c0 { background: var(--muted); } .bb-barra i.c1 { opacity: .55; } .bb-barra i.c2 { opacity: .7; } .bb-barra i.c3 { opacity: .85; }
+.bb-barra b { font-variant-numeric: tabular-nums; font-size: 12px; white-space: nowrap; }
+.bb-fasi { display: flex; flex-wrap: wrap; gap: 4px; font-size: 12.5px; font-weight: 600; }
+.bb-fasi div { flex: 1 1 120px; padding: 8px; border-radius: 8px; background: color-mix(in srgb, var(--accent) 15%, var(--card)); }
+.bb-fasi .f-c { background: color-mix(in srgb, var(--accent) 35%, var(--card)); }
+.bb-fasi .f-d { background: color-mix(in srgb, var(--bad) 25%, var(--card)); }
+.bb-fasi small { display: block; font-weight: 400; color: var(--muted); }
+.bb-fonti { margin-top: 14px; }
+.bb-fonti ol { margin: 0; padding-left: 20px; font-size: 12.5px; line-height: 1.6; color: var(--muted); }
+/* Nutrizione */
+.mw-fase-nutri { margin-bottom: 14px; }
+.mw-fase-nutri p { margin: 8px 0 0; font-size: 13.5px; line-height: 1.5; }
+.mw-consigli-nutri { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 14px 0; text-align: center; }
+.mw-consigli-nutri div { padding: 10px; border-radius: 10px; border: 1px solid var(--card-b); }
+.mw-consigli-nutri b { display: block; font-size: 18px; }
+.mw-consigli-nutri small { font-size: 11.5px; color: var(--muted); }
+.mw-sottotitolo { font-size: 14px; margin: 6px 0; }
+.mw-integratori { margin: 0 0 10px; padding-left: 18px; font-size: 13px; line-height: 1.5; }
+.mw-integratori span { color: var(--muted); font-size: 12px; }
+.mw-ricette { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
+.mw-ricette-titolo { font-size: 11px; color: var(--muted); }
+.mw-ricetta { display: block; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--card-b); font-size: 12.5px; color: inherit; text-decoration: none; }
+.mw-ricetta:hover { border-color: var(--accent); }
+.mw-ricetta small { display: block; color: var(--muted); font-size: 11px; }
+@media (max-width: 760px) { .bb-griglia { grid-template-columns: 1fr; } .bb-barra { grid-template-columns: 96px 1fr auto; } }
