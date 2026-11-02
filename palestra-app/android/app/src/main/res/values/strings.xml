@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MW Palestra</string>
+    <string name="title_activity_main">MW Palestra</string>
+    <string name="package_name">it.mirabiwatt.palestra</string>
+    <string name="custom_url_scheme">it.mirabiwatt.palestra</string>
+</resources>

@@ -1,0 +1,8 @@
+{
+  "appId": "it.mirabiwatt.palestra",
+  "appName": "MW Palestra",
+  "webDir": "www",
+  "server": { "androidScheme": "https", "cleartext": true },
+  "android": { "backgroundColor": "#141018" },
+  "plugins": { "CapacitorHttp": { "enabled": true } }
+}

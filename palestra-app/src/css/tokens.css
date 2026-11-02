@@ -1,0 +1,55 @@
+/* MirabiWatt Palestra · token (02/11/2026). Stessa famiglia di MirabiWatt (icu.css): fondo viola notte, blu come
+ * unico accento, verde solo per «fatta». Scuro di default in palestra, chiaro se il telefono e' in tema chiaro. */
+@font-face { font-family: 'Barlow Condensed'; font-weight: 600; font-display: swap; src: url('../fonts/barlow-condensed-600.woff2') format('woff2'); }
+@font-face { font-family: 'Barlow Condensed'; font-weight: 700; font-display: swap; src: url('../fonts/barlow-condensed-700.woff2') format('woff2'); }
+@font-face { font-family: 'Roboto'; font-weight: 400; font-display: swap; src: url('../fonts/roboto-400.woff2') format('woff2'); }
+@font-face { font-family: 'Roboto'; font-weight: 500; font-display: swap; src: url('../fonts/roboto-500.woff2') format('woff2'); }
+@font-face { font-family: 'Roboto'; font-weight: 700; font-display: swap; src: url('../fonts/roboto-700.woff2') format('woff2'); }
+
+:root {
+  color-scheme: dark;
+  --bg: #141018;
+  --surface: #1e1a26;
+  --surface-2: #2a2636;
+  --line: #3a3548;
+  --text: #f2f0f7;
+  --text-2: #b9b4c7;
+  --accent: #64b5f6;
+  --on-accent: #0d1b2a;
+  --done: #81c784;
+  --on-done: #0f2410;
+  --bad: #ef5350;
+  --focus: #90caf9;
+
+  --font-num: 'Barlow Condensed', 'Roboto Condensed', sans-serif;
+  --font-text: 'Roboto', system-ui, sans-serif;
+
+  --r-card: 16px;      /* schede e pannelli */
+  --r-control: 14px;   /* pulsanti e stepper: stessa famiglia morbida */
+  --tap: 56px;         /* tocco minimo: si usa con le mani sudate */
+  --tap-big: 64px;
+
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 24px; --s-6: 32px; --s-7: 48px;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --t-fast: 160ms;
+  --t-med: 240ms;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+    --bg: #f4f4fa;
+    --surface: #ffffff;
+    --surface-2: #eeeef5;
+    --line: #e2e2ea;
+    --text: #1c1a24;
+    --text-2: #55516a;
+    --accent: #1976d2;
+    --on-accent: #ffffff;
+    --done: #2e7d32;
+    --on-done: #ffffff;
+    --bad: #c4003c;
+    --focus: #1565c0;
+  }
+}

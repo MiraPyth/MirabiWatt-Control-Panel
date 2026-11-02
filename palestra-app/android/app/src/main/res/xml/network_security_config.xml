@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MirabiWatt Palestra: HTTP in chiaro solo verso MirabiWatt sull'OptiPlex (rete di casa e Tailscale). -->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">192.168.1.38</domain>
+        <domain includeSubdomains="false">100.101.135.102</domain>
+    </domain-config>
+</network-security-config>
