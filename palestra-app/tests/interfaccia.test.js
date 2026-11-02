@@ -10,7 +10,7 @@ const attendi = (ms = 30) => new Promise(r => setTimeout(r, ms));
 const PIANO = { seduta: 'Petto-Spalle', schema: 'adattamento 1', scopo: 'Petto alto e spalle.', esercizi: [
   { id: 'panca', nome: 'Panca inclinata', gif: 'abc', attrezzo: 'manubri', tipo: 'isolamento', gruppo: 'petto', serie: 1, reps: [8, 10], repsTesto: '8-10', unita: 'reps', rir: '2', recSec: 90, partenza: [14, 18] }] };
 
-function apri({ rete = 'casa', locale = {} } = {}) {
+function apri({ rete = 'casa', locale = {}, fatta = false } = {}) {
   const inviate = [];
   const oggi = new Date(); const iso = `${oggi.getFullYear()}-${String(oggi.getMonth() + 1).padStart(2, '0')}-${String(oggi.getDate()).padStart(2, '0')}`;
   const html = fs.readFileSync(path.join(WWW, 'index.html'), 'utf8').replace(/<script src="([^"]+)"><\/script>/g, (m, src) => `<script>${fs.readFileSync(path.join(WWW, src), 'utf8')}</script>`);
@@ -18,7 +18,7 @@ function apri({ rete = 'casa', locale = {} } = {}) {
     for (const [k, v] of Object.entries(locale)) w.localStorage.setItem(k, JSON.stringify(v));
     w.fetch = async (url, opz = {}) => {
       if (rete === 'nessuna' || (rete === 'tailscale' && url.includes('192.168'))) throw new Error('rete');
-      if (url.includes('/api/palestra/prossime')) return { ok: true, json: async () => ({ generato: 'x', sedute: [{ data: iso, giorno: 'Lun', piano: PIANO }], ultimi: {} }) };
+      if (url.includes('/api/palestra/prossime')) return { ok: true, json: async () => ({ generato: 'x', sedute: [{ data: iso, giorno: 'Lun', piano: PIANO, fatta }, { data: '2099-01-05', giorno: 'Lun', piano: PIANO }], ultimi: {} }) };
       if (url.includes('/api/palestra/sessioni')) { inviate.push({ url, corpo: JSON.parse(opz.body) }); return { ok: true, json: async () => ({ ok: true }) }; }
       throw new Error('url inattesa ' + url);
     };
@@ -100,4 +100,12 @@ test('app chiusa a meta: la home propone Riprendi', async () => {
 
 test('niente lineette lunghe nei testi dell app', () => {
   for (const f of ['index.html', 'js/app.js']) assert.ok(!/[—–]/.test(fs.readFileSync(path.join(WWW, f), 'utf8')), f);
+});
+
+test('seduta di oggi gia fatta: la home propone la prossima', async () => {
+  const { d, w } = apri({ fatta: true });
+  await attendi();
+  assert.doesNotMatch(d.querySelector('.prossima').textContent, /Oggi/);
+  assert.match(d.querySelector('.prossima').textContent, /Prossima/);
+  w.close();
 });

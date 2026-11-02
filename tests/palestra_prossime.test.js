@@ -40,3 +40,8 @@ test('rotta vera: 200, sedute e ultima volta per esercizio, giorni limitati', as
   assert.ok(Array.isArray(r.j.sedute) && typeof r.j.ultimi === 'object' && /^\d{4}-/.test(r.j.generato));
   for (const s of r.j.sedute) assert.ok(s.data && s.piano && Array.isArray(s.piano.esercizi));
 });
+
+test('seduta gia salvata oggi: segnata fatta (l app non la ripropone)', () => {
+  const r = prossimeSedute({ oggi: '2026-11-02', giorni: 3, ...dip, sessioni: [{ data: '2026-11-02', seduta: 'Petto-Spalle' }] });
+  assert.deepStrictEqual(r.map(x => [x.data, !!x.fatta]), [['2026-11-02', true], ['2026-11-04', false]]);
+});

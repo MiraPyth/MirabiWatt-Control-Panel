@@ -63,7 +63,7 @@
     stato.schermata = 'home';
     const dati = leggi(K.dati, { sedute: [] }), bozza = leggi(K.bozza, null);
     const oggi = isoLocale().slice(0, 10);
-    const future = (dati.sedute || []).filter(s => s.data >= oggi);
+    const future = (dati.sedute || []).filter(s => s.data >= oggi && !s.fatta);   // gia' salvate: non si ripropongono
     const prossima = future[0];
     let corpo;
     if (bozza) {

@@ -807,8 +807,9 @@ const server = http.createServer(async (req, res) => {
     // 02/11/2026: app Android di palestra, scarica le prossime sedute per allenarsi anche senza rete
     if (req.method === 'GET' && req.url.startsWith('/api/palestra/prossime')) {
         const n = Math.min(28, Math.max(1, Number(new URL(req.url, 'http://x').searchParams.get('giorni')) || 14));
-        const sedute = palestraProssime.prossimeSedute({ oggi: todayLocalISO(), giorni: n, findDetailedWeek, pianoPalestra });
-        json(res, 200, { generato: new Date().toISOString(), sedute, ultimi: palestraStore.storico().ultimi || {} });
+        const st = palestraStore.storico();
+        const sedute = palestraProssime.prossimeSedute({ oggi: todayLocalISO(), giorni: n, findDetailedWeek, pianoPalestra, sessioni: st.sessioni || [] });
+        json(res, 200, { generato: new Date().toISOString(), sedute, ultimi: st.ultimi || {} });
         return;
     }
     if (req.method === 'POST' && req.url === '/api/palestra/sessioni') {
