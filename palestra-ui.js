@@ -182,6 +182,7 @@
     const x = stravaEsito;
     if (!x) return '<p class="pal-nota">Strava: controllo…</p>';
     if (x.url) return `<a class="pal-strava" href="${esc(x.url)}" target="_blank" rel="noopener">✓ Su Strava: apri l'attività</a>`;
+    if (x.sovrapposta) return `<p class="pal-nota">${esc(x.error)}: probabilmente l'orologio ha già registrato la palestra. Non la duplico: aggiungi a quella l'immagine qui sotto.</p>`;
     if (x.ok === false) return `<p class="pal-errore">Strava non ha accettato la seduta (${esc(x.error || 'errore')}).</p><button type="button" id="pal-strava-condividi">Riprova su Strava</button>`;
     if (x.collegato === false) return `<p class="pal-nota">Vuoi le sedute nello storico di Strava, come con JEFIT?</p><a class="pal-strava-collega" href="${STRAVA_COLLEGA}" target="_blank" rel="noopener">Collega Strava</a><p class="pal-nota">Serve Tailscale attivo sul telefono. Dopo il collegamento torna qui e premi «Condividi».</p><button type="button" id="pal-strava-condividi">Condividi su Strava</button>`;
     return '<button type="button" id="pal-strava-condividi">Condividi su Strava</button>';

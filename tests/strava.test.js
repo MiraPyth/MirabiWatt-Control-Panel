@@ -61,3 +61,15 @@ test('token: da rinnovare un minuto prima della scadenza', () => {
   assert.strictEqual(S.daRinnovare({ expires_at: 1000 }, 950), true);
   assert.strictEqual(S.daRinnovare(null, 0), true);
 });
+
+// 02/11/2026: «Strava non ha accettato la seduta (Strava 409: error)». Il 409 sulla creazione manuale = c'e' gia'
+// un'attivita' nello stesso orario (di solito l'orologio che ha registrato la palestra): riprovare non serve.
+test('409: attivita sovrapposta, spiegata e senza riprovare', () => {
+  const e = S.esitoErrore(new Error('Strava 409: error'));
+  assert.strictEqual(e.ok, false);
+  assert.strictEqual(e.sovrapposta, true);
+  assert.match(e.error, /già.*stesso orario/i);
+});
+test('altri errori: messaggio originale', () => {
+  assert.deepStrictEqual(S.esitoErrore(new Error('Strava 401: Authorization Error')), { ok: false, error: 'Strava 401: Authorization Error' });
+});

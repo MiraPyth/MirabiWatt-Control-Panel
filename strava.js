@@ -44,4 +44,12 @@ function daRinnovare(token, adessoS) {
     return !token || !token.expires_at || token.expires_at - adessoS < 60;
 }
 
-module.exports = { REDIRECT, attivitaDaSessione, urlAutorizza, daRinnovare, oraLocale };
+// 02/11/2026: il 409 sulla creazione manuale vuol dire che c'e' gia' un'attivita' nello stesso orario (di solito
+// l'orologio che ha registrato la palestra e l'ha sincronizzata da se'). Riprovare non serve: si spiega.
+function esitoErrore(e) {
+    const msg = String((e && e.message) || e || 'errore');
+    if (/^Strava 409\b/.test(msg)) return { ok: false, sovrapposta: true, error: 'Su Strava c\'è già un\'attività nello stesso orario' };
+    return { ok: false, error: msg };
+}
+
+module.exports = { REDIRECT, attivitaDaSessione, urlAutorizza, daRinnovare, oraLocale, esitoErrore };

@@ -817,7 +817,7 @@ const server = http.createServer(async (req, res) => {
         catch (e) { json(res, 400, { ok: false, error: e.message }); return; }
         // 19/10/2026 notte: se Strava è collegato e l'invio automatico è acceso, la seduta va anche su Strava
         let st = null;
-        if (stravaToken() && stravaAuto()) { try { st = await stravaCondividi(id); } catch (e) { st = { ok: false, error: e.message }; } }
+        if (stravaToken() && stravaAuto()) { try { st = await stravaCondividi(id); } catch (e) { st = strava.esitoErrore(e); } }
         json(res, 200, { ok: true, id, strava: st });
         return;
     }
@@ -838,7 +838,7 @@ const server = http.createServer(async (req, res) => {
     }
     if (req.method === 'POST' && req.url === '/api/strava/condividi') {
         try { const { id } = await readBody(req); json(res, 200, await stravaCondividi(id)); }
-        catch (e) { json(res, 502, { ok: false, error: e.message }); }
+        catch (e) { const x = strava.esitoErrore(e); json(res, x.sovrapposta ? 200 : 502, x); }
         return;
     }
     if (req.method === 'POST' && req.url === '/api/strava/auto') {

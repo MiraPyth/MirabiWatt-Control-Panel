@@ -238,3 +238,17 @@ test('Tools: scheda Strava per collegare e verificare il collegamento senza pubb
     assert.deepStrictEqual(errori, []);
   }
 });
+
+test('Strava 409 (attivita gia presente nello stesso orario): lo spiega, niente «Riprova», resta l immagine da aggiungere', async () => {
+  const { w, d } = pagina(null, { ok: false, sovrapposta: true, error: 'Su Strava c\'è già un\'attività nello stesso orario' });
+  await tick(150);
+  await w.mwPalestra.inizia('Petto-Spalle (adattamento 1)');
+  for (let i = 0; i < 12 && !d.getElementById('pal-salva'); i++) d.getElementById('pal-avanti').click();
+  d.getElementById('pal-salva').click();
+  await tick(120);
+  const box = d.querySelector('.pal-salvato');
+  assert.match(box.textContent, /già.*stesso orario[\s\S]*orologio/);
+  assert.ok(!box.querySelector('#pal-strava-condividi'), 'niente Riprova: fallirebbe di nuovo');
+  assert.doesNotMatch(box.textContent, /non ha accettato/);
+  assert.ok(d.getElementById('pal-mappa-scarica'));
+});
