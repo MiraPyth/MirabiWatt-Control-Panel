@@ -25,3 +25,14 @@ App per allenarsi in palestra con le sedute pianificate in MirabiWatt (`~/mirabi
 - Legge il piano stagionale: una settimana ripianificata con l'IA (su intervals.icu) non si vede ancora.
 - Icona e splash sono quelli predefiniti di Capacitor.
 - Schermo sempre acceso finché l'app è aperta (FLAG_KEEP_SCREEN_ON, v0.1.2).
+
+## Versione 0.3.0 (04/11/2026)
+- Tre sezioni in basso: **Calendario** (settimana del piano, card cliccabili con foglio di dettaglio; bici blu, palestra ambra,
+  obiettivi rosa in sezione separata), **Oggi** (solo l'allenamento di oggi) e **Nutrizione** (target e pasti, `pianoNutrizione`
+  copiata da MirabiWatt).
+- Tracking: ogni riga ha kg e ripetizioni propri (campi modificabili) e una spunta che conferma e avvia il recupero.
+- Uscita dalla seduta: popup «Riprendi più tardi» / «Cancella allenamento».
+- Fine recupero: notifica locale (`@capacitor/local-notifications`, permessi POST_NOTIFICATIONS e USE_EXACT_ALARM).
+- Da fare: fase nutrizionale ancora fissa su «mantenimento» (serve un endpoint nel server); il calendario mostra solo la
+  settimana corrente; il timer di recupero è a tutto schermo; il piano (`/api/settimana-piano`) e gli eventi intervals.icu
+  possono non coincidere dopo una ripianificazione.
