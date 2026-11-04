@@ -25,3 +25,6 @@ palestra-app/android/.gradle/
 palestra-app/android/local.properties
 palestra-app/android/app/src/main/assets/public/
 palestra-app/android/capacitor-cordova-android-plugins/build/
+
+# app Android di palestra: rilascio servito dal server (apk + latest.json), non si versiona
+app-android/

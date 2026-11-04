@@ -90,6 +90,18 @@
     return { serieFatte, esercizi, kg: Math.round(kg), durataMin };
   }
 
+  /** 04/11/2026: come è stata fatta una seduta salvata, da mostrare in Oggi: solo esercizi e serie fatte, una riga di testo ciascuno. */
+  function dettaglioSessione(s) {
+    if (!s) return null;
+    const esercizi = (s.esercizi || []).map(e => {
+      const fatte = (e.serie || []).filter(x => x.fatta);
+      const testo = fatte.map(x => e.unita === 's' ? `${x.reps} s` : x.kg == null ? `${x.reps} rip` : `${fmtKg(x.kg)} kg × ${x.reps}`).join(', ');
+      return { nome: e.nome || e.id, testo, serie: fatte.length };
+    }).filter(e => e.serie > 0);
+    const durataMin = s.inizio && s.fine ? Math.round((new Date(s.fine) - new Date(s.inizio)) / 60000) : null;
+    return { titolo: s.seduta, schema: s.schema || '', data: s.data, durataMin, serieFatte: esercizi.reduce((t, e) => t + e.serie, 0), esercizi, note: s.note || '' };
+  }
+
   /** { idEsercizio: { data, serie: [{kg, reps}] } } dalla sessione più recente con almeno una serie fatta. */
   function ultimiDaStorico(sessioni) {
     const out = {};
@@ -101,7 +113,7 @@
     return out;
   }
 
-  const api = { INCREMENTI, proposta, avvicinamenti, nuovaSessione, riepilogo, ultimiDaStorico, kgAvvicinamento, prossimoPasso };
+  const api = { INCREMENTI, proposta, avvicinamenti, nuovaSessione, riepilogo, dettaglioSessione, ultimiDaStorico, kgAvvicinamento, prossimoPasso };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Palestra = api;
 })(typeof window !== 'undefined' ? window : this);

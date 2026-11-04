@@ -11,6 +11,8 @@ const piani = require('./piani.js');
 const { eventoAllenamento } = require('./intervals-evento.js');
 const palestraStore = require('./palestra-store.js');
 const palestraProssime = require('./palestra-prossime.js');
+const palestraAppRilascio = require('./palestra-app-release.js');
+const APP_ANDROID_DIR = path.join(__dirname, 'app-android');
 const ripianifica = require('./ripianifica-ia.js');
 const pianoMixed = require('./scripts/piano-mixed.js');
 const coach = require('./coach.js');
@@ -804,6 +806,8 @@ const server = http.createServer(async (req, res) => {
     }
     // 19/10/2026: app di allenamento in palestra, sessioni salvate in palestra-storico.json
     if (req.method === 'GET' && req.url === '/api/palestra/storico') { json(res, 200, palestraStore.storico()); return; }
+    // 04/11/2026: l'app controlla qui se c'è una versione nuova e la scarica dalle Impostazioni (cartella app-android/)
+    if (palestraAppRilascio.servi(req, res, APP_ANDROID_DIR)) return;
     // 02/11/2026: app Android di palestra, scarica le prossime sedute per allenarsi anche senza rete
     if (req.method === 'GET' && req.url.startsWith('/api/palestra/prossime')) {
         const n = Math.min(28, Math.max(1, Number(new URL(req.url, 'http://x').searchParams.get('giorni')) || 14));

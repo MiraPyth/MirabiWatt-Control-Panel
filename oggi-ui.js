@@ -51,7 +51,7 @@
         <div class="mw-oggi-nome">${esc(g.s)}</div>
         <div class="mw-oggi-info">${[g.dur, g.zone, tss ? `~${tss} TSS` : ''].filter(Boolean).map(esc).join(' · ')}</div>
         ${g.note ? `<p class="mw-aiuto">${esc(g.note)}</p>` : ''}
-        ${fatto ? `<ul class="mw-oggi-fatte">${x.attivita.map(at => `<li>🚴 ${esc((at.name || '').replace(/^\[(MirabiWatt|MW)\]\s*/, '') || 'Attività')}${at.durationMin != null ? ` · ${at.durationMin}′` : ''}${at.tss != null ? ` · ${at.tss} TSS` : ''}</li>`).join('')}</ul>` : passi}
+        ${fatto ? `<ul class="mw-oggi-fatte">${x.attivita.map(at => `<li${g.zone === 'Palestra' ? ' class="mw-clic" role="button" tabindex="0" data-oggi="fatto" title="Apri come l\'hai fatta"' : ''}>${g.zone === 'Palestra' ? '🏋️' : '🚴'} ${esc((at.name || '').replace(/^\[(MirabiWatt|MW)\]\s*/, '') || 'Attività')}${at.durationMin != null ? ` · ${at.durationMin}′` : ''}${at.tss != null ? ` · ${at.tss} TSS` : ''}</li>`).join('')}</ul>` : passi}
         <div class="mw-riga-azioni">
           ${!riposo && !fatto && g.zone === 'Palestra' && x.oggi ? `<button type="button" class="mw-tb mw-primario" data-palestra-inizia="${esc(g.s)}"><i data-lucide="dumbbell" class="w-4 h-4"></i> Inizia allenamento</button>` : ''}
           ${riposo ? '' : '<button type="button" class="mw-tb mw-primario" data-oggi="dettaglio"><i data-lucide="list" class="w-4 h-4"></i> Dettaglio</button>'}
@@ -158,10 +158,34 @@
     } catch (e) { document.getElementById('oggi-forma').innerHTML = `<div class="mw-card-testa"><h3>Forma</h3></div><p class="mw-aiuto">intervals.icu non risponde (${esc(e.message)}).</p>`; }
   }
 
+  /** La seduta di palestra salvata in quel giorno, esercizio per esercizio, con le note. Falso se non c'è (o niente rete). */
+  async function mostraFatto(dataISO) {
+    const el = document.getElementById('dash-workout-detail');
+    if (!el || !window.Palestra || !Palestra.dettaglioSessione) return false;
+    try {
+      const j = await (await fetch('/api/palestra/storico')).json();
+      const l = (j.sessioni || []).filter(s => s.data === dataISO), d = Palestra.dettaglioSessione(l[l.length - 1]);
+      if (!d || !d.esercizi.length) return false;
+      el.classList.remove('hidden');
+      el.innerHTML = `<h4 class="text-sm font-bold mb-2">${esc(d.titolo)}: come l'hai fatta</h4>
+        <p class="mw-aiuto">${[d.schema, d.durataMin != null ? `${d.durataMin}′` : '', `${d.serieFatte} serie`].filter(Boolean).map(esc).join(' · ')}</p>
+        <ul class="mw-oggi-fatte">${d.esercizi.map(e => `<li><b>${esc(e.nome)}</b>: ${esc(e.testo)}</li>`).join('')}</ul>
+        ${d.note ? `<p class="mw-aiuto"><b>Note.</b> ${esc(d.note)}</p>` : ''}`;
+      if (el.scrollIntoView) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      return true;
+    } catch (e) { return false; }
+  }
+
+  root.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('.mw-clic')) { e.preventDefault(); e.target.click(); } });
   root.addEventListener('click', e => {
     const b = e.target.closest('[data-oggi]');
     if (!b) return;
     const o = oggi(), ws = fmtISO(mondayOf(parseISO(o))), x = settimana(ws).giorni[(parseISO(o).getDay() + 6) % 7];
+    // 04/11/2026: a seduta di palestra fatta, «Dettaglio» e l'attività si aprono sulla seduta come è stata fatta
+    if (b.dataset.oggi === 'fatto' || (b.dataset.oggi === 'dettaglio' && x && x.giorno && x.giorno.zone === 'Palestra' && x.attivita.length)) {
+      mostraFatto(o).then(ok => { if (!ok && x && x.giorno) showWorkoutDetail(x.giorno.s); });
+      return;
+    }
     if (b.dataset.oggi === 'dettaglio' && x && x.giorno) showWorkoutDetail(x.giorno.s);
     if (b.dataset.oggi === 'imprevisto' && x && x.originale) calImprevisto(ws, x.originale.d);
     if (b.dataset.oggi === 'calendario') switchDashView('view-calendar');
