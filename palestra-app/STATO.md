@@ -24,4 +24,4 @@ App per allenarsi in palestra con le sedute pianificate in MirabiWatt (`~/mirabi
 ## Limiti noti (v0.1.0)
 - Legge il piano stagionale: una settimana ripianificata con l'IA (su intervals.icu) non si vede ancora.
 - Icona e splash sono quelli predefiniti di Capacitor.
-- Lo schermo può spegnersi durante il recupero (manca il keep-awake).
+- Schermo sempre acceso finché l'app è aperta (FLAG_KEEP_SCREEN_ON, v0.1.2).
