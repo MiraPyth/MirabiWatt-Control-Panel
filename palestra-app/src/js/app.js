@@ -1,8 +1,9 @@
-/* MirabiWatt Palestra · interfaccia (02/11/2026). Quattro schermate: Home, Allenamento, Recupero, Fine.
+/* MirabiWatt Palestra · interfaccia (02/11/2026). Tre sezioni in basso (Settimana, Oggi, Nutrizione) e, durante la
+ * seduta, Allenamento, Recupero, Fine.
  * Dati sul telefono (localStorage della WebView): sedute scaricate, bozza della seduta in corso, coda da inviare. */
 (function () {
   'use strict';
-  const K = { dati: 'mwp_dati', bozza: 'mwp_bozza', coda: 'mwp_coda' };
+  const K = { dati: 'mwp_dati', bozza: 'mwp_bozza', coda: 'mwp_coda', sett: 'mwp_sett', peso: 'mwp_peso', tab: 'mwp_tab' };
   const app = document.getElementById('app');
   const esc = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const icona = (nome, etichetta) => `<span class="icona"${etichetta ? ` role="img" aria-label="${esc(etichetta)}"` : ' aria-hidden="true"'}>${(window.ICONE || {})[nome] || ''}</span>`;
@@ -14,7 +15,7 @@
   const GIORNI = ['dom', 'lun', 'mar', 'mer', 'gio', 'ven', 'sab'];
   const dataBreve = iso => { const d = new Date(iso + 'T12:00:00'); return `${GIORNI[d.getDay()]} ${d.getDate()}/${d.getMonth() + 1}`; };
 
-  let stato = { schermata: 'home', server: null, sync: 'offline', seduta: null, timer: null };
+  let stato = { schermata: 'home', tab: leggi(K.tab, 'oggi'), server: null, sync: 'offline', seduta: null, timer: null };
 
   // ---------- rete ----------
   async function getJSON(url, ms = 3000) {
@@ -38,6 +39,8 @@
         if (!res.ok) throw new Error('HTTP ' + res.status);
       });
       scrivi(K.coda, r.coda);
+      try { scrivi(K.sett, { ...await getJSON(`${stato.server}/api/settimana-piano`, 5000), scaricato: Date.now() }); } catch (e) { /* resta la settimana in memoria */ }
+      try { const d = await getJSON(`${stato.server}/api/dashboard`, 8000); if (d.lastWeighIn) scrivi(K.peso, d.lastWeighIn.value); } catch (e) { /* resta il peso in memoria */ }
       stato.sync = 'online';
     } else stato.sync = 'offline';
     if (stato.schermata === 'home') home(); else disegnaStato();
@@ -58,19 +61,93 @@
     el.innerHTML = `${icona(s.ico)}<span>${esc(s.t)}</span>`;
   }
 
-  // ---------- home ----------
+  // ---------- sezioni in basso ----------
+  const TABS = [{ id: 'settimana', t: 'Settimana', ico: 'calendar-blank' }, { id: 'oggi', t: 'Oggi', ico: 'barbell' }, { id: 'nutrizione', t: 'Nutrizione', ico: 'fork-knife' }];
+  function tabs(visibile) {
+    const nav = document.getElementById('tabs');
+    nav.hidden = !visibile;
+    if (!visibile) return;
+    nav.innerHTML = TABS.map(x => `<button type="button" data-tab="${x.id}"${x.id === stato.tab ? ' class="attiva" aria-current="page"' : ''}>${icona(x.ico)}<span>${x.t}</span></button>`).join('');
+    nav.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => { stato.tab = b.dataset.tab; scrivi(K.tab, stato.tab); home(); window.scrollTo(0, 0); });
+  }
+  function intestazione(titolo, sotto) {
+    return `<header class="barra"><div class="barra-titolo"><h1>${esc(titolo)}</h1>${sotto ? `<small>${esc(sotto)}</small>` : ''}</div>
+      <button class="tasto-icona" id="aggiorna" type="button" aria-label="Aggiorna">${icona('arrow-clockwise')}</button></header>
+      <div><span id="stato-sync" class="stato-sync" role="status"></span></div>`;
+  }
+  const oggiISO = () => isoLocale().slice(0, 10);
+
   function home() {
     stato.schermata = 'home';
+    tabs(true);
+    ({ settimana, nutrizione, oggi: schedaOggi }[stato.tab] || schedaOggi)();
+    disegnaStato();
+    const a = document.getElementById('aggiorna');
+    if (a) a.onclick = sincronizza;
+  }
+
+  // ---------- settimana ----------
+  function settimana() {
+    const w = leggi(K.sett, null), oggi = oggiISO();
+    if (!w) {
+      app.innerHTML = `<div class="schermata con-tab">${intestazione('Settimana')}<div class="vuoto">${icona('calendar-blank')}<b>Settimana non scaricata</b>Collegati alla rete di casa o a Tailscale e tocca «Aggiorna».</div></div>`;
+      return;
+    }
+    const fatte = new Set(((leggi(K.dati, {}).sedute) || []).filter(x => x.fatta).map(x => x.data));
+    const gara = (w.gare || []).filter(g => g.data >= oggi).sort((a, b) => a.data.localeCompare(b.data))[0];
+    const ICO = { palestra: 'barbell', bici: 'bicycle', riposo: 'moon' };
+    app.innerHTML = `<div class="schermata con-tab">${intestazione('Settimana', [w.fase, w.settimana].filter(Boolean).join(', '))}
+      ${gara ? `<div class="gara">${icona('flag-checkered')}<div><b>${esc(gara.nome)}</b><small>tra ${Giornata.giorniA(gara.data, oggi)} giorni, ${esc(dataBreve(gara.data))}${gara.km ? `, ${gara.km} km` : ''}</small></div></div>` : ''}
+      <ul class="giorni-settimana">${(w.giorni || []).map(g => {
+        const gen = Giornata.genere(g), st = Giornata.stato(g, oggi), fatta = gen === 'palestra' && fatte.has(g.data);
+        const dettaglio = gen === 'riposo' ? 'Recupero' : [g.dur, g.zona].filter(Boolean).join(', ');
+        return `<li class="giorno-card ${gen} ${st}"><span class="tessera-ico">${icona(ICO[gen])}</span>
+          <div><div class="g-quando">${esc(g.giorno)} ${esc(dataBreve(g.data).split(' ')[1])}</div><b>${esc(g.nome)}</b><div class="g-dett">${esc(dettaglio)}</div></div>
+          ${fatta ? `<span class="g-stato fatta">${icona('check')}Fatta</span>` : st === 'oggi' ? '<span class="g-stato oggi">Oggi</span>' : ''}</li>`;
+      }).join('')}</ul></div>`;
+  }
+
+  // ---------- nutrizione ----------
+  function nutrizione() {
+    const w = leggi(K.sett, null), oggi = oggiISO(), g = w && (w.giorni || []).find(x => x.data === oggi);
+    if (!g) {
+      app.innerHTML = `<div class="schermata con-tab">${intestazione('Nutrizione')}<div class="vuoto">${icona('fork-knife')}<b>Piano di oggi non scaricato</b>Collegati alla rete di casa o a Tailscale e tocca «Aggiorna».</div></div>`;
+      return;
+    }
+    const peso = leggi(K.peso, 82.5), n = Giornata.nutrizione(g, peso, 'mantenimento', pianoNutrizione);
+    const NOMI = { riposo: 'Giornata di riposo', palestra: 'Giornata di palestra', endurance: 'Giornata di bici', hit: 'Giornata intensa', lungo: 'Uscita lunga' };
+    const kc = n.p * 4 + n.c * 4 + n.fat * 9, quota = (x, f) => Math.round(x * f / kc * 100);
+    app.innerHTML = `<div class="schermata con-tab">${intestazione('Nutrizione', `${NOMI[n.tipo] || ''}, ${fmtKg(peso)} kg`)}
+      <section class="prossima"><div class="quando">Target di oggi</div><h2>${n.kcal} kcal</h2>
+        <div class="macro"><span class="p"><b>${n.p} g</b>proteine</span><span class="c"><b>${n.c} g</b>carboidrati</span><span class="f"><b>${n.fat} g</b>grassi</span></div>
+        <div class="barra-macro" role="img" aria-label="Proteine ${quota(n.p, 4)}%, carboidrati ${quota(n.c, 4)}%, grassi ${quota(n.fat, 9)}%"><i class="p" style="width:${quota(n.p, 4)}%"></i><i class="c" style="width:${quota(n.c, 4)}%"></i><i class="f" style="width:${quota(n.fat, 9)}%"></i></div>
+        ${n.acquaL ? `<p class="scopo">${icona('drop')} Acqua: circa ${String(n.acquaL).replace('.', ',')} litri</p>` : ''}</section>
+      <h2 class="sezione-titolo">Pasti suggeriti</h2>
+      <ul class="pasti">${n.pasti.map(m => `<li class="pasto"><div class="pasto-testa"><b>${esc(m.nome)}</b><span>${m.kcal} kcal</span></div>
+        <div class="pasto-macro">P ${m.p} g, C ${m.c} g, G ${m.fat} g</div>
+        <ul class="cibi">${m.cibi.map(c => `<li><span>${esc(c.label)}</span><span>${c.grammi} g</span></li>`).join('')}</ul>${m.nota ? `<p class="scopo">${esc(m.nota)}</p>` : ''}</li>`).join('')}</ul></div>`;
+  }
+
+  // ---------- oggi ----------
+  function schedaOggi() {
     const dati = leggi(K.dati, { sedute: [] }), bozza = leggi(K.bozza, null);
-    const oggi = isoLocale().slice(0, 10);
+    const oggi = oggiISO();
+    const w = leggi(K.sett, null), gOggi = w && (w.giorni || []).find(x => x.data === oggi), gen = Giornata.genere(gOggi);
     const future = (dati.sedute || []).filter(s => s.data >= oggi && !s.fatta);   // gia' salvate: non si ripropongono
     const prossima = future[0];
-    let corpo;
+    let corpo, fuoriPalestra = '';
+    if (!bozza && gOggi && gen !== 'palestra') {
+      // oggi non e' un giorno di palestra: bici o riposo, poi la prossima seduta
+      fuoriPalestra = gen === 'riposo'
+        ? `<section class="prossima"><div class="quando">Oggi</div><h2>Riposo</h2><div class="meta">Recupero: oggi niente pesi.</div></section>`
+        : `<section class="prossima"><div class="quando">Oggi, in bici</div><h2>${esc(gOggi.nome)}</h2><div class="meta">${esc([gOggi.dur, gOggi.zona].filter(Boolean).join(', '))}</div>
+           <p class="scopo">Si registra con il ciclocomputer o Zwift: qui non serve il tracking.</p></section>`;
+    }
     if (bozza) {
       corpo = `<section class="prossima"><div class="quando">Allenamento in corso</div><h2>${esc(bozza.seduta)}</h2>
         <div class="meta">iniziato ${esc(bozza.inizio.slice(11, 16))}</div></section>`;
     } else if (prossima) {
-      const p = prossima.piano, quando = prossima.data === oggi ? 'Oggi' : `Prossima: ${dataBreve(prossima.data)}`;
+      const p = prossima.piano, quando = prossima.data === oggi ? 'Oggi' : `Prossima palestra: ${dataBreve(prossima.data)}`;
       const minuti = Math.round((10 + p.esercizi.reduce((t, e) => t + e.serie * 2.5, 0)) / 5) * 5;
       corpo = `<section class="prossima"><div class="quando">${esc(quando)}</div><h2>${esc(p.seduta)}</h2>
         <div class="meta">${p.esercizi.length} esercizi, circa ${minuti} min, ${esc(p.schema || '')}</div>
@@ -79,11 +156,9 @@
       corpo = `<div class="vuoto">${icona('barbell')}<b>Nessuna seduta scaricata</b>Collegati alla rete di casa o a Tailscale e tocca «Aggiorna».</div>`;
     }
     const altre = future.slice(bozza ? 0 : 1, 7);
-    app.innerHTML = `<div class="schermata">
-      <header class="barra"><h1>Palestra</h1>
-        <button class="tasto-icona" id="aggiorna" type="button" aria-label="Aggiorna">${icona('arrow-clockwise')}</button></header>
-      <div><span id="stato-sync" class="stato-sync" role="status"></span></div>
-      ${corpo}
+    app.innerHTML = `<div class="schermata con-tab">
+      ${intestazione('Allenamento di oggi', gOggi ? `${gOggi.giorno} ${dataBreve(oggi).split(' ')[1]}` : '')}
+      ${fuoriPalestra}${corpo}
       ${altre.length ? `<h2 class="sezione-titolo">Prossimi giorni</h2><ul class="elenco-giorni">${altre.map(s =>
         `<li><span class="giorno">${esc(dataBreve(s.data))}</span><span>${esc(s.piano.seduta)}</span></li>`).join('')}</ul>` : ''}
       <div class="spinta"></div>
@@ -91,8 +166,6 @@
         ${bozza ? `<button class="cta" id="riprendi" type="button">${icona('play')}Riprendi allenamento</button>`
           : prossima ? `<button class="cta" id="inizia" type="button">${icona('barbell')}Inizia allenamento</button>` : ''}
       </div></div>`;
-    disegnaStato();
-    document.getElementById('aggiorna').onclick = sincronizza;
     const b = document.getElementById('inizia');
     if (b) b.onclick = () => {
       stato.seduta = Palestra.nuovaSessione(prossima.piano, dati.ultimi || {}, isoLocale());
@@ -113,22 +186,26 @@
 
   function allenamento() {
     stato.schermata = 'allenamento';
+    tabs(false);
     const s = stato.seduta, pos = Seduta.posizione(s);
     if (pos.finita) return fine();
     const e = s.esercizi[pos.iEs], j = e.serie.findIndex(x => !x.fatta), serie = e.serie[j];
     const avv = pos.passo.tipo === 'avvicinamento';
     const testo = esc(pos.passo.testo).replace(/^([^:]+):/, '<b>$1:</b>');
-    const punti = [...(e.avvicinamento || []).map((a, i) => ({ cls: 'avv' + (a.fatta ? ' fatta' : avv && i === pos.passo.indice ? ' ora' : ''), t: 'A' })),
-      ...e.serie.map((x, i) => ({ cls: x.fatta ? 'fatta' : !avv && i === j ? 'ora' : '', t: i + 1 }))];
+    const unita = e.unita === 's' ? 's' : 'rip';
+    const righe = [...(e.avvicinamento || []).map((a, i) => ({ et: 'A', kg: Palestra.kgAvvicinamento(e, e.serie[0].kg, a.pct), reps: a.reps, fatta: a.fatta, ora: !a.fatta && avv && i === pos.passo.indice })),
+      ...e.serie.map((x, i) => ({ et: String(i + 1), kg: x.kg, reps: x.reps, fatta: x.fatta, ora: !x.fatta && !avv && i === j }))];
     app.innerHTML = `<div class="schermata">
       <header class="barra">
         <button class="tasto-icona" id="esci" type="button" aria-label="Torna alla home">${icona('x')}</button>
         <div class="barra-titolo"><b>Esercizio ${pos.iEs + 1} di ${s.esercizi.length}</b><small>${esc(s.seduta)}</small></div>
         <span class="cronometro" id="cronometro" aria-label="Tempo trascorso"></span></header>
       <section class="esercizio">
-        ${e.gif ? `<img src="gif/${esc(e.gif)}.gif" alt="Come si esegue: ${esc(e.nome)}" width="112" height="112">` : '<span></span>'}
-        <div><h2>${esc(e.nome)}</h2><div class="gruppo">${esc(e.gruppo || '')}</div></div></section>
-      <ul class="serie-punti" aria-label="Serie">${punti.map(p => `<li class="${p.cls}">${p.t}</li>`).join('')}</ul>
+        ${e.gif ? `<img src="gif/${esc(e.gif)}.gif" alt="Come si esegue: ${esc(e.nome)}" width="320" height="200">` : ''}
+        <div class="nome"><h2>${esc(e.nome)}</h2><div class="gruppo">${esc(e.gruppo || '')}</div></div></section>
+      <ul class="righe-serie" aria-label="Serie">${righe.map(r => `<li class="${r.fatta ? 'fatta' : r.ora ? 'ora' : ''}${r.et === 'A' ? ' avv' : ''}"><span class="et">${r.et === 'A' ? 'W' : r.et}</span>
+        <span class="val"><b>${r.kg == null ? '-' : fmtKg(r.kg)}</b> kg</span><span class="val"><b>${r.reps}</b> ${unita}</span>
+        <span class="spunta">${r.fatta ? icona('check', 'Fatta') : ''}</span></li>`).join('')}</ul>
       <p class="passo">${testo}</p>
       ${avv ? '' : `<div class="stepper-coppia">
         <div class="stepper"><label id="l-kg">Kg</label><output aria-labelledby="l-kg">${fmtKg(serie.kg)}</output>
@@ -188,6 +265,7 @@
   // ---------- fine ----------
   function fine() {
     stato.schermata = 'fine';
+    tabs(false);
     clearInterval(stato.timerCrono);
     const s = stato.seduta, r = Palestra.riepilogo(s, isoLocale());
     app.innerHTML = `<div class="schermata">

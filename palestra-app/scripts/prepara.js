@@ -5,11 +5,12 @@ const path = require('path');
 const R = path.join(__dirname, '..');
 const MW = process.env.MIRABIWATT_DIR || path.join(R, '..');
 const WWW = path.join(R, 'www');
-const ICONE = ['barbell', 'check', 'x', 'plus', 'minus', 'play', 'skip-forward', 'arrow-clockwise', 'arrow-left', 'cloud-check', 'cloud-slash'];
+const ICONE = ['barbell', 'check', 'x', 'plus', 'minus', 'play', 'skip-forward', 'arrow-clockwise', 'arrow-left', 'cloud-check', 'cloud-slash', 'calendar-blank', 'bicycle', 'moon', 'fork-knife', 'flag-checkered', 'drop', 'timer'];
 
 fs.rmSync(WWW, { recursive: true, force: true });
 fs.cpSync(path.join(R, 'src'), WWW, { recursive: true });
 fs.copyFileSync(path.join(MW, 'palestra.js'), path.join(WWW, 'js', 'palestra.js'));
+fs.copyFileSync(path.join(MW, 'nutrition-library.js'), path.join(WWW, 'js', 'nutrition-library.js'));
 fs.cpSync(path.join(MW, 'palestra-gif'), path.join(WWW, 'gif'), { recursive: true });
 
 fs.mkdirSync(path.join(WWW, 'fonts'), { recursive: true });
