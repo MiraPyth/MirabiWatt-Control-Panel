@@ -10,7 +10,7 @@ const attendi = (ms = 30) => new Promise(r => setTimeout(r, ms));
 const PIANO = { seduta: 'Petto-Spalle', schema: 'adattamento 1', scopo: 'Petto alto e spalle.', esercizi: [
   { id: 'panca', nome: 'Panca inclinata', gif: 'abc', attrezzo: 'manubri', tipo: 'isolamento', gruppo: 'petto', serie: 1, reps: [8, 10], repsTesto: '8-10', unita: 'reps', rir: '2', recSec: 90, partenza: [14, 18] }] };
 
-function apri({ rete = 'casa', locale = {}, fatta = false, oggiTipo = 'palestra' } = {}) {
+function apri({ rete = 'casa', locale = {}, fatta = false, oggiTipo = 'palestra', notifiche = null } = {}) {
   const inviate = [];
   const oggi = new Date(); const iso = `${oggi.getFullYear()}-${String(oggi.getMonth() + 1).padStart(2, '0')}-${String(oggi.getDate()).padStart(2, '0')}`;
   const html = fs.readFileSync(path.join(WWW, 'index.html'), 'utf8').replace(/<script src="([^"]+)"><\/script>/g, (m, src) => `<script>${fs.readFileSync(path.join(WWW, src), 'utf8')}</script>`);
@@ -27,6 +27,7 @@ function apri({ rete = 'casa', locale = {}, fatta = false, oggiTipo = 'palestra'
       throw new Error('url inattesa ' + url);
     };
     w.navigator.vibrate = () => true;
+    if (notifiche) w.Capacitor = { Plugins: { LocalNotifications: notifiche } };
   } });
   return { w: dom.window, d: dom.window.document, inviate };
 }
@@ -57,23 +58,24 @@ test('senza rete e senza dati: messaggio che spiega cosa fare', async () => {
   w.close();
 });
 
-test('seduta completa offline: avvicinamento, serie con stepper, recupero, fine, salvata in coda e inviata al ritorno', async () => {
+
+const scrivi = (w, inp, v) => { inp.value = v; inp.dispatchEvent(new w.Event('input', { bubbles: true })); };
+
+test('seduta completa offline: ogni riga con i suoi kg e ripetizioni, conferma di riga, recupero, fine, coda e invio al ritorno', async () => {
   const { d, w, inviate } = apri();
   await attendi();
-  // da qui la rete cade: in palestra non c'e' segnale
-  const fetchVera = w.fetch; w.fetch = async () => { throw new Error('rete'); };
+  const fetchVera = w.fetch; w.fetch = async () => { throw new Error('rete'); };   // in palestra non c'e' segnale
   d.getElementById('inizia').click();
-  assert.match(d.querySelector('.passo').textContent, /Avvicinamento 1 di 1/);
-  assert.ok(!d.querySelector('.stepper'), 'niente stepper sugli avvicinamenti');
-  d.getElementById('fatta').click();
-  assert.ok(d.querySelector('.recupero'), 'recupero dopo l avvicinamento');
+  assert.ok(!d.querySelector('.stepper'), 'niente barra con kg e ripetizioni sotto');
+  assert.strictEqual(d.querySelectorAll('.righe-serie li').length, 2);
+  d.querySelector('[data-conf="0"]').click();                       // riga W confermata
+  assert.ok(d.querySelector('.recupero'), 'parte il recupero');
   d.getElementById('salta').click();
-  assert.match(d.querySelector('.passo').textContent, /Serie 1 di 1/);
-  assert.strictEqual(d.querySelectorAll('.stepper output')[0].textContent, '14');
-  d.querySelector('[data-campo="kg"][data-verso="1"]').click();
-  assert.strictEqual(d.querySelectorAll('.stepper output')[0].textContent, '16');
-  assert.ok(JSON.parse(w.localStorage.getItem('mwp_bozza')), 'bozza salvata a ogni tocco');
-  d.getElementById('fatta').click();
+  const kg = d.querySelector('input[data-t="serie"][data-c="kg"]'), reps = d.querySelector('input[data-t="serie"][data-c="reps"]');
+  assert.strictEqual(kg.value, '14');
+  scrivi(w, kg, '16'); scrivi(w, reps, '9');                        // si cambia dalla riga stessa
+  assert.strictEqual(JSON.parse(w.localStorage.getItem('mwp_bozza')).esercizi[0].serie[0].kg, 16, 'bozza salvata a ogni modifica');
+  d.querySelector('[data-conf="1"]').click();
   assert.match(d.querySelector('h1').textContent, /Seduta finita/);
   d.getElementById('note').value = 'Spalla ok';
   d.getElementById('salva').click();
@@ -81,15 +83,55 @@ test('seduta completa offline: avvicinamento, serie con stepper, recupero, fine,
   assert.strictEqual(JSON.parse(w.localStorage.getItem('mwp_coda')).length, 1);
   assert.strictEqual(w.localStorage.getItem('mwp_bozza'), null);
   assert.match(d.getElementById('stato-sync').textContent, /1 seduta da inviare/);
-  // a casa: Aggiorna invia la coda
   w.fetch = fetchVera;
   d.getElementById('aggiorna').click();
   await attendi();
   assert.strictEqual(inviate.length, 1);
   assert.strictEqual(inviate[0].corpo.esercizi[0].serie[0].kg, 16);
+  assert.strictEqual(inviate[0].corpo.esercizi[0].serie[0].reps, 9);
   assert.strictEqual(inviate[0].corpo.note, 'Spalla ok');
-  assert.deepStrictEqual(JSON.parse(w.localStorage.getItem('mwp_coda')), []);
   assert.match(d.getElementById('stato-sync').textContent, /Sincronizzato/);
+  w.close();
+});
+
+test('uscire dall allenamento: popup con Cancella / Riprendi piu tardi', async () => {
+  const { d, w } = apri();
+  await attendi();
+  d.getElementById('inizia').click();
+  d.getElementById('esci').click();
+  assert.match(d.querySelector('.dialogo').textContent, /Riprendi più tardi[\s\S]*Cancella allenamento/);
+  d.getElementById('dlg-resta').click();
+  assert.ok(!d.querySelector('.dialogo'), 'resta nell allenamento');
+  assert.ok(d.querySelector('.righe-serie'));
+  d.getElementById('esci').click();
+  d.getElementById('dlg-dopo').click();
+  assert.ok(w.localStorage.getItem('mwp_bozza'), 'la bozza resta');
+  assert.ok(d.getElementById('riprendi'));
+  d.getElementById('riprendi').click();
+  d.getElementById('esci').click();
+  d.getElementById('dlg-cancella').click();
+  assert.strictEqual(w.localStorage.getItem('mwp_bozza'), null, 'cancellata');
+  assert.ok(d.getElementById('inizia'));
+  w.close();
+});
+
+test('recupero: la notifica di fine si programma, si sposta con +15 s e si annulla con Salta', async () => {
+  const chiamate = [];
+  const notifiche = { checkPermissions: async () => ({ display: 'granted' }), requestPermissions: async () => ({ display: 'granted' }), createChannel: async () => {},
+    schedule: async o => chiamate.push(['programma', o.notifications[0].schedule.at.getTime()]), cancel: async () => chiamate.push(['annulla']) };
+  const { d, w } = apri({ notifiche });
+  await attendi();
+  d.getElementById('inizia').click();
+  d.querySelector('[data-conf="0"]').click();
+  await attendi();
+  const prima = chiamate.find(c => c[0] === 'programma');
+  assert.ok(prima && prima[1] > Date.now() + 50000 && prima[1] < Date.now() + 70000, 'circa 60 s dopo');
+  d.getElementById('piu15').click();
+  await attendi();
+  assert.ok(chiamate.filter(c => c[0] === 'programma').pop()[1] >= prima[1] + 14000, 'spostata di 15 s');
+  d.getElementById('salta').click();
+  await attendi();
+  assert.strictEqual(chiamate[chiamate.length - 1][0], 'annulla');
   w.close();
 });
 
@@ -106,22 +148,33 @@ test('niente lineette lunghe nei testi dell app', () => {
   for (const f of ['index.html', 'js/app.js']) assert.ok(!/[—–]/.test(fs.readFileSync(path.join(WWW, f), 'utf8')), f);
 });
 
-test('seduta di oggi gia fatta: la home propone la prossima', async () => {
+
+test('oggi: seduta gia fatta, nessuna replica del calendario', async () => {
   const { d, w } = apri({ fatta: true });
   await attendi();
-  assert.doesNotMatch(d.querySelector('.prossima').textContent, /Oggi/);
-  assert.match(d.querySelector('.prossima').textContent, /Prossima/);
+  assert.match(d.querySelector('.prossima').textContent, /Oggi[\s\S]*già salvata/);
+  assert.ok(!d.getElementById('inizia'));
+  assert.ok(!d.querySelector('.elenco-giorni, .giorno-card'), 'niente elenco di giorni nella schermata Oggi');
   w.close();
 });
 
-test('settimana: palestra, bici e riposo, giorno di oggi evidenziato, gara', async () => {
+test('calendario: card cliccabili con colori per bici, palestra e riposo; obiettivi separati', async () => {
   const { d, w } = apri();
   await attendi();
-  d.querySelector('[data-tab="settimana"]').click();
-  assert.strictEqual(d.querySelectorAll('.giorno-card').length, 2);
-  assert.match(d.querySelector('.giorno-card.oggi').textContent, /Petto-Spalle[\s\S]*50'/);
-  assert.match(d.querySelector('.giorno-card.riposo').textContent, /Riposo[\s\S]*Recupero/);
-  assert.match(d.querySelector('.gara').textContent, /Granfondo X/);
+  d.querySelector('[data-tab="calendario"]').click();
+  assert.match(d.querySelector('h1').textContent, /Calendario/);
+  assert.strictEqual(d.querySelectorAll('[data-giorno]').length, 2);
+  assert.match(d.querySelector('.giorno-card.palestra.oggi').textContent, /Petto-Spalle[\s\S]*50'/);
+  assert.ok(d.querySelector('.giorno-card.riposo'));
+  const gara = d.querySelector('[data-gara]');
+  assert.match(gara.textContent, /Granfondo X/);
+  assert.ok(!gara.closest('ul').querySelector('[data-giorno]'), 'obiettivi in un elenco a parte');
+  d.querySelector('[data-giorno="0"]').click();
+  assert.match(d.querySelector('.foglio').textContent, /Palestra[\s\S]*Petto-Spalle[\s\S]*Panca inclinata/);
+  d.getElementById('chiudi-foglio').click();
+  assert.ok(!d.querySelector('.foglio'));
+  gara.click();
+  assert.match(d.querySelector('.foglio').textContent, /Obiettivo[\s\S]*104 km/);
   w.close();
 });
 
@@ -135,19 +188,13 @@ test('nutrizione: target e pasti del giorno', async () => {
   w.close();
 });
 
-test('oggi in bici: card della bici, niente tracking, resta la prossima palestra', async () => {
+test('oggi in bici: solo la card della bici, niente tracking ne prossime sedute', async () => {
   const { d, w } = apri({ oggiTipo: 'bici' });
   await attendi();
+  // la seduta di palestra di oggi scaricata prevale: senza di essa si vede la bici
+  w.localStorage.setItem('mwp_dati', JSON.stringify({ sedute: [{ data: '2099-01-05', piano: PIANO }] }));
+  w.MWP.home();
   assert.match(d.querySelector('.prossima').textContent, /in bici[\s\S]*EnduranceCorto[\s\S]*1h15/);
-  w.close();
-});
-
-test('tracking: righe serie con kg, ripetizioni e spunta', async () => {
-  const { d, w } = apri();
-  await attendi();
-  d.getElementById('inizia').click();
-  assert.ok(d.getElementById('tabs').hidden, 'tab nascoste durante la seduta');
-  assert.strictEqual(d.querySelectorAll('.righe-serie li').length, 2);
-  assert.match(d.querySelector('.righe-serie li.ora').textContent, /W[\s\S]*kg[\s\S]*rip/);
+  assert.ok(!d.getElementById('inizia'));
   w.close();
 });

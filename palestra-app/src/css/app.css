@@ -200,3 +200,55 @@ button:focus-visible, textarea:focus-visible { outline: 3px solid var(--focus); 
 .passo { margin-top: var(--s-3); }
 .stepper-coppia { margin-top: var(--s-3); }
 .stepper output { font-size: 44px; }
+
+/* ---- 04/11/2026: calendario cliccabile con colori, popup, righe con campi propri ---- */
+.giorno-card { width: 100%; text-align: left; color: inherit; font: inherit; --c: var(--text-2); }
+.giorno-card.bici { --c: var(--c-bici); } .giorno-card.palestra { --c: var(--c-palestra); } .giorno-card.gara { --c: var(--c-obiettivo); }
+.giorno-card { border-left: 5px solid var(--c); }
+.giorno-card .tessera-ico { color: var(--c); }
+.giorno-card.oggi { border-color: var(--c); box-shadow: 0 0 0 1px var(--c); }
+.giorno-card:active { transform: scale(0.985); }
+.g-stato.gara { color: var(--c-obiettivo); font: 700 20px/1 var(--font-num); }
+.g-stato.oggi { color: var(--text); background: var(--surface-2); padding: var(--s-1) var(--s-3); border-radius: 999px; }
+.legenda { display: flex; gap: var(--s-4); margin-top: var(--s-2); font-size: 14px; color: var(--text-2); }
+.legenda span { display: inline-flex; align-items: center; gap: var(--s-1); }
+.legenda .icona { width: 18px; height: 18px; }
+.legenda .bici { color: var(--c-bici); } .legenda .palestra { color: var(--c-palestra); } .legenda .riposo { color: var(--text-2); }
+.giorni-settimana { margin-top: var(--s-3); }
+
+.velo { position: fixed; inset: 0; z-index: 20; display: flex; align-items: flex-end; justify-content: center; background: rgba(0, 0, 0, 0.6); animation: velo-entra var(--t-fast) ease-out; }
+.foglio {
+  width: 100%; max-width: 560px; max-height: 88dvh; overflow-y: auto; display: grid; gap: var(--s-3);
+  padding: var(--s-5) var(--s-4) calc(env(safe-area-inset-bottom) + var(--s-4)); border-radius: 24px 24px 0 0; background: var(--surface);
+  animation: entra var(--t-med) var(--ease-out);
+}
+.foglio h2 { margin: 0; font: 700 28px/1.1 var(--font-num); }
+.foglio p { margin: 0; }
+.foglio-testa { display: flex; align-items: center; gap: var(--s-3); --c: var(--text-2); }
+.foglio-testa.bici { --c: var(--c-bici); } .foglio-testa.palestra { --c: var(--c-palestra); } .foglio-testa.gara { --c: var(--c-obiettivo); }
+.foglio-testa .tessera-ico { width: 56px; height: 56px; border-radius: var(--r-control); display: grid; place-items: center; background: var(--surface-2); color: var(--c); flex: none; }
+.foglio-testa .g-quando { color: var(--c); font: 600 15px/1.2 var(--font-num); letter-spacing: 0.04em; text-transform: uppercase; }
+.dialogo { padding-top: var(--s-6); }
+.cta-secondaria.pericolo { color: var(--bad); border: 1px solid var(--bad); background: transparent; }
+@keyframes velo-entra { from { opacity: 0; } }
+
+.prossima.bici { border-left: 5px solid var(--c-bici); }
+.prossima.fatta .meta { color: var(--done); display: flex; align-items: center; gap: var(--s-2); }
+.elenco-esercizi { margin-top: var(--s-4); }
+
+/* righe: kg e ripetizioni modificabili direttamente, spunta per confermare */
+.righe-serie li { grid-template-columns: 40px 1fr 1fr 56px; gap: var(--s-2); min-height: 64px; }
+.righe-serie .val { display: flex; align-items: baseline; gap: var(--s-1); }
+.righe-serie .val input {
+  width: 100%; min-width: 0; height: 52px; padding: 0 var(--s-2); border-radius: 12px; border: 1px solid var(--line); background: var(--surface-2);
+  color: var(--text); font: 700 28px/1 var(--font-num); font-variant-numeric: tabular-nums; text-align: center;
+}
+.righe-serie li.ora .val input { border-color: var(--accent); }
+.righe-serie li.fatta .val input { color: var(--text-2); background: transparent; border-color: transparent; }
+.righe-serie .val input:focus-visible { outline: 3px solid var(--focus); outline-offset: 1px; }
+.righe-serie .val span { color: var(--text-2); font-size: 13px; }
+.righe-serie .spunta { width: 56px; height: 56px; border-radius: var(--r-control); background: var(--surface-2); color: var(--text-2); display: grid; place-items: center; }
+.righe-serie li.ora .spunta { background: var(--accent); color: var(--on-accent); }
+.righe-serie li.fatta .spunta { background: var(--done); color: var(--on-done); }
+.righe-serie .spunta:active { transform: scale(0.94); }
+.righe-serie .val b { text-decoration: none; }

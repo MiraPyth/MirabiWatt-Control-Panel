@@ -20,6 +20,9 @@
   --on-done: #0f2410;
   --bad: #ef5350;
   --focus: #90caf9;
+  --c-bici: #64b5f6;       /* calendario: bici blu, palestra ambra, obiettivi rosa */
+  --c-palestra: #ffb74d;
+  --c-obiettivo: #f48fb1;
 
   --font-num: 'Barlow Condensed', 'Roboto Condensed', sans-serif;
   --font-text: 'Roboto', system-ui, sans-serif;
@@ -51,5 +54,8 @@
     --on-done: #ffffff;
     --bad: #c4003c;
     --focus: #1565c0;
+    --c-bici: #1976d2;
+    --c-palestra: #e65100;
+    --c-obiettivo: #c2185b;
   }
 }
