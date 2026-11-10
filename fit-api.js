@@ -3,6 +3,7 @@
 // Regola: se un dato non si puo' leggere lo si dice (503/502, «avvisi»), mai un numero inventato.
 const { obiettiviGiorno } = require('./fit-oggi.js');
 const profilo = require('./fit-profilo.js');
+const { ultimoAllenamento } = require('./fit-ultimo.js');
 
 const MAX_JSON = 16 * 1024;
 const MAX_FOTO = 1.5 * 1024 * 1024;
@@ -58,6 +59,16 @@ function creaFitApi({ garmin, settimanaDel, attivita, sessioni, pesoKg, ftp, car
             giorno: giorno ? { nome: giorno.nome, dur: giorno.dur, zona: giorno.zona, riposo: !!giorno.riposo, haSeduta: !!giorno.seduta } : null, obiettivi, avvisi });
     }
 
+    /** L'ultimo allenamento (palestra o attivita' degli ultimi 30 giorni), con le sole metriche pertinenti. */
+    async function ultimo(req, res) {
+        const avvisi = [];
+        let att = [];
+        try { att = await attivita(giorniFa(30), oggi()); } catch (e) { avvisi.push('Attività non disponibili: intervals.icu non risponde.'); }
+        let kg = null;
+        try { const v = await pesoKg(); kg = typeof v === 'number' && v > 0 ? v : null; } catch (e) { /* senza peso niente stima calorica */ }
+        json(res, 200, { generato: adesso().toISOString(), ultimo: ultimoAllenamento({ sessioni: sessioni(), attivita: att, pesoKg: kg }), avvisi });
+    }
+
     async function profiloRotta(req, res) {
         if (req.method === 'GET') return json(res, 200, profilo.leggi(cartellaDati));
         const c = await leggiCorpo(req, MAX_JSON);
@@ -85,6 +96,7 @@ function creaFitApi({ garmin, settimanaDel, attivita, sessioni, pesoKg, ftp, car
         const u = new URL(req.url, 'http://x'), p = u.pathname;
         if (req.method === 'GET' && p === '/api/fit/peso') { await peso(req, res, u); return true; }
         if (req.method === 'GET' && p === '/api/fit/oggi') { await giornata(req, res); return true; }
+        if (req.method === 'GET' && p === '/api/fit/ultimo') { await ultimo(req, res); return true; }
         if ((req.method === 'GET' || req.method === 'PUT') && p === '/api/fit/profilo') { await profiloRotta(req, res); return true; }
         if ((req.method === 'GET' || req.method === 'PUT') && p === '/api/fit/foto') { await fotoRotta(req, res); return true; }
         return false;

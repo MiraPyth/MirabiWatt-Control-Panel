@@ -403,7 +403,7 @@ async function atletaIntervals() {
 }
 const fitRotte = fitApi.creaFitApi({
     garmin: garminFit, settimanaDel: settimanaVera, cartellaDati: __dirname,
-    attivita: async (da, a) => (await intervalsGet(`/api/v1/athlete/${ATHLETE_ID}/activities?oldest=${da}&newest=${a}`)).map(x => ({ id: x.id, date: String(x.start_date_local || '').slice(0, 10), type: x.type || '', durationMin: x.moving_time != null ? Math.round(x.moving_time / 60) : null, kcal: x.calories != null ? Math.round(x.calories) : null, distanceKm: x.distance != null ? Math.round(x.distance / 10) / 100 : null })),
+    attivita: async (da, a) => (await intervalsGet(`/api/v1/athlete/${ATHLETE_ID}/activities?oldest=${da}&newest=${a}`)).map(x => ({ id: x.id, date: String(x.start_date_local || '').slice(0, 10), type: x.type || '', durationMin: x.moving_time != null ? Math.round(x.moving_time / 60) : null, kcal: x.calories != null ? Math.round(x.calories) : null, distanceKm: x.distance != null ? Math.round(x.distance / 10) / 100 : null, start: String(x.start_date_local || '').slice(11, 16) || null, name: x.name || '', np: x.icu_weighted_avg_watts != null ? Math.round(x.icu_weighted_avg_watts) : null, watt: x.icu_average_watts != null ? Math.round(x.icu_average_watts) : null })),
     sessioni: () => palestraStore.storico().sessioni || [],
     pesoKg: async () => (await atletaIntervals()).weightKg, ftp: async () => (await atletaIntervals()).ftp,
 });

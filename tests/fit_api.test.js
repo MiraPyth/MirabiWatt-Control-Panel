@@ -146,3 +146,23 @@ test('rotte non fit: non vengono toccate', async () => {
   assert.strictEqual((await chiedi(s, 'POST', '/api/fit/peso', '{}')).corpo.toString(), 'altro');
   s.close();
 });
+
+test('ultimo: l\'ultimo allenamento con le metriche pertinenti, e un avviso se le attivita\' non si leggono', async () => {
+  const sess = [{ id: 'a', data: '2026-11-10', seduta: 'Petto-Spalle', inizio: '2026-11-10T18:00:00', fine: '2026-11-10T18:50:00', esercizi: [{ id: 'panca-piana-manubri', nome: 'Panca', serie: [{ kg: 14, reps: 8, fatta: true }] }] }];
+  let { s } = await avvia({ sessioni: () => sess, attivita: async () => [{ id: '1', date: '2026-11-09', start: '19:00', name: 'Zwift', type: 'VirtualRide', durationMin: 60, distanceKm: 30, kcal: 700, np: 250 }] });
+  let r = await chiedi(s, 'GET', '/api/fit/ultimo');
+  assert.strictEqual(r.status, 200);
+  assert.strictEqual(r.json.ultimo.tipo, 'palestra');
+  assert.strictEqual(r.json.ultimo.durataMin, 50);
+  assert.deepStrictEqual(r.json.avvisi, []);
+  s.close();
+  ({ s } = await avvia({ sessioni: () => sess, attivita: async () => { throw new Error('boom'); } }));
+  r = await chiedi(s, 'GET', '/api/fit/ultimo');
+  assert.strictEqual(r.json.ultimo.tipo, 'palestra', 'la palestra si vede anche senza intervals.icu');
+  assert.match(r.json.avvisi.join(' '), /attivit/i);
+  s.close();
+  ({ s } = await avvia());
+  r = await chiedi(s, 'GET', '/api/fit/ultimo');
+  assert.strictEqual(r.json.ultimo, null, 'nessun allenamento: null, non un errore');
+  s.close();
+});
