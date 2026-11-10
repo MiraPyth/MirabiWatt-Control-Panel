@@ -13,6 +13,8 @@ const palestraStore = require('./palestra-store.js');
 const palestraProssime = require('./palestra-prossime.js');
 const palestraAppRilascio = require('./palestra-app-release.js');
 const palestraSettimana = require('./palestra-settimana.js');
+const fitGarmin = require('./fit-garmin.js');
+const fitApi = require('./fit-api.js');
 // 10/11/2026: come MIRAGAME, il server legge direttamente la cartella dist/ dell'app (ultima.json + apk), senza pubblicazione a mano
 const APP_ANDROID_DIR = process.env.MW_APP_DIST || palestraAppRilascio.DIST_PREDEFINITA;
 const ripianifica = require('./ripianifica-ia.js');
@@ -376,6 +378,35 @@ async function pushWeekToIntervals(days, weekStartISO) {
     }
     return results;
 }
+
+// 10/11/2026: la settimana vera per l'app (usata da /api/palestra/settimana e da /api/fit/oggi)
+async function settimanaVera(data) {
+    const g = new Date(data + 'T12:00:00'), lun = fmtISO(addDays(g, -((g.getDay() + 6) % 7))), dom = fmtISO(addDays(new Date(lun + 'T12:00:00'), 6));
+    const ev = await intervalsGet(`/api/v1/athlete/${ATHLETE_ID}/events?oldest=${lun}&newest=${dom}`).catch(() => null);
+    const eventi = Array.isArray(ev) ? ev.filter(e => e.category === 'WORKOUT').map(e => ({ date: String(e.start_date_local || '').slice(0, 10), name: e.name || '' })) : null;
+    const st = palestraStore.storico();
+    const s = palestraSettimana.settimanaPalestra({ lunedi: lun, eventi, sessioni: st.sessioni || [], findDetailedWeek, pianoPalestra, baseName,
+        gare: (SEASON.events || []).map(e => ({ nome: e.name, data: e.date, priorita: e.priority, km: e.km, dislivello: e.elev })) });
+    return { generato: new Date().toISOString(), ...s, ultimi: st.ultimi || {} };
+}
+
+// 10/11/2026: app Fit. Garmin Personal API (la chiave sta in un file riservato, mai in log o risposte) e profilo atleta in cache
+const GARMIN_KEY_PATH = path.join(require('os').homedir(), '.config', 'mirabiwatt', 'garmin-api-key');
+const garminFit = fitGarmin.creaGarmin({ chiave: () => { try { return fs.readFileSync(GARMIN_KEY_PATH, 'utf8').trim() || null; } catch (e) { return null; } }, fetch: (...a) => fetch(...a) });
+let atletaCache = { t: 0, v: null };
+async function atletaIntervals() {
+    if (atletaCache.v && Date.now() - atletaCache.t < 3600000) return atletaCache.v;
+    const profile = await intervalsGet(`/api/v1/athlete/${ATHLETE_ID}`);
+    const ride = (profile.sportSettings || []).find(x => (x.types || []).includes('Ride')) || {};
+    atletaCache = { t: Date.now(), v: { weightKg: profile.icu_weight || null, ftp: ride.ftp || null } };
+    return atletaCache.v;
+}
+const fitRotte = fitApi.creaFitApi({
+    garmin: garminFit, settimanaDel: settimanaVera, cartellaDati: __dirname,
+    attivita: async (da, a) => (await intervalsGet(`/api/v1/athlete/${ATHLETE_ID}/activities?oldest=${da}&newest=${a}`)).map(x => ({ id: x.id, date: String(x.start_date_local || '').slice(0, 10), type: x.type || '', durationMin: x.moving_time != null ? Math.round(x.moving_time / 60) : null, kcal: x.calories != null ? Math.round(x.calories) : null, distanceKm: x.distance != null ? Math.round(x.distance / 10) / 100 : null })),
+    sessioni: () => palestraStore.storico().sessioni || [],
+    pesoKg: async () => (await atletaIntervals()).weightKg, ftp: async () => (await atletaIntervals()).ftp,
+});
 
 async function buildDashboard() {
     const today = new Date();
@@ -816,16 +847,12 @@ const server = http.createServer(async (req, res) => {
         try {
             const data = new URL(req.url, 'http://x').searchParams.get('data') || todayLocalISO();
             if (!dataOk(data)) { json(res, 400, { error: 'data (AAAA-MM-GG) non valida' }); return; }
-            const g = new Date(data + 'T12:00:00'), lun = fmtISO(addDays(g, -((g.getDay() + 6) % 7))), dom = fmtISO(addDays(new Date(lun + 'T12:00:00'), 6));
-            const ev = await intervalsGet(`/api/v1/athlete/${ATHLETE_ID}/events?oldest=${lun}&newest=${dom}`).catch(() => null);
-            const eventi = Array.isArray(ev) ? ev.filter(e => e.category === 'WORKOUT').map(e => ({ date: String(e.start_date_local || '').slice(0, 10), name: e.name || '' })) : null;
-            const st = palestraStore.storico();
-            const s = palestraSettimana.settimanaPalestra({ lunedi: lun, eventi, sessioni: st.sessioni || [], findDetailedWeek, pianoPalestra, baseName,
-                gare: (SEASON.events || []).map(e => ({ nome: e.name, data: e.date, priorita: e.priority, km: e.km, dislivello: e.elev })) });
-            json(res, 200, { generato: new Date().toISOString(), ...s, ultimi: st.ultimi || {} });
+            json(res, 200, await settimanaVera(data));
         } catch (e) { json(res, 502, { error: String(e.message) }); }
         return;
     }
+    // 10/11/2026: app Fit (Expo): peso Garmin, obiettivi del giorno, profilo e foto
+    if (await fitRotte.servi(req, res)) return;
     // 02/11/2026: app Android di palestra, scarica le prossime sedute per allenarsi anche senza rete
     if (req.method === 'GET' && req.url.startsWith('/api/palestra/prossime')) {
         const n = Math.min(28, Math.max(1, Number(new URL(req.url, 'http://x').searchParams.get('giorni')) || 14));
