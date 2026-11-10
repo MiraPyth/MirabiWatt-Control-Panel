@@ -12,7 +12,9 @@ const { eventoAllenamento } = require('./intervals-evento.js');
 const palestraStore = require('./palestra-store.js');
 const palestraProssime = require('./palestra-prossime.js');
 const palestraAppRilascio = require('./palestra-app-release.js');
-const APP_ANDROID_DIR = path.join(__dirname, 'app-android');
+const palestraSettimana = require('./palestra-settimana.js');
+// 10/11/2026: come MIRAGAME, il server legge direttamente la cartella dist/ dell'app (ultima.json + apk), senza pubblicazione a mano
+const APP_ANDROID_DIR = process.env.MW_APP_DIST || palestraAppRilascio.DIST_PREDEFINITA;
 const ripianifica = require('./ripianifica-ia.js');
 const pianoMixed = require('./scripts/piano-mixed.js');
 const coach = require('./coach.js');
@@ -806,8 +808,24 @@ const server = http.createServer(async (req, res) => {
     }
     // 19/10/2026: app di allenamento in palestra, sessioni salvate in palestra-storico.json
     if (req.method === 'GET' && req.url === '/api/palestra/storico') { json(res, 200, palestraStore.storico()); return; }
-    // 04/11/2026: l'app controlla qui se c'è una versione nuova e la scarica dalle Impostazioni (cartella app-android/)
+    // 10/11/2026: l'app controlla qui se c'è una build nuova e la scarica dentro l'app, come MIRAGAME (dist/ dell'app)
     if (palestraAppRilascio.servi(req, res, APP_ANDROID_DIR)) return;
+    // 10/11/2026: la settimana vera per l'app di palestra: gli eventi di intervals.icu (dove vanno le modifiche fatte da
+    // MirabiWatt) con il piano per durata, zona e scheda; le sedute non fatte restano scegliibili (anche quelle di ieri)
+    if (req.method === 'GET' && req.url.startsWith('/api/palestra/settimana')) {
+        try {
+            const data = new URL(req.url, 'http://x').searchParams.get('data') || todayLocalISO();
+            if (!dataOk(data)) { json(res, 400, { error: 'data (AAAA-MM-GG) non valida' }); return; }
+            const g = new Date(data + 'T12:00:00'), lun = fmtISO(addDays(g, -((g.getDay() + 6) % 7))), dom = fmtISO(addDays(new Date(lun + 'T12:00:00'), 6));
+            const ev = await intervalsGet(`/api/v1/athlete/${ATHLETE_ID}/events?oldest=${lun}&newest=${dom}`).catch(() => null);
+            const eventi = Array.isArray(ev) ? ev.filter(e => e.category === 'WORKOUT').map(e => ({ date: String(e.start_date_local || '').slice(0, 10), name: e.name || '' })) : null;
+            const st = palestraStore.storico();
+            const s = palestraSettimana.settimanaPalestra({ lunedi: lun, eventi, sessioni: st.sessioni || [], findDetailedWeek, pianoPalestra, baseName,
+                gare: (SEASON.events || []).map(e => ({ nome: e.name, data: e.date, priorita: e.priority, km: e.km, dislivello: e.elev })) });
+            json(res, 200, { generato: new Date().toISOString(), ...s, ultimi: st.ultimi || {} });
+        } catch (e) { json(res, 502, { error: String(e.message) }); }
+        return;
+    }
     // 02/11/2026: app Android di palestra, scarica le prossime sedute per allenarsi anche senza rete
     if (req.method === 'GET' && req.url.startsWith('/api/palestra/prossime')) {
         const n = Math.min(28, Math.max(1, Number(new URL(req.url, 'http://x').searchParams.get('giorni')) || 14));
