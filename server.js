@@ -383,7 +383,7 @@ async function pushWeekToIntervals(days, weekStartISO) {
 async function settimanaVera(data) {
     const g = new Date(data + 'T12:00:00'), lun = fmtISO(addDays(g, -((g.getDay() + 6) % 7))), dom = fmtISO(addDays(new Date(lun + 'T12:00:00'), 6));
     const ev = await intervalsGet(`/api/v1/athlete/${ATHLETE_ID}/events?oldest=${lun}&newest=${dom}`).catch(() => null);
-    const eventi = Array.isArray(ev) ? ev.filter(e => e.category === 'WORKOUT').map(e => ({ date: String(e.start_date_local || '').slice(0, 10), name: e.name || '' })) : null;
+    const eventi = Array.isArray(ev) ? ev.filter(e => e.category === 'WORKOUT' || e.category === 'NOTE').map(e => ({ date: String(e.start_date_local || '').slice(0, 10), name: e.name || '', categoria: e.category, type: e.type || null, durationMin: e.moving_time > 0 ? Math.round(e.moving_time / 60) : null, tss: e.icu_training_load != null ? e.icu_training_load : null })) : null;
     const st = palestraStore.storico();
     const s = palestraSettimana.settimanaPalestra({ lunedi: lun, eventi, sessioni: st.sessioni || [], findDetailedWeek, pianoPalestra, baseName,
         gare: (SEASON.events || []).map(e => ({ nome: e.name, data: e.date, priorita: e.priority, km: e.km, dislivello: e.elev })) });

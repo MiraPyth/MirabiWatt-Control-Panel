@@ -8,6 +8,17 @@ const RIPOSI = new Set(['Riposo', 'Riposo o Passeggiata', 'Corpo libero e MSR'])
 const giornoISO = (iso, n) => { const d = new Date(iso + 'T12:00:00'); d.setDate(d.getDate() + n); return d.toISOString().slice(0, 10); };
 const conSchema = nome => /\(.*\)\s*$/.test(nome || '');
 
+/** 45 -> «45'», 60 -> «1h», 75 -> «1h15», 125 -> «2h05» (stesso formato del piano). */
+const formatoDurata = m => (m < 60 ? `${m}'` : `${Math.floor(m / 60)}h${m % 60 ? String(m % 60).padStart(2, '0') : ''}`);
+const SPORT_TIPO = [[/weight|strength|crossfit/i, 'palestra'], [/ride/i, 'ciclismo'], [/run/i, 'corsa'], [/swim/i, 'nuoto']];
+/** palestra | ciclismo | corsa | nuoto | altro, dal tipo dell'evento; senza tipo dalla scheda o dalla zona del piano; null se non e' un allenamento. */
+function sportDi(type, seduta, zona, riposo) {
+    if (riposo) return null;
+    if (type) { const t = SPORT_TIPO.find(([re]) => re.test(type)); return t ? t[1] : 'altro'; }
+    if (seduta || String(zona).toUpperCase().includes('PALESTRA')) return 'palestra';
+    return /^(Z\d|HIT|TEST|GARA|TEMPO)/i.test(zona || '') ? 'ciclismo' : null;
+}
+
 function settimanaPalestra({ lunedi, eventi, sessioni = [], gare = [], findDetailedWeek, pianoPalestra, baseName }) {
     const wk = findDetailedWeek(lunedi), piano = wk && wk.week ? wk.week.days : [];
     const pulisci = n => baseName(String(n || '').replace(/^\[(MirabiWatt|MW)\]\s*/, ''));
@@ -22,16 +33,20 @@ function settimanaPalestra({ lunedi, eventi, sessioni = [], gare = [], findDetai
     if (Array.isArray(eventi) && eventi.length) {
         fonte = 'intervals';
         giorni = GG.map((g, i) => {
-            const data = giornoISO(lunedi, i), ev = eventi.find(e => e.date === data);
-            if (!ev) return { data, giorno: g, nome: 'Riposo', dur: '', zona: '', riposo: true, seduta: null, nomePiano: null };
+            const data = giornoISO(lunedi, i), delGiorno = eventi.filter(e => e.date === data);
+            const ev = delGiorno.find(e => (e.categoria || 'WORKOUT') !== 'NOTE'), nota = delGiorno.find(e => e.categoria === 'NOTE');
+            if (!ev) return { data, giorno: g, nome: nota ? nota.name : 'Riposo', dur: '', zona: '', riposo: true, sport: null, tss: null, seduta: null, nomePiano: null };
             const nome = pulisci(ev.name), p = perNome(nome), full = nomeCompleto(nome, p), s = scheda(full);
             const zona = (p && p.zone) || (s ? 'Palestra' : '');
-            return { data, giorno: g, nome, dur: (p && p.dur) || '', zona, riposo: riposo(nome, zona), seduta: s, nomePiano: s ? full : null };
+            const dur = ev.durationMin > 0 ? formatoDurata(Math.round(ev.durationMin)) : (p && p.dur) || '';
+            const rip = riposo(nome, zona);
+            return { data, giorno: g, nome, dur, zona, riposo: rip, sport: sportDi(ev.type, s, zona, rip), tss: typeof ev.tss === 'number' ? Math.round(ev.tss) : null, seduta: s, nomePiano: s ? full : null };
         });
     } else {
         giorni = piano.map((d, i) => {
             const nome = baseName(d.s || ''), s = d.s ? scheda(d.s) : null;
-            return { data: giornoISO(lunedi, i), giorno: d.d || GG[i], nome, dur: d.dur || '', zona: d.zone || '', riposo: riposo(nome, d.zone), seduta: s, nomePiano: s ? d.s : null };
+            const rip = riposo(nome, d.zone);
+            return { data: giornoISO(lunedi, i), giorno: d.d || GG[i], nome, dur: d.dur || '', zona: d.zone || '', riposo: rip, sport: sportDi(null, s, d.zone, rip), tss: null, seduta: s, nomePiano: s ? d.s : null };
         });
     }
 

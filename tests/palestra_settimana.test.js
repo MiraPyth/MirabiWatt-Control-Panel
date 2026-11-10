@@ -93,3 +93,53 @@ test('settimana fuori dal piano: niente scheda inventata', () => {
   assert.strictEqual(s.giorni[1].seduta, null, 'nessuno schema noto: non si indovina');
   assert.strictEqual(s.fase, null);
 });
+
+// ---- 10/11/2026 sera: gli eventi di intervals.icu portano durata reale, tipo di sport e note di riposo ----
+test('durata reale dall\'evento (in minuti), non dal piano: le modifiche fatte da MirabiWatt contano', () => {
+  const eventi = [{ date: '2026-11-12', name: '[MW] EnduranceCorto', categoria: 'WORKOUT', type: 'Ride', durationMin: 90, tss: 61 }, { date: '2026-11-15', name: '[MW] EnduranceLungo', categoria: 'WORKOUT', type: 'Ride', durationMin: 265, tss: 232 }, { date: '2026-11-11', name: '[MW] Petto-Spalle', categoria: 'WORKOUT', type: 'WeightTraining', durationMin: 70 }];
+  const g = chiama({ eventi }).giorni;
+  assert.deepStrictEqual([g[3].dur, g[6].dur, g[2].dur], ['1h30', '4h25', '1h10']);
+  assert.strictEqual(g[3].tss, 61);
+  assert.strictEqual(g[2].tss, null);
+});
+
+test('formato della durata: minuti sotto l\'ora, ore e minuti sopra, ora tonda', () => {
+  const dur = m => chiama({ eventi: [{ date: '2026-11-12', name: '[MW] EnduranceCorto', categoria: 'WORKOUT', type: 'Ride', durationMin: m }] }).giorni[3].dur;
+  assert.deepStrictEqual([dur(45), dur(60), dur(75), dur(125)], ["45'", '1h', '1h15', '2h05']);
+});
+
+test('senza durata sull\'evento si usa quella del piano', () => {
+  assert.strictEqual(chiama().giorni[3].dur, '1h15');
+});
+
+test('note di intervals.icu (DIVANO, DAY OFF, RIPOSO TOTALE): giorno di riposo col nome della nota', () => {
+  const eventi = [...EVENTI, { date: '2026-11-09', name: 'DIVANO', categoria: 'NOTE' }, { date: '2026-11-10', name: 'DAY OFF', categoria: 'NOTE' }, { date: '2026-11-14', name: 'RIPOSO TOTALE', categoria: 'NOTE' }];
+  const g = chiama({ eventi }).giorni;
+  assert.deepStrictEqual([g[0].nome, g[0].riposo, g[1].nome, g[5].nome, g[5].riposo], ['DIVANO', true, 'DAY OFF', 'RIPOSO TOTALE', true]);
+  assert.strictEqual(g[0].seduta, null);
+});
+
+test('allenamento e nota nello stesso giorno: vince l\'allenamento', () => {
+  const eventi = [{ date: '2026-11-11', name: 'Nota', categoria: 'NOTE' }, { date: '2026-11-11', name: '[MW] Petto-Spalle', categoria: 'WORKOUT', type: 'WeightTraining', durationMin: 70 }];
+  const g = chiama({ eventi }).giorni[2];
+  assert.strictEqual(g.nome, 'Petto-Spalle');
+  assert.strictEqual(g.riposo, false);
+});
+
+test('sport dal tipo dell\'evento: palestra, ciclismo, corsa, nuoto, altro; null per il riposo', () => {
+  const sport = (type, name = '[MW] X') => chiama({ eventi: [{ date: '2026-11-12', name, categoria: 'WORKOUT', type, durationMin: 40 }] }).giorni[3].sport;
+  assert.deepStrictEqual([sport('WeightTraining'), sport('Ride'), sport('VirtualRide'), sport('Run'), sport('Swim'), sport('Yoga')], ['palestra', 'ciclismo', 'ciclismo', 'corsa', 'nuoto', 'altro']);
+  assert.strictEqual(chiama().giorni[0].sport !== undefined, true);
+  const g = chiama({ eventi: [{ date: '2026-11-09', name: 'DIVANO', categoria: 'NOTE' }, ...EVENTI] }).giorni;
+  assert.strictEqual(g[0].sport, null);
+});
+
+test('evento senza tipo: lo sport si ricava dal piano (scheda = palestra, zona Z2/HIT = ciclismo)', () => {
+  const g = chiama().giorni;   // EVENTI senza type
+  assert.deepStrictEqual([g[2].sport, g[3].sport, g[6].sport], ['palestra', 'ciclismo', 'ciclismo']);
+});
+
+test('fonte «piano»: lo sport arriva dalla zona', () => {
+  const g = chiama({ eventi: null }).giorni;
+  assert.deepStrictEqual([g[0].sport, g[1].sport, g[5].sport], ['palestra', 'ciclismo', null]);
+});
