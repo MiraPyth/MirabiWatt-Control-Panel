@@ -27,7 +27,7 @@ function leggiCorpo(req, limite) {
     });
 }
 
-function creaFitApi({ garmin, settimanaDel, attivita, eventi = async () => [], percorso = async () => [], pianifica = null, traguardi = null, seduta = null, sessioni, pesoKg, ftp, cartellaDati, adesso = () => new Date() }) {
+function creaFitApi({ garmin, settimanaDel, attivita, eventi = async () => [], percorso = async () => [], pianifica = null, traguardi = null, seduta = null, servizi = null, sessioni, pesoKg, ftp, cartellaDati, adesso = () => new Date() }) {
     const oggi = () => isoLocale(adesso());
     const giorniFa = n => { const d = adesso(); d.setDate(d.getDate() - n); return isoLocale(d); };
 
@@ -133,6 +133,13 @@ function creaFitApi({ garmin, settimanaDel, attivita, eventi = async () => [], p
         } catch (e) { json(res, 502, { error: 'Seduta non disponibile.' }); }
     }
 
+    /** Stato dei servizi collegati (Garmin, intervals.icu, Strava, Health Connect), senza segreti. */
+    async function serviziRotta(req, res) {
+        if (!servizi) return json(res, 503, { error: 'Servizi non disponibili sul server', nonDisponibile: true });
+        try { json(res, 200, await servizi()); }
+        catch (e) { json(res, 502, { error: 'Stato dei servizi non disponibile.' }); }
+    }
+
     async function profiloRotta(req, res) {
         if (req.method === 'GET') return json(res, 200, profilo.leggi(cartellaDati));
         const c = await leggiCorpo(req, MAX_JSON);
@@ -165,6 +172,7 @@ function creaFitApi({ garmin, settimanaDel, attivita, eventi = async () => [], p
         if (req.method === 'GET' && p === '/api/fit/percorso') { await percorsoRotta(req, res, u); return true; }
         if (req.method === 'GET' && p === '/api/fit/modelli') { await modelli(req, res); return true; }
         if ((req.method === 'POST' || req.method === 'DELETE') && p === '/api/fit/pianifica') { await pianificaRotta(req, res, u); return true; }
+        if (req.method === 'GET' && p === '/api/fit/servizi') { await serviziRotta(req, res); return true; }
         if (req.method === 'GET' && p === '/api/fit/traguardi') { await traguardiRotta(req, res); return true; }
         if (req.method === 'GET' && p === '/api/fit/seduta') { await sedutaRotta(req, res, u); return true; }
         if ((req.method === 'GET' || req.method === 'PUT') && p === '/api/fit/profilo') { await profiloRotta(req, res); return true; }
