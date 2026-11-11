@@ -19,7 +19,8 @@ function sportDi(type, seduta, zona, riposo) {
     return /^(Z\d|HIT|TEST|GARA|TEMPO)/i.test(zona || '') ? 'ciclismo' : null;
 }
 
-function settimanaPalestra({ lunedi, eventi, sessioni = [], gare = [], findDetailedWeek, pianoPalestra, baseName }) {
+/** Come un evento di intervals.icu («[MW] Petto-Spalle») diventa la sua scheda del piano: nome pulito, giorno del piano, nome con lo schema, scheda. */
+function risolutore({ lunedi, findDetailedWeek, pianoPalestra, baseName }) {
     const wk = findDetailedWeek(lunedi), piano = wk && wk.week ? wk.week.days : [];
     const pulisci = n => baseName(String(n || '').replace(/^\[(MirabiWatt|MW)\]\s*/, ''));
     const perNome = nome => piano.find(d => d.s && baseName(d.s) === nome);
@@ -27,6 +28,18 @@ function settimanaPalestra({ lunedi, eventi, sessioni = [], gare = [], findDetai
     const schema = daPalestra ? (daPalestra.s.match(/\(([^)]*)\)\s*$/) || [])[1] : null;
     const nomeCompleto = (nome, p) => (p && conSchema(p.s) ? p.s : schema ? `${nome} (${schema})` : nome);
     const scheda = full => (conSchema(full) ? pianoPalestra(full) || null : null);
+    return { wk, piano, pulisci, perNome, nomeCompleto, scheda };
+}
+
+/** La scheda del piano per un evento di palestra della settimana che inizia di `lunedi`, o null. */
+function schedaDiEvento({ nomeEvento, lunedi, findDetailedWeek, pianoPalestra, baseName }) {
+    const r = risolutore({ lunedi, findDetailedWeek, pianoPalestra, baseName });
+    const nome = r.pulisci(nomeEvento);
+    return r.scheda(r.nomeCompleto(nome, r.perNome(nome)));
+}
+
+function settimanaPalestra({ lunedi, eventi, sessioni = [], gare = [], findDetailedWeek, pianoPalestra, baseName }) {
+    const { wk, piano, pulisci, perNome, nomeCompleto, scheda } = risolutore({ lunedi, findDetailedWeek, pianoPalestra, baseName });
     const riposo = (nome, zona) => RIPOSI.has(nome) || zona === 'Rec';
 
     let fonte = 'piano', giorni;
@@ -68,4 +81,4 @@ function settimanaPalestra({ lunedi, eventi, sessioni = [], gare = [], findDetai
     return { lunedi, fonte, fase: wk && wk.phase ? wk.phase.name : null, settimana: wk && wk.week ? wk.week.label : null, gare, giorni, altre };
 }
 
-module.exports = { settimanaPalestra };
+module.exports = { settimanaPalestra, schedaDiEvento };
