@@ -13,6 +13,7 @@ const { eventoAllenamento } = require('./intervals-evento.js');
 const palestraStore = require('./palestra-store.js');
 const palestraProssime = require('./palestra-prossime.js');
 const palestraAppRilascio = require('./palestra-app-release.js');
+const fitAppRilascio = require('./fit-app-release.js');
 const palestraSettimana = require('./palestra-settimana.js');
 const fitCalendario = require('./fit-calendario.js');
 const fitGarmin = require('./fit-garmin.js');
@@ -931,6 +932,7 @@ const server = http.createServer(async (req, res) => {
     if (req.method === 'GET' && req.url === '/api/palestra/storico') { json(res, 200, palestraStore.storico()); return; }
     // 10/11/2026: l'app controlla qui se c'è una build nuova e la scarica dentro l'app, come MIRAGAME (dist/ dell'app)
     if (palestraAppRilascio.servi(req, res, APP_ANDROID_DIR)) return;
+    if (fitAppRilascio.servi(req, res, process.env.MW_FIT_DIST || fitAppRilascio.DIST_FIT)) return;
     // 10/11/2026: la settimana vera per l'app di palestra: gli eventi di intervals.icu (dove vanno le modifiche fatte da
     // MirabiWatt) con il piano per durata, zona e scheda; le sedute non fatte restano scegliibili (anche quelle di ieri)
     if (req.method === 'GET' && req.url.startsWith('/api/palestra/settimana')) {

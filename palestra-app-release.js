@@ -6,38 +6,46 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
-const URL_APK = '/api/palestra/app.apk';
 const DIST_PREDEFINITA = path.join(os.homedir(), 'Mirabiwatt-Android-App', 'dist');
 
-/** { file, json } se la cartella ha ultima.json e l'apk che indica (solo un nome di file, mai un percorso), altrimenti null. */
-function leggi(dir) {
-  try {
-    const j = JSON.parse(fs.readFileSync(path.join(dir, 'ultima.json'), 'utf8'));
-    if (!j.versione || typeof j.apk !== 'string' || path.basename(j.apk) !== j.apk || !j.apk.endsWith('.apk')) return null;
-    const file = path.join(dir, j.apk);
-    return fs.statSync(file).isFile() ? { file, json: j } : null;
-  } catch (e) { return null; }
+/** Un canale di aggiornamento: GET <prefisso> (json) e GET <prefisso>.apk (il file), dalla cartella dist/ di quell'app. */
+function creaRilascio(prefisso) {
+  const URL_APK = `${prefisso}.apk`;
+
+  /** { file, json } se la cartella ha ultima.json e l'apk che indica (solo un nome di file, mai un percorso), altrimenti null. */
+  function leggi(dir) {
+    try {
+      const j = JSON.parse(fs.readFileSync(path.join(dir, 'ultima.json'), 'utf8'));
+      if (!j.versione || typeof j.apk !== 'string' || path.basename(j.apk) !== j.apk || !j.apk.endsWith('.apk')) return null;
+      const file = path.join(dir, j.apk);
+      return fs.statSync(file).isFile() ? { file, json: j } : null;
+    } catch (e) { return null; }
+  }
+
+  /** { ok, versione, codice, costruito, byte, url } o null. */
+  function info(dir) {
+    const r = leggi(dir);
+    if (!r) return null;
+    return { ok: true, versione: String(r.json.versione), codice: r.json.codice, costruito: r.json.costruito, byte: fs.statSync(r.file).size, url: URL_APK };
+  }
+
+  /** Gestisce le due rotte; true se la richiesta e' stata servita (anche con 404), false se non e' per questo modulo. */
+  function servi(req, res, dir) {
+    if (req.method !== 'GET') return false;
+    const url = req.url.split('?')[0];
+    if (url !== prefisso && url !== URL_APK) return false;
+    const r = leggi(dir);
+    if (!r) { res.writeHead(404, { 'Content-Type': 'application/json' }); res.end(JSON.stringify({ error: 'nessuna build dell\'app' })); return true; }
+    if (url === prefisso) { res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }); res.end(JSON.stringify(info(dir))); return true; }
+    res.writeHead(200, { 'Content-Type': 'application/vnd.android.package-archive', 'Content-Length': fs.statSync(r.file).size,
+      'Content-Disposition': `attachment; filename="${path.basename(r.file)}"`, 'Cache-Control': 'no-store' });
+    fs.createReadStream(r.file).pipe(res);
+    return true;
+  }
+
+  return { info, servi, URL_APK };
 }
 
-/** { ok, versione, codice, costruito, byte, url } o null. */
-function info(dir) {
-  const r = leggi(dir);
-  if (!r) return null;
-  return { ok: true, versione: String(r.json.versione), codice: r.json.codice, costruito: r.json.costruito, byte: fs.statSync(r.file).size, url: URL_APK };
-}
+const palestra = creaRilascio('/api/palestra/app');
 
-/** Gestisce le due rotte; true se la richiesta e' stata servita (anche con 404), false se non e' per questo modulo. */
-function servi(req, res, dir) {
-  if (req.method !== 'GET') return false;
-  const url = req.url.split('?')[0];
-  if (url !== '/api/palestra/app' && url !== URL_APK) return false;
-  const r = leggi(dir);
-  if (!r) { res.writeHead(404, { 'Content-Type': 'application/json' }); res.end(JSON.stringify({ error: 'nessuna build dell\'app' })); return true; }
-  if (url === '/api/palestra/app') { res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }); res.end(JSON.stringify(info(dir))); return true; }
-  res.writeHead(200, { 'Content-Type': 'application/vnd.android.package-archive', 'Content-Length': fs.statSync(r.file).size,
-    'Content-Disposition': `attachment; filename="${path.basename(r.file)}"`, 'Cache-Control': 'no-store' });
-  fs.createReadStream(r.file).pipe(res);
-  return true;
-}
-
-module.exports = { info, servi, URL_APK, DIST_PREDEFINITA };
+module.exports = { ...palestra, creaRilascio, DIST_PREDEFINITA };
