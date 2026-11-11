@@ -27,7 +27,7 @@ function leggiCorpo(req, limite) {
     });
 }
 
-function creaFitApi({ garmin, settimanaDel, attivita, eventi = async () => [], percorso = async () => [], sessioni, pesoKg, ftp, cartellaDati, adesso = () => new Date() }) {
+function creaFitApi({ garmin, settimanaDel, attivita, eventi = async () => [], percorso = async () => [], pianifica = null, sessioni, pesoKg, ftp, cartellaDati, adesso = () => new Date() }) {
     const oggi = () => isoLocale(adesso());
     const giorniFa = n => { const d = adesso(); d.setDate(d.getDate() - n); return isoLocale(d); };
 
@@ -89,6 +89,31 @@ function creaFitApi({ garmin, settimanaDel, attivita, eventi = async () => [], p
         catch (e) { json(res, 502, { error: 'Percorso non disponibile: intervals.icu non risponde.' }); }
     }
 
+    /** Modelli di allenamento che l'app puo' pianificare (ciclismo, palestra). */
+    async function modelli(req, res) {
+        if (!pianifica) return json(res, 503, { error: 'Pianificazione non disponibile sul server', nonDisponibile: true });
+        try { json(res, 200, await pianifica.modelli()); }
+        catch (e) { json(res, 502, { error: 'Modelli non disponibili.' }); }
+    }
+
+    /** POST: crea l'allenamento su intervals.icu (da li' arriva ai dispositivi Garmin). DELETE: toglie uno creato dall'app. */
+    async function pianificaRotta(req, res, u) {
+        if (!pianifica) return json(res, 503, { error: 'Pianificazione non disponibile sul server', nonDisponibile: true });
+        if (req.method === 'DELETE') {
+            const id = u.searchParams.get('id') || '';
+            if (!/^\d{1,12}$/.test(id)) return json(res, 400, { error: 'id non valido' });
+            try { await pianifica.elimina(id); json(res, 200, { ok: true }); }
+            catch (e) { json(res, e.code === 'non-app' ? 403 : 502, { error: e.code === 'non-app' ? 'Da qui si tolgono solo gli allenamenti creati dall\'app.' : 'intervals.icu non risponde.' }); }
+            return;
+        }
+        const c = await leggiCorpo(req, MAX_JSON);
+        if (c.troppo) return json(res, 413, { error: 'richiesta troppo grande' });
+        let input;
+        try { input = JSON.parse(c.dati.toString('utf8')); } catch (e) { return json(res, 400, { error: 'JSON non valido' }); }
+        try { const r = await pianifica.crea(input); json(res, 200, { ok: true, id: r.id, nome: r.nome, data: r.data }); }
+        catch (e) { if (e.code === 'input') json(res, 400, { error: e.message }); else json(res, 502, { error: 'intervals.icu non risponde: allenamento non creato.' }); }
+    }
+
     async function profiloRotta(req, res) {
         if (req.method === 'GET') return json(res, 200, profilo.leggi(cartellaDati));
         const c = await leggiCorpo(req, MAX_JSON);
@@ -119,6 +144,8 @@ function creaFitApi({ garmin, settimanaDel, attivita, eventi = async () => [], p
         if (req.method === 'GET' && p === '/api/fit/ultimo') { await ultimo(req, res); return true; }
         if (req.method === 'GET' && p === '/api/fit/calendario') { await calendario(req, res, u); return true; }
         if (req.method === 'GET' && p === '/api/fit/percorso') { await percorsoRotta(req, res, u); return true; }
+        if (req.method === 'GET' && p === '/api/fit/modelli') { await modelli(req, res); return true; }
+        if ((req.method === 'POST' || req.method === 'DELETE') && p === '/api/fit/pianifica') { await pianificaRotta(req, res, u); return true; }
         if ((req.method === 'GET' || req.method === 'PUT') && p === '/api/fit/profilo') { await profiloRotta(req, res); return true; }
         if ((req.method === 'GET' || req.method === 'PUT') && p === '/api/fit/foto') { await fotoRotta(req, res); return true; }
         return false;

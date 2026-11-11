@@ -5,7 +5,8 @@ const http = require('http');
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
-const { getWorkoutDetail, baseName, pianoPalestra } = require('./workout-library.js');
+const { getWorkoutDetail, baseName, pianoPalestra, LIBRARY, SEDUTE_PALESTRA } = require('./workout-library.js');
+const fitPianifica = require('./fit-pianifica.js');
 const { SEASON, usaPiano, findDetailedWeek, findSummaryPhase, faseNutrizione, fmtISO, addDays, mondayOf, parseISO, parseDurMin } = require('./season-plan.js');
 const piani = require('./piani.js');
 const { eventoAllenamento } = require('./intervals-evento.js');
@@ -399,9 +400,46 @@ async function atletaIntervals() {
     if (atletaCache.v && Date.now() - atletaCache.t < 3600000) return atletaCache.v;
     const profile = await intervalsGet(`/api/v1/athlete/${ATHLETE_ID}`);
     const ride = (profile.sportSettings || []).find(x => (x.types || []).includes('Ride')) || {};
-    atletaCache = { t: Date.now(), v: { weightKg: profile.icu_weight || null, ftp: ride.ftp || null } };
+    atletaCache = { t: Date.now(), v: { weightKg: profile.icu_weight || null, ftp: ride.ftp || null, cp: (ride.mmp_model && ride.mmp_model.criticalPower) || null } };
     return atletaCache.v;
 }
+// 11/11/2026: «+» dell'app Fit. L'evento nasce nel formato nativo di intervals.icu (che poi Garmin sincronizza); uid dell'app = unico, mai sovrascrive
+function intervalsDelete(pathAndQuery) {
+    return new Promise((resolve, reject) => {
+        const req = https.request({ hostname: 'intervals.icu', path: pathAndQuery, method: 'DELETE', headers: { Authorization: AUTH_HEADER } }, res => {
+            res.resume();
+            res.on('end', () => (res.statusCode >= 200 && res.statusCode < 300 ? resolve() : reject(new Error(`intervals.icu ${res.statusCode}`))));
+        });
+        req.on('error', reject);
+        req.end();
+    });
+}
+async function schemaPalestraCorrente() {
+    const wk = findDetailedWeek(fmtISO(mondayOf(new Date())));
+    const giorni = wk && wk.week ? wk.week.days : [];
+    const d = giorni.find(x => x.s && /\(.*\)\s*$/.test(x.s) && pianoPalestra(x.s));
+    return d ? (d.s.match(/\(([^)]*)\)\s*$/) || [])[1] : null;
+}
+async function contestoPianifica() {
+    const { ftp, cp } = await atletaIntervals();
+    const f = ftp || 320, c = cp || f - 30;
+    return { libreria: LIBRARY, sedutePalestra: Object.keys(SEDUTE_PALESTRA), schemaPalestra: await schemaPalestraCorrente(), getDetail: n => getWorkoutDetail(n, f, c), pianoPalestra, ftp: f, cp: c };
+}
+const pianificaFit = {
+    modelli: async () => fitPianifica.modelliDisponibili(await contestoPianifica()),
+    crea: async input => {
+        let ev;
+        try { ev = fitPianifica.eventoNuovo({ ...(await contestoPianifica()), data: input && input.data, sport: input && input.sport, modello: input && input.modello, libero: input && input.libero }); }
+        catch (e) { throw Object.assign(e, { code: 'input' }); }
+        const creato = await intervalsPostEvent(ev);
+        return { id: creato.id, nome: ev.name, data: input.data };
+    },
+    elimina: async id => {
+        const ev = await intervalsGet(`/api/v1/athlete/${ATHLETE_ID}/events/${id}`);
+        if (!ev || !String(ev.external_id || '').startsWith(fitPianifica.UID_APP)) throw Object.assign(new Error('non creato dall\'app'), { code: 'non-app' });
+        await intervalsDelete(`/api/v1/athlete/${ATHLETE_ID}/events/${id}`);
+    },
+};
 const fitRotte = fitApi.creaFitApi({
     garmin: garminFit, settimanaDel: settimanaVera, cartellaDati: __dirname,
     attivita: async (da, a) => (await intervalsGet(`/api/v1/athlete/${ATHLETE_ID}/activities?oldest=${da}&newest=${a}`)).map(x => ({ id: x.id, date: String(x.start_date_local || '').slice(0, 10), type: x.type || '', durationMin: x.moving_time != null ? Math.round(x.moving_time / 60) : null, kcal: x.calories != null ? Math.round(x.calories) : null, distanceKm: x.distance != null ? Math.round(x.distance / 10) / 100 : null, start: String(x.start_date_local || '').slice(11, 16) || null, name: x.name || '', np: x.icu_weighted_avg_watts != null ? Math.round(x.icu_weighted_avg_watts) : null, watt: x.icu_average_watts != null ? Math.round(x.icu_average_watts) : null, bpm: x.average_heartrate != null ? Math.round(x.average_heartrate) : null, bpmMax: x.max_heartrate != null ? Math.round(x.max_heartrate) : null, rpm: x.average_cadence != null ? Math.round(x.average_cadence) : null, kmh: x.average_speed != null ? Math.round(x.average_speed * 36) / 10 : null, climbM: x.total_elevation_gain != null ? Math.round(x.total_elevation_gain) : null, tss: x.icu_training_load != null ? Math.round(x.icu_training_load) : null })),
@@ -415,6 +453,7 @@ const fitRotte = fitApi.creaFitApi({
         }
         return r;
     }),
+    pianifica: pianificaFit,
     percorso: async id => fitCalendario.campionaPercorso(await intervalsGet(`/api/v1/activity/${id}/streams?types=latlng`), 120),
     sessioni: () => palestraStore.storico().sessioni || [],
     pesoKg: async () => (await atletaIntervals()).weightKg, ftp: async () => (await atletaIntervals()).ftp,
