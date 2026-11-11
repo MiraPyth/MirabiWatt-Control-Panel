@@ -10,6 +10,29 @@ const RIPOSO = /divano|day off|riposo/i;
 const haSerieFatte = s => (s.esercizi || []).some(e => (e.serie || []).some(x => x.fatta));
 const minutiTra = (a, b) => (a && b ? Math.max(0, Math.round((Date.parse(b) - Date.parse(a)) / 60000)) : null);
 
+const positivo = x => (typeof x === 'number' && isFinite(x) && x > 0 ? x : null);
+
+/** Le metriche vere di un'attivita' fatta e il link a intervals.icu; i dati mancanti si omettono (mai zero). Senza id: null. */
+function datiAttivita(a) {
+    if (!a.id) return null;
+    const mappa = { distanzaKm: a.distanceKm, velMediaKmh: a.kmh, npWatt: a.np, wattMedi: a.watt, bpmMedio: a.bpm, bpmMax: a.bpmMax,
+        rpmMedio: a.rpm, dislivelloM: a.climbM, kcal: a.kcal, tss: a.tss };
+    const out = { id: String(a.id), url: `https://intervals.icu/activities/${a.id}` };
+    for (const [k, v] of Object.entries(mappa)) if (positivo(v) !== null) out[k] = v;
+    return out;
+}
+
+/** Il percorso GPS [[lat, lng], ...] da `streams` di intervals.icu (tipo latlng: lat in `data`, lng in `data2`), senza i punti vuoti e con al piu' `max` punti. */
+function campionaPercorso(streams, max = 120) {
+    const s = Array.isArray(streams) ? streams.find(x => x && x.type === 'latlng') : null;
+    if (!s || !Array.isArray(s.data) || !Array.isArray(s.data2)) return [];
+    const punti = [];
+    s.data.forEach((lat, i) => { const lng = s.data2[i]; if (typeof lat === 'number' && typeof lng === 'number') punti.push([lat, lng]); });
+    if (punti.length <= max) return punti;
+    const passo = (punti.length - 1) / (max - 1);
+    return Array.from({ length: max }, (_, i) => punti[Math.round(i * passo)]);
+}
+
 /** { da, a } con il primo e l'ultimo giorno di «AAAA-MM», o null se il mese non e' valido. */
 function intervalloMese(mese) {
     const m = /^(\d{4})-(\d{2})$/.exec(String(mese || ''));
@@ -36,7 +59,8 @@ function calendarioMese({ mese, oggi, attivita = [], eventi = [], sessioni = [] 
     for (const a of attivita.filter(x => dentro(x.date))) {
         const sport = sportDi(a.type);
         if (sport === 'palestra' && conSeduta.has(a.date)) continue;   // la seduta salvata e' la stessa cosa dell'attivita' di pesi
-        del(a.date).voci.push({ sport, nome: a.name || '', durataMin: a.durationMin > 0 ? Math.round(a.durationMin) : null, svolto: true });
+        const dati = datiAttivita(a);
+        del(a.date).voci.push({ sport, nome: a.name || '', durataMin: a.durationMin > 0 ? Math.round(a.durationMin) : null, svolto: true, ...(dati ? { attivita: dati } : {}) });
     }
     for (const e of eventi.filter(x => dentro(x.date))) {
         const g = del(e.date);
@@ -70,4 +94,4 @@ function eserciziDaScheda(scheda) {
 /** Gruppi muscolari distinti degli esercizi, nell'ordine in cui compaiono. */
 const muscoliDaEsercizi = esercizi => [...new Set((esercizi || []).map(x => x.gruppo).filter(Boolean))];
 
-module.exports = { calendarioMese, intervalloMese, sportDi, zoneDaDoc, eserciziDaScheda };
+module.exports = { calendarioMese, intervalloMese, sportDi, zoneDaDoc, eserciziDaScheda, campionaPercorso };

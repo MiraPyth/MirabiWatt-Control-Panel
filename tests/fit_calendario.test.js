@@ -25,7 +25,7 @@ test('attivita fatte: sport dal tipo, durata e svolto vero', () => {
     { id: 2, date: '2026-11-06', type: 'Run', name: 'Corsa', durationMin: 35 },
     { id: 3, date: '2026-11-07', type: 'Swim', name: 'Nuoto', durationMin: 30 },
     { id: 4, date: '2026-11-08', type: 'Yoga', name: 'Yoga', durationMin: 20 }] });
-  assert.deepStrictEqual(giorno(c, '2026-11-05').voci, [{ sport: 'ciclismo', nome: 'Zwift Z2', durataMin: 62, svolto: true }]);
+  assert.deepStrictEqual(giorno(c, '2026-11-05').voci, [{ sport: 'ciclismo', nome: 'Zwift Z2', durataMin: 62, svolto: true, attivita: { id: '1', url: 'https://intervals.icu/activities/1' } }]);
   assert.deepStrictEqual(giorno(c, '2026-11-06').sport, ['corsa']);
   assert.deepStrictEqual(giorno(c, '2026-11-07').sport, ['nuoto']);
   assert.deepStrictEqual(giorno(c, '2026-11-08').sport, ['altro']);
@@ -49,7 +49,7 @@ test('pianificato: evento senza attivita dello stesso sport resta da fare; se fa
   const attivita = [{ id: 1, date: '2026-11-10', type: 'VirtualRide', name: 'Zwift', durationMin: 58 }];
   const c = calendarioMese({ ...base, eventi, attivita });
   assert.deepStrictEqual(giorno(c, '2026-11-12').voci, [{ sport: 'ciclismo', nome: 'Sweet Spot', durataMin: 75, svolto: false }]);
-  assert.deepStrictEqual(giorno(c, '2026-11-10').voci, [{ sport: 'ciclismo', nome: 'Zwift', durataMin: 58, svolto: true }]);
+  assert.deepStrictEqual(giorno(c, '2026-11-10').voci, [{ sport: 'ciclismo', nome: 'Zwift', durataMin: 58, svolto: true, attivita: { id: '1', url: 'https://intervals.icu/activities/1' } }]);
 });
 
 test('note di riposo segnano il giorno; altre note si ignorano', () => {

@@ -404,7 +404,7 @@ async function atletaIntervals() {
 }
 const fitRotte = fitApi.creaFitApi({
     garmin: garminFit, settimanaDel: settimanaVera, cartellaDati: __dirname,
-    attivita: async (da, a) => (await intervalsGet(`/api/v1/athlete/${ATHLETE_ID}/activities?oldest=${da}&newest=${a}`)).map(x => ({ id: x.id, date: String(x.start_date_local || '').slice(0, 10), type: x.type || '', durationMin: x.moving_time != null ? Math.round(x.moving_time / 60) : null, kcal: x.calories != null ? Math.round(x.calories) : null, distanceKm: x.distance != null ? Math.round(x.distance / 10) / 100 : null, start: String(x.start_date_local || '').slice(11, 16) || null, name: x.name || '', np: x.icu_weighted_avg_watts != null ? Math.round(x.icu_weighted_avg_watts) : null, watt: x.icu_average_watts != null ? Math.round(x.icu_average_watts) : null })),
+    attivita: async (da, a) => (await intervalsGet(`/api/v1/athlete/${ATHLETE_ID}/activities?oldest=${da}&newest=${a}`)).map(x => ({ id: x.id, date: String(x.start_date_local || '').slice(0, 10), type: x.type || '', durationMin: x.moving_time != null ? Math.round(x.moving_time / 60) : null, kcal: x.calories != null ? Math.round(x.calories) : null, distanceKm: x.distance != null ? Math.round(x.distance / 10) / 100 : null, start: String(x.start_date_local || '').slice(11, 16) || null, name: x.name || '', np: x.icu_weighted_avg_watts != null ? Math.round(x.icu_weighted_avg_watts) : null, watt: x.icu_average_watts != null ? Math.round(x.icu_average_watts) : null, bpm: x.average_heartrate != null ? Math.round(x.average_heartrate) : null, bpmMax: x.max_heartrate != null ? Math.round(x.max_heartrate) : null, rpm: x.average_cadence != null ? Math.round(x.average_cadence) : null, kmh: x.average_speed != null ? Math.round(x.average_speed * 36) / 10 : null, climbM: x.total_elevation_gain != null ? Math.round(x.total_elevation_gain) : null, tss: x.icu_training_load != null ? Math.round(x.icu_training_load) : null })),
     eventi: async (da, a) => (await intervalsGet(`/api/v1/athlete/${ATHLETE_ID}/events?oldest=${da}&newest=${a}`)).filter(e => e.category === 'WORKOUT' || e.category === 'NOTE').map(e => {
         const data = String(e.start_date_local || '').slice(0, 10), r = { date: data, name: e.name || '', categoria: e.category, type: e.type || null, durationMin: e.moving_time > 0 ? Math.round(e.moving_time / 60) : null };
         const zone = fitCalendario.zoneDaDoc(e.workout_doc);
@@ -415,6 +415,7 @@ const fitRotte = fitApi.creaFitApi({
         }
         return r;
     }),
+    percorso: async id => fitCalendario.campionaPercorso(await intervalsGet(`/api/v1/activity/${id}/streams?types=latlng`), 120),
     sessioni: () => palestraStore.storico().sessioni || [],
     pesoKg: async () => (await atletaIntervals()).weightKg, ftp: async () => (await atletaIntervals()).ftp,
 });

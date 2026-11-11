@@ -27,7 +27,7 @@ function leggiCorpo(req, limite) {
     });
 }
 
-function creaFitApi({ garmin, settimanaDel, attivita, eventi = async () => [], sessioni, pesoKg, ftp, cartellaDati, adesso = () => new Date() }) {
+function creaFitApi({ garmin, settimanaDel, attivita, eventi = async () => [], percorso = async () => [], sessioni, pesoKg, ftp, cartellaDati, adesso = () => new Date() }) {
     const oggi = () => isoLocale(adesso());
     const giorniFa = n => { const d = adesso(); d.setDate(d.getDate() - n); return isoLocale(d); };
 
@@ -81,6 +81,14 @@ function creaFitApi({ garmin, settimanaDel, attivita, eventi = async () => [], s
         json(res, 200, { generato: adesso().toISOString(), ...calendarioMese({ mese, oggi: oggi(), attivita: att, eventi: ev, sessioni: sessioni() }), avvisi });
     }
 
+    /** Il percorso GPS (poche decine di punti) di un'attivita' di intervals.icu, per disegnarlo nell'app. */
+    async function percorsoRotta(req, res, u) {
+        const id = u.searchParams.get('id') || '';
+        if (!/^i?\d{1,12}$/.test(id)) return json(res, 400, { error: 'id attività non valido' });
+        try { json(res, 200, { id, punti: await percorso(id) }); }
+        catch (e) { json(res, 502, { error: 'Percorso non disponibile: intervals.icu non risponde.' }); }
+    }
+
     async function profiloRotta(req, res) {
         if (req.method === 'GET') return json(res, 200, profilo.leggi(cartellaDati));
         const c = await leggiCorpo(req, MAX_JSON);
@@ -110,6 +118,7 @@ function creaFitApi({ garmin, settimanaDel, attivita, eventi = async () => [], s
         if (req.method === 'GET' && p === '/api/fit/oggi') { await giornata(req, res); return true; }
         if (req.method === 'GET' && p === '/api/fit/ultimo') { await ultimo(req, res); return true; }
         if (req.method === 'GET' && p === '/api/fit/calendario') { await calendario(req, res, u); return true; }
+        if (req.method === 'GET' && p === '/api/fit/percorso') { await percorsoRotta(req, res, u); return true; }
         if ((req.method === 'GET' || req.method === 'PUT') && p === '/api/fit/profilo') { await profiloRotta(req, res); return true; }
         if ((req.method === 'GET' || req.method === 'PUT') && p === '/api/fit/foto') { await fotoRotta(req, res); return true; }
         return false;
