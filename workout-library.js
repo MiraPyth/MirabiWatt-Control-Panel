@@ -387,7 +387,7 @@ const ESERCIZI_PALESTRA = {
           consigli: ['Di fianco al cavo, maniglia al petto.', 'Spingi avanti senza ruotare il busto.', 'Tieni 2" a braccia tese.'] }
     ],
     'Schiena-Bicipiti': [
-        { id: 'lat-machine', partenza: [35, 45], nome: 'Lat machine presa larga (o trazioni)', gruppo: 'dorsali', tipo: 'composto', serie: 3, reps: '6-10', gif: 'LEprlgG', attrezzo: 'cavo',
+        { id: 'lat-machine', partenza: [35, 45], nome: 'Lat machine presa larga (o trazioni)', gruppo: 'dorsali', tipo: 'composto', serie: 3, reps: '6-10', gif: '7F1DVzn', attrezzo: 'cavo',
           perche: 'Tirata verticale: larghezza della schiena, la «V» che fa sembrare la vita più stretta.',
           consigli: ['Petto in fuori, barra verso lo sterno.', 'Gomiti verso i fianchi.', 'Risali fino a braccia distese.'] },
         { id: 'rematore-petto-appoggiato', partenza: [12, 16], nome: 'Rematore con petto appoggiato, gomiti larghi', gruppo: 'dorsali alti e trapezio', tipo: 'composto', serie: 3, reps: '8-12', gif: '7vG5o25', attrezzo: 'manubri',
