@@ -19,7 +19,7 @@ const DEFINIZIONI = [
     { id: 'p5s-1000', categoria: 'Potenza', nome: 'Sprint da 1.000 W', descr: 'Raggiungi 1.000 W di picco su 5 secondi', metrica: 'p5s', soglia: 1000, unita: 'W' },
 ];
 
-const sommaVolume = s => (s.esercizi || []).reduce((t, e) => t + (e.unita === 's' ? 0 : (e.serie || []).filter(x => x.fatta).reduce((u, x) => u + (x.kg || 0) * (x.reps || 0), 0)), 0);
+const sommaVolume = s => (s.esercizi || []).reduce((t, e) => t + (e.unita === 's' ? 0 : (e.serie || []).filter(x => x.fatta).reduce((u, x) => u + ((x.kg || 0) + (typeof e.barra === 'number' ? e.barra : 0)) * (x.reps || 0), 0)), 0);
 const haSerieFatte = s => (s.esercizi || []).some(e => (e.serie || []).some(x => x.fatta));
 const wattA = (curva, secondi) => {
     if (!curva || !Array.isArray(curva.secs) || !Array.isArray(curva.watts)) return null;

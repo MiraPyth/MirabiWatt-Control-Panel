@@ -5,6 +5,8 @@ const path = require('path');
 const { ultimiDaStorico } = require('./palestra.js');
 
 const PATH = path.join(__dirname, 'palestra-storico.json');
+// 11/11/2026: sul bilanciere le serie salvate hanno solo i dischi; la barra (kg) si conserva a parte per contare il volume vero
+const barraValida = b => typeof b === 'number' && isFinite(b) && b > 0 && b <= 50;
 const numero = x => x === null || (typeof x === 'number' && isFinite(x) && x >= 0 && x < 1000);
 
 function leggi(file) {
@@ -28,7 +30,7 @@ function salva(sessione, file = PATH) {
     const pulita = {
         id: sessione.id, data: sessione.data, seduta: sessione.seduta, schema: sessione.schema || '', inizio: sessione.inizio || null,
         fine: sessione.fine || null, note: String(sessione.note || '').slice(0, 1000),
-        esercizi: sessione.esercizi.map(e => ({ id: e.id, nome: e.nome || e.id, serie: e.serie.map(x => ({ kg: x.kg, reps: x.reps, fatta: x.fatta })) }))
+        esercizi: sessione.esercizi.map(e => ({ id: e.id, nome: e.nome || e.id, ...(barraValida(e.barra) ? { barra: e.barra } : {}), serie: e.serie.map(x => ({ kg: x.kg, reps: x.reps, fatta: x.fatta })) }))
     };
     const vecchia = leggi(file).find(s => s.id === pulita.id);
     if (vecchia && vecchia.stravaId) pulita.stravaId = vecchia.stravaId;   // già su Strava: un nuovo salvataggio non la ripubblica
