@@ -5,7 +5,7 @@ const http = require('http');
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
-const { getWorkoutDetail, baseName, pianoPalestra, LIBRARY, SEDUTE_PALESTRA } = require('./workout-library.js');
+const { getWorkoutDetail, baseName, pianoPalestra, LIBRARY, SEDUTE_PALESTRA, ESERCIZI_PALESTRA: SEDUTE_ESERCIZI } = require('./workout-library.js');
 const fitPianifica = require('./fit-pianifica.js');
 const { SEASON, usaPiano, findDetailedWeek, findSummaryPhase, faseNutrizione, fmtISO, addDays, mondayOf, parseISO, parseDurMin } = require('./season-plan.js');
 const piani = require('./piani.js');
@@ -450,6 +450,7 @@ const pianificaFit = {
 };
 // 11/11/2026: traguardi (achievements e record) e seduta per il tracking dell'app Fit, sui dati veri
 const fitTraguardi = require('./fit-traguardi.js');
+const fitForza = require('./fit-forza.js');
 const traguardiFit = async () => {
     const oggi = todayLocalISO(), da = fmtDate(new Date(Date.now() - 365 * 86400000));
     const [att, atleta, curve] = await Promise.all([
@@ -462,9 +463,15 @@ const traguardiFit = async () => {
     return fitTraguardi.calcolaTraguardi({ sessioni: palestraStore.storico().sessioni || [], attivita, ftp: atleta.ftp || null, curva: tutto ? { secs: tutto.secs, watts: tutto.watts } : null,
         soglie: require('./fit-profilo.js').leggi(__dirname).obiettivi.achievements || {}, oggi });
 };
+const catalogoEsercizi = () => {
+    const c = {};
+    for (const seduta of Object.keys(SEDUTE_ESERCIZI)) for (const e of SEDUTE_ESERCIZI[seduta]) c[e.id] = { nome: e.nome, attrezzo: e.attrezzo, gruppo: e.gruppo };
+    return c;
+};
+const forzaFit = async () => fitForza.forza({ sessioni: palestraStore.storico().sessioni || [], catalogo: catalogoEsercizi() });
 const sedutaFit = async ({ data, nome }) => {
     const scheda = palestraSettimana.schedaDiEvento({ nomeEvento: nome, lunedi: fmtISO(mondayOf(parseISO(data))), findDetailedWeek, pianoPalestra, baseName });
-    const da = fmtDate(new Date(Date.now() - 120 * 86400000));
+    const da = fmtDate(new Date(Date.now() - 400 * 86400000));
     return { scheda, storico: (palestraStore.storico().sessioni || []).filter(x => x.data >= da) };
 };
 // 11/11/2026: stato dei servizi per il Profilo dell'app Fit (esiti, mai chiavi ne' token)
@@ -493,7 +500,7 @@ const fitRotte = fitApi.creaFitApi({
         }
         return r;
     }),
-    pianifica: pianificaFit, traguardi: traguardiFit, seduta: sedutaFit, servizi: serviziFit,
+    pianifica: pianificaFit, traguardi: traguardiFit, seduta: sedutaFit, servizi: serviziFit, forza: forzaFit,
     percorso: async id => fitCalendario.campionaPercorso(await intervalsGet(`/api/v1/activity/${id}/streams?types=latlng`), 120),
     sessioni: () => palestraStore.storico().sessioni || [],
     pesoKg: async () => (await atletaIntervals()).weightKg, ftp: async () => (await atletaIntervals()).ftp,
