@@ -66,6 +66,18 @@ test('input non valido: data, sport, modello, durata e zona fuori misura vengono
   assert.throws(r({ sport: 'corsa' }), /libero/i);
 });
 
+test('richiesta ripetibile: identificativo valido e ricerca dell evento gia creato', () => {
+  const { idRichiesta, trovaEsistente } = require('../fit-pianifica.js');
+  assert.strictEqual(idRichiesta('a1b2c3d4e5'), 'a1b2c3d4e5');
+  assert.strictEqual(idRichiesta('../x'), null);
+  assert.strictEqual(idRichiesta('abc'), null);
+  assert.strictEqual(idRichiesta(undefined), null);
+  const eventi = [{ id: 1, external_id: null }, { id: 2, external_id: 'mirabiwatt-app-2026-11-20-corsa-a1b2c3d4e5', name: '[MW] Corsa' }];
+  assert.strictEqual(trovaEsistente(eventi, 'mirabiwatt-app-2026-11-20-corsa-a1b2c3d4e5').id, 2);
+  assert.strictEqual(trovaEsistente(eventi, 'mirabiwatt-app-2026-11-20-corsa-altro123'), null);
+  assert.strictEqual(trovaEsistente(null, 'x'), null);
+});
+
 test('il nome libero e ripulito: niente sigle doppie, niente a capo, lunghezza limitata', () => {
   const e = eventoNuovo({ ...base, data: '2026-11-22', sport: 'corsa', libero: { nome: '[MW]  Corsa\nlunga ' + 'x'.repeat(200), durataMin: 40, zona: 2 }, casuale: () => 'k' });
   assert.ok(e.name.startsWith('[MW] Corsa lunga'));

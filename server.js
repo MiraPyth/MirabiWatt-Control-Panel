@@ -428,9 +428,16 @@ async function contestoPianifica() {
 const pianificaFit = {
     modelli: async () => fitPianifica.modelliDisponibili(await contestoPianifica()),
     crea: async input => {
+        // «richiestaId» dell'app: se la richiesta si ripete (timeout, secondo indirizzo) non nasce un doppione
+        const richiesta = fitPianifica.idRichiesta(input && input.richiestaId);
         let ev;
-        try { ev = fitPianifica.eventoNuovo({ ...(await contestoPianifica()), data: input && input.data, sport: input && input.sport, modello: input && input.modello, libero: input && input.libero }); }
+        try { ev = fitPianifica.eventoNuovo({ ...(await contestoPianifica()), data: input && input.data, sport: input && input.sport, modello: input && input.modello, libero: input && input.libero, ...(richiesta ? { casuale: () => richiesta } : {}) }); }
         catch (e) { throw Object.assign(e, { code: 'input' }); }
+        if (richiesta) {
+            const giorno = await intervalsGet(`/api/v1/athlete/${ATHLETE_ID}/events?oldest=${input.data}&newest=${input.data}`);
+            const gia = fitPianifica.trovaEsistente(giorno, ev.external_id);
+            if (gia) return { id: gia.id, nome: gia.name || ev.name, data: input.data };
+        }
         const creato = await intervalsPostEvent(ev);
         return { id: creato.id, nome: ev.name, data: input.data };
     },

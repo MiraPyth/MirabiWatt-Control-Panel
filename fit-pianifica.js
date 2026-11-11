@@ -54,4 +54,10 @@ function eventoNuovo({ data, sport, modello, libero, libreria, sedutePalestra, s
         moving_time: durataMin * 60, description: testoLibero({ durataMin, zona }) };
 }
 
-module.exports = { modelliDisponibili, eventoNuovo, testoLibero, UID_APP };
+/** Identificativo scelto dall'app per una richiesta (6-16 caratteri minuscoli o cifre), o null: serve a ripetere una richiesta senza creare doppioni. */
+const idRichiesta = r => (/^[a-z0-9]{6,16}$/.test(String(r || '')) ? String(r) : null);
+
+/** L'evento gia' creato con quell'external_id tra quelli del giorno, o null. */
+const trovaEsistente = (eventi, externalId) => (Array.isArray(eventi) ? eventi.find(e => e && e.external_id === externalId) || null : null);
+
+module.exports = { modelliDisponibili, eventoNuovo, testoLibero, idRichiesta, trovaEsistente, UID_APP };
