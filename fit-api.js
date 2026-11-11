@@ -4,6 +4,7 @@
 const { obiettiviGiorno } = require('./fit-oggi.js');
 const profilo = require('./fit-profilo.js');
 const { ultimoAllenamento } = require('./fit-ultimo.js');
+const { calendarioMese, intervalloMese } = require('./fit-calendario.js');
 
 const MAX_JSON = 16 * 1024;
 const MAX_FOTO = 1.5 * 1024 * 1024;
@@ -26,7 +27,7 @@ function leggiCorpo(req, limite) {
     });
 }
 
-function creaFitApi({ garmin, settimanaDel, attivita, sessioni, pesoKg, ftp, cartellaDati, adesso = () => new Date() }) {
+function creaFitApi({ garmin, settimanaDel, attivita, eventi = async () => [], sessioni, pesoKg, ftp, cartellaDati, adesso = () => new Date() }) {
     const oggi = () => isoLocale(adesso());
     const giorniFa = n => { const d = adesso(); d.setDate(d.getDate() - n); return isoLocale(d); };
 
@@ -69,6 +70,17 @@ function creaFitApi({ garmin, settimanaDel, attivita, sessioni, pesoKg, ftp, car
         json(res, 200, { generato: adesso().toISOString(), ultimo: ultimoAllenamento({ sessioni: sessioni(), attivita: att, pesoKg: kg }), avvisi });
     }
 
+    /** Il mese per il calendario: fatto (attivita' e sedute) e da fare (eventi), per giorno e sport. */
+    async function calendario(req, res, u) {
+        const mese = u.searchParams.get('mese') || oggi().slice(0, 7), r = intervalloMese(mese);
+        if (!r) return json(res, 400, { error: 'mese deve essere AAAA-MM' });
+        const avvisi = [];
+        let att = [], ev = [];
+        try { att = await attivita(r.da, r.a); } catch (e) { avvisi.push('Attività non disponibili: intervals.icu non risponde.'); }
+        try { ev = await eventi(r.da, r.a); } catch (e) { avvisi.push('Allenamenti pianificati non disponibili: intervals.icu non risponde.'); }
+        json(res, 200, { generato: adesso().toISOString(), ...calendarioMese({ mese, oggi: oggi(), attivita: att, eventi: ev, sessioni: sessioni() }), avvisi });
+    }
+
     async function profiloRotta(req, res) {
         if (req.method === 'GET') return json(res, 200, profilo.leggi(cartellaDati));
         const c = await leggiCorpo(req, MAX_JSON);
@@ -97,6 +109,7 @@ function creaFitApi({ garmin, settimanaDel, attivita, sessioni, pesoKg, ftp, car
         if (req.method === 'GET' && p === '/api/fit/peso') { await peso(req, res, u); return true; }
         if (req.method === 'GET' && p === '/api/fit/oggi') { await giornata(req, res); return true; }
         if (req.method === 'GET' && p === '/api/fit/ultimo') { await ultimo(req, res); return true; }
+        if (req.method === 'GET' && p === '/api/fit/calendario') { await calendario(req, res, u); return true; }
         if ((req.method === 'GET' || req.method === 'PUT') && p === '/api/fit/profilo') { await profiloRotta(req, res); return true; }
         if ((req.method === 'GET' || req.method === 'PUT') && p === '/api/fit/foto') { await fotoRotta(req, res); return true; }
         return false;

@@ -166,3 +166,23 @@ test('ultimo: l\'ultimo allenamento con le metriche pertinenti, e un avviso se l
   assert.strictEqual(r.json.ultimo, null, 'nessun allenamento: null, non un errore');
   s.close();
 });
+
+test('calendario: mese con fatto e da fare, errori di intervals.icu come avvisi, mese non valido 400', async () => {
+  const { s } = await avvia({
+    attivita: async () => [{ id: 1, date: '2026-11-05', type: 'Ride', name: 'Z2', durationMin: 60 }],
+    eventi: async () => [{ date: '2026-11-12', name: 'Sweet Spot', categoria: 'WORKOUT', type: 'Ride', durationMin: 75 }] });
+  const r = await chiedi(s, 'GET', '/api/fit/calendario?mese=2026-11');
+  assert.strictEqual(r.status, 200);
+  assert.strictEqual(r.json.giorni.length, 30);
+  assert.strictEqual(r.json.giorni[4].voci[0].svolto, true);
+  assert.strictEqual(r.json.giorni[11].voci[0].svolto, false);
+  assert.deepStrictEqual(r.json.avvisi, []);
+  assert.strictEqual((await chiedi(s, 'GET', '/api/fit/calendario?mese=2026-13')).status, 400);
+  s.close();
+  const g = (await avvia({ eventi: async () => { throw new Error('giu'); } })).s;
+  const r2 = await chiedi(g, 'GET', '/api/fit/calendario');
+  assert.strictEqual(r2.status, 200);
+  assert.strictEqual(r2.json.mese, '2026-11');
+  assert.match(r2.json.avvisi[0], /pianificati non disponibili/);
+  g.close();
+});
