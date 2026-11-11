@@ -27,7 +27,7 @@ function leggiCorpo(req, limite) {
     });
 }
 
-function creaFitApi({ garmin, settimanaDel, attivita, eventi = async () => [], percorso = async () => [], pianifica = null, sessioni, pesoKg, ftp, cartellaDati, adesso = () => new Date() }) {
+function creaFitApi({ garmin, settimanaDel, attivita, eventi = async () => [], percorso = async () => [], pianifica = null, traguardi = null, seduta = null, sessioni, pesoKg, ftp, cartellaDati, adesso = () => new Date() }) {
     const oggi = () => isoLocale(adesso());
     const giorniFa = n => { const d = adesso(); d.setDate(d.getDate() - n); return isoLocale(d); };
 
@@ -114,6 +114,25 @@ function creaFitApi({ garmin, settimanaDel, attivita, eventi = async () => [], p
         catch (e) { if (e.code === 'input') json(res, 400, { error: e.message }); else json(res, 502, { error: 'intervals.icu non risponde: allenamento non creato.' }); }
     }
 
+    /** Achievements con avanzamento e record personali, calcolati sui dati veri. */
+    async function traguardiRotta(req, res) {
+        if (!traguardi) return json(res, 503, { error: 'Traguardi non disponibili sul server', nonDisponibile: true });
+        try { json(res, 200, await traguardi()); }
+        catch (e) { json(res, 502, { error: 'Traguardi non disponibili: intervals.icu non risponde.' }); }
+    }
+
+    /** La scheda della seduta di un giorno e lo storico delle sedute fatte, per allenarsi (anche senza rete: l'app tiene una copia). */
+    async function sedutaRotta(req, res, u) {
+        const data = u.searchParams.get('data') || '', nome = u.searchParams.get('nome') || '';
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(data) || !nome.trim() || nome.length > 120) return json(res, 400, { error: 'servono data (AAAA-MM-GG) e nome della seduta' });
+        if (!seduta) return json(res, 503, { error: 'Sedute non disponibili sul server', nonDisponibile: true });
+        try {
+            const r = await seduta({ data, nome });
+            if (!r || !r.scheda) return json(res, 404, { error: 'Nessuna scheda di palestra per questa seduta.' });
+            json(res, 200, { data, nome, scheda: r.scheda, storico: r.storico || [] });
+        } catch (e) { json(res, 502, { error: 'Seduta non disponibile.' }); }
+    }
+
     async function profiloRotta(req, res) {
         if (req.method === 'GET') return json(res, 200, profilo.leggi(cartellaDati));
         const c = await leggiCorpo(req, MAX_JSON);
@@ -146,6 +165,8 @@ function creaFitApi({ garmin, settimanaDel, attivita, eventi = async () => [], p
         if (req.method === 'GET' && p === '/api/fit/percorso') { await percorsoRotta(req, res, u); return true; }
         if (req.method === 'GET' && p === '/api/fit/modelli') { await modelli(req, res); return true; }
         if ((req.method === 'POST' || req.method === 'DELETE') && p === '/api/fit/pianifica') { await pianificaRotta(req, res, u); return true; }
+        if (req.method === 'GET' && p === '/api/fit/traguardi') { await traguardiRotta(req, res); return true; }
+        if (req.method === 'GET' && p === '/api/fit/seduta') { await sedutaRotta(req, res, u); return true; }
         if ((req.method === 'GET' || req.method === 'PUT') && p === '/api/fit/profilo') { await profiloRotta(req, res); return true; }
         if ((req.method === 'GET' || req.method === 'PUT') && p === '/api/fit/foto') { await fotoRotta(req, res); return true; }
         return false;

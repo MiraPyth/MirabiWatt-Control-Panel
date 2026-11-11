@@ -67,4 +67,25 @@ function record(v) {
     return voci.filter(r => typeof r.valore === 'number' && r.valore > 0);
 }
 
-module.exports = { DEFINIZIONI, valori, achievements, record };
+const giorniTra = (a, b) => Math.round((Date.parse(`${b}T12:00:00Z`) - Date.parse(`${a}T12:00:00Z`)) / 86400000);
+
+/** La serie piu' lunga di giorni di allenamento di fila (giorni di calendario, dal primo all'ultimo): un solo giorno di riposo in mezzo e' ammesso, due la spezzano. */
+function serieMassima(giorni) {
+    const d = [...new Set((giorni || []).filter(x => /^\d{4}-\d{2}-\d{2}$/.test(String(x))))].sort();
+    if (!d.length) return 0;
+    let max = 1, inizio = d[0];
+    for (let i = 1; i < d.length; i++) {
+        if (giorniTra(d[i - 1], d[i]) > 2) inizio = d[i];
+        max = Math.max(max, giorniTra(inizio, d[i]) + 1);
+    }
+    return max;
+}
+
+/** Tutto il calcolo di achievements e record dai dati veri: sedute salvate, attivita' di intervals.icu, FTP e curva di potenza all-time. */
+function calcolaTraguardi({ sessioni = [], attivita = [], ftp = null, curva = null, soglie = {}, oggi }) {
+    const giorni = [...sessioni.filter(haSerieFatte).map(s => s.data), ...attivita.filter(a => a.durationMin > 0).map(a => a.date)];
+    const v = valori({ sessioni, attivita, serieRecord: serieMassima(giorni), ftp, curva });
+    return { achievements: achievements(v, soglie), record: record(v), aggiornato: oggi };
+}
+
+module.exports = { DEFINIZIONI, valori, achievements, record, serieMassima, calcolaTraguardi };
