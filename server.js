@@ -431,7 +431,7 @@ const pianificaFit = {
         // «richiestaId» dell'app: se la richiesta si ripete (timeout, secondo indirizzo) non nasce un doppione
         const richiesta = fitPianifica.idRichiesta(input && input.richiestaId);
         let ev;
-        try { ev = fitPianifica.eventoNuovo({ ...(await contestoPianifica()), data: input && input.data, sport: input && input.sport, modello: input && input.modello, libero: input && input.libero, ...(richiesta ? { casuale: () => richiesta } : {}) }); }
+        try { ev = fitPianifica.eventoNuovo({ ...(await contestoPianifica()), data: input && input.data, sport: input && input.sport, modello: input && input.modello, libero: input && input.libero, personalizzato: input && input.personalizzato, ...(richiesta ? { casuale: () => richiesta } : {}) }); }
         catch (e) { throw Object.assign(e, { code: 'input' }); }
         if (richiesta) {
             const giorno = await intervalsGet(`/api/v1/athlete/${ATHLETE_ID}/events?oldest=${input.data}&newest=${input.data}`);

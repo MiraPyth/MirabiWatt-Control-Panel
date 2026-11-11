@@ -2,6 +2,7 @@
 // (testo con «- 10m 55%», «Z2 Pace»…), l'unico che intervals sincronizza poi sui dispositivi Garmin. Sintassi verificata con
 // eventi di prova veri: Ride a %FTP, Run e Swim a «Zn Pace» (pace_zone), WeightTraining con durata e descrizione.
 const { eventoAllenamento, SIGLA, TOGLI_SIGLA } = require('./intervals-evento.js');
+const { testoDaPassi, durataTotaleSec, validaPassi } = require('./fit-passi.js');
 
 const UID_APP = 'mirabiwatt-app-';
 const SPORT = new Set(['ciclismo', 'palestra', 'corsa', 'nuoto']);
@@ -29,12 +30,12 @@ function testoLibero({ durataMin, zona }) {
 const pulisciNome = n => String(n || '').replace(TOGLI_SIGLA, '').replace(/\s+/g, ' ').trim().slice(0, MAX_NOME - SIGLA.length - 1).trim();
 
 /** L'evento da inviare a intervals.icu. Rifiuta con un errore dal messaggio chiaro ogni input fuori misura. */
-function eventoNuovo({ data, sport, modello, libero, libreria, sedutePalestra, schemaPalestra, getDetail, pianoPalestra, ftp, cp, casuale = () => Math.random().toString(36).slice(2, 8) }) {
+function eventoNuovo({ data, sport, modello, libero, personalizzato, libreria, sedutePalestra, schemaPalestra, getDetail, pianoPalestra, ftp, cp, casuale = () => Math.random().toString(36).slice(2, 8) }) {
     if (!dataValida(data)) throw new Error('data non valida (AAAA-MM-GG)');
     if (!SPORT.has(sport)) throw new Error('sport non valido');
     const idEsterno = `${UID_APP}${data}-${sport}-${casuale()}`;   // intervals.icu tiene il proprio uid: il nostro sta in external_id e riconosce gli eventi dell'app
 
-    if (sport === 'ciclismo' || sport === 'palestra') {
+    if ((sport === 'ciclismo' || sport === 'palestra') && !personalizzato) {
         const m = modelliDisponibili({ libreria, sedutePalestra, schemaPalestra, getDetail, pianoPalestra })[sport].find(x => x.id === modello);
         if (!m) throw new Error('modello non disponibile');
         const nomeCompleto = sport === 'palestra' ? `${modello} (${schemaPalestra})` : modello;
@@ -42,6 +43,17 @@ function eventoNuovo({ data, sport, modello, libero, libreria, sedutePalestra, s
         const e = eventoAllenamento({ s: nomeCompleto, zone: sport === 'palestra' ? 'Palestra' : '', note: '' }, data, detail);
         const { uid, ...senzaUid } = e;
         return { ...senzaUid, external_id: idEsterno };
+    }
+
+    if (personalizzato) {
+        if (sport === 'palestra') throw new Error('sport non valido per un allenamento a passi');
+        const nome = pulisciNome(personalizzato.nome);
+        if (!nome) throw new Error('nome mancante');
+        const errore = validaPassi(personalizzato.passi, sport);
+        if (errore) throw new Error(errore);
+        return { category: 'WORKOUT', type: sport === 'ciclismo' ? 'Ride' : TIPO_LIBERO[sport], start_date_local: `${data}T00:00:00`, name: `${SIGLA} ${nome}`,
+            external_id: idEsterno, moving_time: durataTotaleSec(personalizzato.passi), description: testoDaPassi(personalizzato.passi, sport),
+            ...(sport === 'ciclismo' && personalizzato.indoor ? { indoor: true } : {}) };
     }
 
     if (!libero || typeof libero !== 'object') throw new Error('serve un allenamento libero (nome, durata, zona)');
