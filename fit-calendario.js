@@ -1,6 +1,9 @@
 // MirabiWatt · calendario mensile dell'app Fit (11/11/2026). Pura: per ogni giorno del mese cio' che e' stato fatto (attivita' di intervals.icu
 // e sedute di palestra salvate) e cio' che e' ancora da fare (eventi pianificati), con lo sport. Nessun dato inventato: sport sconosciuto = «altro».
+const MappaMuscoli = require('./mappa-muscoli.js');
 const pad = n => String(n).padStart(2, '0');
+/** I muscoli piu' lavorati di una seduta fatta (stessa mappa dell'«ultimo allenamento»). */
+const muscoliSessione = s => MappaMuscoli.classifica(MappaMuscoli.carico(s)).slice(0, 4).map(m => m.nome);
 const SPORT = [[/weight|strength|crossfit/i, 'palestra'], [/ride|cycl/i, 'ciclismo'], [/run/i, 'corsa'], [/swim/i, 'nuoto']];
 const sportDi = tipo => { const t = SPORT.find(([re]) => re.test(String(tipo || ''))); return t ? t[1] : 'altro'; };
 const RIPOSO = /divano|day off|riposo/i;
@@ -27,7 +30,8 @@ function calendarioMese({ mese, oggi, attivita = [], eventi = [], sessioni = [] 
     for (const s of sessioni.filter(x => dentro(x.data) && haSerieFatte(x))) {
         conSeduta.add(s.data);
         const svolti = (s.esercizi || []).map(e => ({ nome: e.nome, serie: (e.serie || []).filter(x => x.fatta).length })).filter(e => e.nome && e.serie > 0);
-        del(s.data).voci.push({ sport: 'palestra', nome: s.seduta, durataMin: minutiTra(s.inizio, s.fine), svolto: true, ...(svolti.length ? { esercizi: svolti } : {}) });
+        del(s.data).voci.push({ sport: 'palestra', nome: s.seduta, durataMin: minutiTra(s.inizio, s.fine), svolto: true, ...(svolti.length ? { esercizi: svolti } : {}),
+            ...(muscoliSessione(s).length ? { muscoli: muscoliSessione(s) } : {}) });
     }
     for (const a of attivita.filter(x => dentro(x.date))) {
         const sport = sportDi(a.type);
@@ -40,7 +44,8 @@ function calendarioMese({ mese, oggi, attivita = [], eventi = [], sessioni = [] 
         const sport = sportDi(e.type);
         if (g.voci.some(v => v.svolto && v.sport === sport)) continue;   // gia' fatto
         g.voci.push({ sport, nome: e.name || '', durataMin: e.durationMin > 0 ? Math.round(e.durationMin) : null, svolto: false,
-            ...(e.zone && e.zone.length ? { zone: e.zone } : {}), ...(e.esercizi && e.esercizi.length ? { esercizi: e.esercizi } : {}) });
+            ...(e.zone && e.zone.length ? { zone: e.zone } : {}), ...(e.esercizi && e.esercizi.length ? { esercizi: e.esercizi } : {}),
+            ...(muscoliDaEsercizi(e.esercizi).length ? { muscoli: muscoliDaEsercizi(e.esercizi) } : {}) });
     }
     for (const g of giorni) g.sport = [...new Set(g.voci.map(v => v.sport))];
     return { mese, oggi, giorni };
@@ -58,7 +63,11 @@ function zoneDaDoc(doc) {
 function eserciziDaScheda(scheda) {
     const e = scheda && Array.isArray(scheda.esercizi) ? scheda.esercizi : [];
     if (!e.length) return null;
-    return e.map(x => ({ nome: x.nome, serie: x.serie, reps: x.unita && x.unita !== 'reps' ? `${x.repsTesto} ${x.unita}` : String(x.repsTesto) }));
+    return e.map(x => ({ nome: x.nome, serie: x.serie, reps: x.unita && x.unita !== 'reps' ? `${x.repsTesto} ${x.unita}` : String(x.repsTesto),
+        ...(x.gruppo ? { gruppo: x.gruppo } : {}), ...(x.rir != null ? { rir: String(x.rir) } : {}), ...(x.recSec > 0 ? { recSec: x.recSec } : {}) }));
 }
+
+/** Gruppi muscolari distinti degli esercizi, nell'ordine in cui compaiono. */
+const muscoliDaEsercizi = esercizi => [...new Set((esercizi || []).map(x => x.gruppo).filter(Boolean))];
 
 module.exports = { calendarioMese, intervalloMese, sportDi, zoneDaDoc, eserciziDaScheda };

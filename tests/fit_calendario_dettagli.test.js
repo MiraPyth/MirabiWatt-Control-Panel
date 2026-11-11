@@ -36,6 +36,25 @@ test('dettagli degli eventi pianificati passano nella voce; seduta fatta porta g
   assert.strictEqual('zone' in giorno(c, '2026-11-09').voci[0], false);
 });
 
+test('esercizi: gruppo muscolare, RIR e recupero passano quando ci sono', () => {
+  const scheda = { esercizi: [{ nome: 'Squat', serie: 2, repsTesto: '5-8', unita: 'reps', gruppo: 'quadricipiti e glutei', rir: '3', recSec: 180 }] };
+  assert.deepStrictEqual(eserciziDaScheda(scheda), [{ nome: 'Squat', serie: 2, reps: '5-8', gruppo: 'quadricipiti e glutei', rir: '3', recSec: 180 }]);
+});
+
+test('muscoli della voce: gruppi distinti degli esercizi pianificati, nell ordine, senza doppioni', () => {
+  const eventi = [{ date: '2026-11-13', name: 'Schiena', categoria: 'WORKOUT', type: 'WeightTraining', durationMin: 60, esercizi: [
+    { nome: 'Lat', serie: 2, reps: '6-10', gruppo: 'dorsali' }, { nome: 'Rematore', serie: 2, reps: '8-12', gruppo: 'dorsali' },
+    { nome: 'Curl', serie: 2, reps: '8-12', gruppo: 'bicipiti' }, { nome: 'Senza gruppo', serie: 1, reps: '10' }] }];
+  assert.deepStrictEqual(giorno(calendarioMese({ ...base, eventi }), '2026-11-13').voci[0].muscoli, ['dorsali', 'bicipiti']);
+});
+
+test('seduta fatta: muscoli dal carico delle serie svolte (stessa mappa della Dashboard)', () => {
+  const sessioni = [{ data: '2026-11-09', seduta: 'Petto-Spalle', inizio: '2026-11-09T18:00:00', fine: '2026-11-09T18:50:00',
+    esercizi: [{ id: 'panca-piana-manubri', nome: 'Panca piana con manubri', serie: [{ kg: 14, reps: 6, fatta: true }, { kg: 14, reps: 6, fatta: true }] }] }];
+  const m = giorno(calendarioMese({ ...base, sessioni }), '2026-11-09').voci[0].muscoli;
+  assert.ok(Array.isArray(m) && m.length >= 1 && m.every(x => typeof x === 'string'));
+});
+
 test('scheda di un evento [MW]: nome pulito e schema preso dalla settimana del piano', () => {
   const { schedaDiEvento } = require('../palestra-settimana.js');
   const baseName = n => String(n).replace(/\s*\(.*\)\s*$/, '');
